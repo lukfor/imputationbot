@@ -1,4 +1,4 @@
-# :bowtie: imputationbutler
+# :construction_worker: Imputation Butler
 Your personal butler for imputationserver
 
 ## Configure
