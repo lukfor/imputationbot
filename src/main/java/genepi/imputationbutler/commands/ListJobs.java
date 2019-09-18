@@ -3,8 +3,10 @@ package genepi.imputationbutler.commands;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import genepi.base.Tool;
 import genepi.imputationbutler.client.CloudgeneClient;
 import genepi.imputationbutler.client.CloudgeneClientConfig;
+import genepi.io.FileUtil;
 
 public class ListJobs extends BaseCommand {
 
@@ -14,8 +16,7 @@ public class ListJobs extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		// TODO Auto-generated method stub
-
+		addOptionalParameter("json", "write result as json to the provided file", Tool.STRING);
 	}
 
 	@Override
@@ -31,10 +32,24 @@ public class ListJobs extends BaseCommand {
 			CloudgeneClientConfig config = readConfig();
 			CloudgeneClient client = new CloudgeneClient(config);
 			JSONArray jobs = client.getJobs();
-			//TODO: use table library
-			for (int i = 0; i < jobs.length(); i++) {
-				JSONObject job = jobs.getJSONObject(i);
-				System.out.println(job.get("id"));
+
+			if (getValue("json") != null) {
+
+				String filename = getValue("json").toString();
+
+				StringBuffer buffer = new StringBuffer();
+				buffer.append(jobs.toString());
+				FileUtil.writeStringBufferToFile(filename, buffer);
+				printlnInGreen("Written all jobs to file '" + filename + "'");
+
+			} else {
+
+				// TODO: use table library
+				for (int i = 0; i < jobs.length(); i++) {
+					JSONObject job = jobs.getJSONObject(i);
+					System.out.println(job.get("id"));
+				}
+
 			}
 			return 0;
 		} catch (Exception e) {

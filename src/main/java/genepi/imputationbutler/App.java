@@ -11,11 +11,11 @@ import genepi.imputationbutler.commands.DownloadResults;
 import genepi.imputationbutler.commands.ListJobs;
 import genepi.imputationbutler.commands.RunImputationJob;
 import genepi.imputationbutler.commands.RunQualityControlJob;
+import genepi.imputationbutler.commands.GetJobStatus;
 
+public class App extends Toolbox {
 
-public class App  extends Toolbox {
-	
-	public static final String VERSION  = "0.0.1";
+	public static final String VERSION = "0.0.1";
 
 	public App(String command, String[] args) {
 		super(command, args);
@@ -44,13 +44,14 @@ public class App  extends Toolbox {
 	}
 
 	public static void main(String[] args) throws Exception {
+
 		App toolbox = new App("imputation-butler", args);
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
 		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("list", ListJobs.class);
 		toolbox.addTool("download", DownloadResults.class);
-
+		toolbox.addTool("status", GetJobStatus.class);
 		toolbox.start();
 
 	}
