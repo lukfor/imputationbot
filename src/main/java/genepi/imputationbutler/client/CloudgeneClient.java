@@ -1,6 +1,7 @@
 package genepi.imputationbutler.client;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +36,12 @@ public class CloudgeneClient {
 
 	}
 
-	public String submitJob(String app, FormDataSet form) throws JSONException, IOException {
+	public String submitJob(String app, Map<String, String> params) throws JSONException, IOException {
+
+		FormDataSet form = new FormDataSet();
+		for (String param : params.keySet()) {
+			form.add(param, params.get(param));
+		}
 
 		ClientResource resource = createClientResource("/api/v2/jobs/submit/" + app);
 		resource.post(form);

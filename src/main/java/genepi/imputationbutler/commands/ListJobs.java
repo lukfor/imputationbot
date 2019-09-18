@@ -3,6 +3,8 @@ package genepi.imputationbutler.commands;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.jakewharton.fliptables.FlipTable;
+
 import genepi.base.Tool;
 import genepi.imputationbutler.client.CloudgeneClient;
 import genepi.imputationbutler.client.CloudgeneClientConfig;
@@ -44,11 +46,23 @@ public class ListJobs extends BaseCommand {
 
 			} else {
 
-				// TODO: use table library
+				String[] header = new String[4];
+				header[0] = "";
+				header[1] = "Job";
+				header[2] = "Status";
+				header[3] = "Application";
+
+				String[][] data = new String[jobs.length()][header.length];
+
 				for (int i = 0; i < jobs.length(); i++) {
 					JSONObject job = jobs.getJSONObject(i);
-					System.out.println(job.get("id"));
+					data[i][0] = "#" + (jobs.length() - i);
+					data[i][1] = job.getString("id");
+					data[i][2] = job.getInt("state") + "";
+					data[i][3] = job.getString("application");
 				}
+
+				System.out.println(FlipTable.of(header, data));
 
 			}
 			return 0;

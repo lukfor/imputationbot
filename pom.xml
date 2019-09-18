@@ -76,6 +76,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.jakewharton.fliptables</groupId>
+			<artifactId>fliptables</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.restlet.jee</groupId>
 			<artifactId>org.restlet.ext.html</artifactId>
 			<version>${restlet.version}</version>
