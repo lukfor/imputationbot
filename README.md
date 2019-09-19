@@ -1,4 +1,4 @@
-# :construction_worker: Imputation Butler
+# Imputation Butler :man_juggling:
 Your personal butler for imputationserver
 
 ## Configure
