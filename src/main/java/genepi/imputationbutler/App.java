@@ -35,7 +35,7 @@ public class App extends Toolbox {
 		System.out.println();
 		System.out.println("Imputation Butler " + App.VERSION + " 🤹");
 		System.out.println("https://imputationserver.sph.umich.edu");
-		System.out.println("(c) 2019 Lukas Forer and Sebastian Schoenherr");
+		System.out.println("(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
 
 		try {
 			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
