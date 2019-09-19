@@ -5,7 +5,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -62,12 +61,6 @@ public class RunImputationJob extends BaseCommand {
 			option.setRequired(false);
 			options.addOption(option);
 
-			// add download flag
-			Option option2 = new Option(null, "download", false,
-					"Download results after job execution. Wait flag has to be set.");
-			option2.setRequired(false);
-			options.addOption(option2);
-
 			// parse the command line arguments
 			CommandLine line = null;
 			try {
@@ -92,6 +85,7 @@ public class RunImputationJob extends BaseCommand {
 			System.out.println();
 
 			printlnInGreen("Job submitted 👍");
+			
 			info("\nJob id is " + id);
 
 			if (line.hasOption("wait")) {

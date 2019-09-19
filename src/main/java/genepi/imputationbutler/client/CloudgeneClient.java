@@ -1,5 +1,7 @@
 package genepi.imputationbutler.client;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -105,10 +107,7 @@ public class CloudgeneClient {
 
 			ClientResource resourceJobs = createClientResource("/api/v2/jobs");
 
-			try {
-				resourceJobs.get();
-			} catch (Exception e) {
-			}
+			resourceJobs.get();
 
 			JSONObject object = new JSONObject(resourceJobs.getResponseEntity().getText());
 			JSONArray result = object.getJSONArray("data");
@@ -117,6 +116,17 @@ public class CloudgeneClient {
 			return result;
 
 		}
+
+	}
+
+	public void downloadResults(String remotePath, String localPath)
+			throws IOException, JSONException, InterruptedException {
+
+		ClientResource resourceDownload = createClientResource("/results/" + remotePath);
+
+		resourceDownload.get();
+		resourceDownload.getResponseEntity().write(new FileOutputStream(new File(localPath)));
+		resourceDownload.release();
 
 	}
 
