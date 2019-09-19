@@ -19,12 +19,11 @@ public class ListJobs extends BaseCommand {
 	@Override
 	public void createParameters() {
 		addOptionalParameter("json", "write result as json to the provided file", Tool.STRING);
+		addFlag("all", "Show all jobs");
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -57,9 +56,15 @@ public class ListJobs extends BaseCommand {
 				header[2] = "Status";
 				header[3] = "Application";
 
-				String[][] data = new String[jobs.length()][header.length];
 
-				for (int i = 0; i < jobs.length(); i++) {
+				int length = 10;
+				if (isFlagSet("all")) {
+					length = jobs.length();
+				}
+
+				String[][] data = new String[length][header.length];
+
+				for (int i = 0; i < length; i++) {
 					JSONObject job = jobs.getJSONObject(i);
 					data[i][0] = "#" + (jobs.length() - i);
 					data[i][1] = job.getString("id");
@@ -68,13 +73,13 @@ public class ListJobs extends BaseCommand {
 				}
 
 				info(FlipTable.of(header, data));
-
+				info("Showing " + 1 + " to " + length + " of " + jobs.length() + " jobs.\n\n");
 			}
 			return 0;
+			
 		} catch (Exception e) {
-
+			
 			error(e.toString());
-
 			return 1;
 
 		}
