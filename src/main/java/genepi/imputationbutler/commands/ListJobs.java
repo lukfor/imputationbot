@@ -46,6 +46,11 @@ public class ListJobs extends BaseCommand {
 
 			} else {
 
+				if (jobs.length() == 0) {
+					info("No jobs found.\n");
+					return 0;
+				}
+				
 				String[] header = new String[4];
 				header[0] = "";
 				header[1] = "Job";
@@ -62,13 +67,13 @@ public class ListJobs extends BaseCommand {
 					data[i][3] = job.getString("application");
 				}
 
-				System.out.println(FlipTable.of(header, data));
+				info(FlipTable.of(header, data));
 
 			}
 			return 0;
 		} catch (Exception e) {
 
-			printError(e.toString());
+			error(e.toString());
 
 			return 1;
 

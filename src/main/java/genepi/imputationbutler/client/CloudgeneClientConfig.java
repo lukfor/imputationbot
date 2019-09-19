@@ -6,6 +6,8 @@ public class CloudgeneClientConfig {
 
 	private String token;
 
+	private String app;
+
 	public String getHostname() {
 		return hostname;
 	}
@@ -21,7 +23,13 @@ public class CloudgeneClientConfig {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
-	
-	
+
+	public void setApp(String app) {
+		this.app = app;
+	}
+
+	public String getApp() {
+		return app;
+	}
+
 }

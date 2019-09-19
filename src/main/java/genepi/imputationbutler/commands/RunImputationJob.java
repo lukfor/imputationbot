@@ -20,6 +20,9 @@ public class RunImputationJob extends BaseCommand {
 
 	@Override
 	public int run() {
+		
+		//TODO: get json from http://localhost:8080/api/v2/server/apps/imputationserver
+		
 		// TODO Auto-generated method stub
 		return 0;
 	}

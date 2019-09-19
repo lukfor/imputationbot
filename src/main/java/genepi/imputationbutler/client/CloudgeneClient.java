@@ -35,6 +35,19 @@ public class CloudgeneClient {
 		return resource;
 
 	}
+	
+	public JSONObject getServerDetails() throws IOException, JSONException, InterruptedException {
+
+		ClientResource resourceStatus = createClientResource("/api/v2/server");
+
+		resourceStatus.get();
+
+		JSONObject object = new JSONObject(resourceStatus.getResponseEntity().getText());
+		resourceStatus.release();
+
+		return object;
+
+	}
 
 	public String submitJob(String app, Map<String, String> params) throws JSONException, IOException {
 

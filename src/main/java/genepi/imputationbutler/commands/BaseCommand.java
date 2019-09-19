@@ -18,7 +18,11 @@ public abstract class BaseCommand extends Tool {
 		super(args);
 	}
 
-	public void printError(String message) {
+	public void info(String message) {
+		System.out.println(message);
+	}
+	
+	public void error(String message) {
 		printlnInRed("\nError: " + message);
 	}
 
