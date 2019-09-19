@@ -35,7 +35,7 @@ public class CloudgeneClient {
 		return resource;
 
 	}
-	
+
 	public JSONObject getServerDetails() throws IOException, JSONException, InterruptedException {
 
 		ClientResource resourceStatus = createClientResource("/api/v2/server");
@@ -49,19 +49,27 @@ public class CloudgeneClient {
 
 	}
 
-	public String submitJob(String app, Map<String, String> params) throws JSONException, IOException {
+	public JSONObject getAppDetails(String app) throws IOException, JSONException, InterruptedException {
 
-		FormDataSet form = new FormDataSet();
-		for (String param : params.keySet()) {
-			form.add(param, params.get(param));
-		}
+		ClientResource resourceStatus = createClientResource("/api/v2/server/apps/" + app);
+
+		resourceStatus.get();
+
+		JSONObject object = new JSONObject(resourceStatus.getResponseEntity().getText());
+		resourceStatus.release();
+
+		return object;
+
+	}
+
+	public JSONObject submitJob(String app, FormDataSet form) throws JSONException, IOException {
 
 		ClientResource resource = createClientResource("/api/v2/jobs/submit/" + app);
 		resource.post(form);
 
 		JSONObject object = new JSONObject(resource.getResponseEntity().getText());
 		resource.release();
-		return (String) object.get("id");
+		return object;
 	}
 
 	public void waitForJob(String id) throws IOException, JSONException, InterruptedException {
@@ -74,7 +82,7 @@ public class CloudgeneClient {
 
 		boolean running = object.getInt("state") == 1 || object.getInt("state") == 2 || object.getInt("state") == 3;
 		if (running) {
-			Thread.sleep(500);
+			Thread.sleep(10000);
 			waitForJob(id);
 		}
 	}

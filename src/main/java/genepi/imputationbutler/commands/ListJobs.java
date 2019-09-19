@@ -63,7 +63,7 @@ public class ListJobs extends BaseCommand {
 					JSONObject job = jobs.getJSONObject(i);
 					data[i][0] = "#" + (jobs.length() - i);
 					data[i][1] = job.getString("id");
-					data[i][2] = job.getInt("state") + "";
+					data[i][2] = getJobStateAsText(job.getInt("state"));
 					data[i][3] = job.getString("application");
 				}
 

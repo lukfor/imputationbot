@@ -21,7 +21,7 @@ public abstract class BaseCommand extends Tool {
 	public void info(String message) {
 		System.out.println(message);
 	}
-	
+
 	public void error(String message) {
 		printlnInRed("\nError: " + message);
 	}
@@ -42,6 +42,14 @@ public abstract class BaseCommand extends Tool {
 		return ((char) 27 + "[32m" + text + (char) 27 + "[0m");
 	}
 
+	public String makeBlue(String text) {
+		return ((char) 27 + "[34m" + text + (char) 27 + "[0m");
+	}
+
+	public String makeGray(String text) {
+		return ((char) 27 + "[90m" + text + (char) 27 + "[0m");
+	}
+	
 	public void writeConfig(CloudgeneClientConfig config) throws IOException {
 		YamlWriter writer = new YamlWriter(new FileWriter("imputationbutler.config"));
 		writer.write(config);
@@ -52,6 +60,34 @@ public abstract class BaseCommand extends Tool {
 		YamlReader reader = new YamlReader(new FileReader("imputationbutler.config"));
 		CloudgeneClientConfig config = reader.read(CloudgeneClientConfig.class);
 		return config;
+	}
+
+	public String getJobStateAsText(int state) {
+		switch (state) {
+		case 1:
+			return makeBlue("Waiting");
+		case 2:
+			return makeBlue("Running");
+		case 3:
+			return makeBlue("Exporting");
+		case 4:
+			return makeGreen("Success");
+		case 5:
+			return makeRed("Failed");
+		case 6:
+			return makeRed("Canceled");
+		case 7:
+			return makeGray("Retired");
+		case 8:
+			return makeGreen("Success");
+		case 9:
+			return makeRed("Failed");
+		case 10:
+			return makeGray("Deleted");
+		case -1:
+			return makeGray("Dead");
+		}
+		return makeGray("?");
 	}
 
 }

@@ -2,8 +2,16 @@ package genepi.imputationbutler;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.restlet.engine.Engine;
+import org.restlet.ext.slf4j.Slf4jLoggerFacade;
 
 import genepi.base.Toolbox;
 import genepi.imputationbutler.commands.ConfigCloudgeneClient;
@@ -19,12 +27,13 @@ public class App extends Toolbox {
 
 	public App(String command, String[] args) {
 		super(command, args);
-		printHeader();
+		turnLoggingOff();
+		printHeader();		
 	}
 
 	private void printHeader() {
 		System.out.println();
-		System.out.println("Imputation Butler " + App.VERSION + " 👷");
+		System.out.println("Imputation Butler " + App.VERSION + " 🤹");
 		System.out.println("https://imputationserver.sph.umich.edu");
 		System.out.println("(c) 2019 Lukas Forer and Sebastian Schoenherr");
 
@@ -43,6 +52,18 @@ public class App extends Toolbox {
 		System.out.println();
 	}
 
+	public void turnLoggingOff() {
+		
+		Slf4jLoggerFacade loggerFacade = new Slf4jLoggerFacade();
+		Engine.getInstance().setLoggerFacade(loggerFacade);
+		
+		List<Logger> loggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
+		loggers.add(LogManager.getRootLogger());
+		for (Logger logger : loggers) {
+			logger.setLevel(Level.OFF);
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 		App toolbox = new App("imputation-butler", args);
