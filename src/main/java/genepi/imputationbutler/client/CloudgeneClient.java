@@ -38,6 +38,19 @@ public class CloudgeneClient {
 
 	}
 
+	public JSONObject getAuthUser() throws IOException, JSONException, InterruptedException {
+
+		ClientResource resourceStatus = createClientResource("/api/v2/users/me/profile");
+
+		resourceStatus.get();
+
+		JSONObject object = new JSONObject(resourceStatus.getResponseEntity().getText());
+		resourceStatus.release();
+
+		return object;
+
+	}
+	
 	public JSONObject getServerDetails() throws IOException, JSONException, InterruptedException {
 
 		ClientResource resourceStatus = createClientResource("/api/v2/server");

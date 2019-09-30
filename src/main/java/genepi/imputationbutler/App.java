@@ -19,6 +19,7 @@ import genepi.imputationbutler.commands.DownloadResults;
 import genepi.imputationbutler.commands.ListJobs;
 import genepi.imputationbutler.commands.RunImputationJob;
 import genepi.imputationbutler.commands.RunQualityControlJob;
+import genepi.imputationbutler.commands.ShowVersion;
 import genepi.imputationbutler.commands.GetJobStatus;
 
 public class App extends Toolbox {
@@ -73,6 +74,7 @@ public class App extends Toolbox {
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("status", GetJobStatus.class);
+		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 
 	}

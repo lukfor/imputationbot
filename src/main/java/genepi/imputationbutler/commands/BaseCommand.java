@@ -1,11 +1,10 @@
 package genepi.imputationbutler.commands;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
@@ -56,7 +55,14 @@ public abstract class BaseCommand extends Tool {
 		writer.close();
 	}
 
-	public CloudgeneClientConfig readConfig() throws FileNotFoundException, YamlException {
+	public CloudgeneClientConfig readConfig() throws Exception {
+		
+		File file = new File("imputationbutler.config");
+		
+		if (!file.exists()) {
+			throw new Exception("No configuration found. Please run 'imputation-butler configure'");
+		}
+		
 		YamlReader reader = new YamlReader(new FileReader("imputationbutler.config"));
 		CloudgeneClientConfig config = reader.read(CloudgeneClientConfig.class);
 		return config;
