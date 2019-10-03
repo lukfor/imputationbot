@@ -1,11 +1,19 @@
-# Imputation Butler :man_juggling:
-Your personal butler for imputationserver
+# Imputationbot :robot:
+Your personal butler for Imputationserver
+
+## Install
+
+```
+curl -s imputationbot.now.sh | bash
+```
 
 ## Configure
 
 ```
-imputation-butler configure
+imputationbot configure
 ```
+
+your access token is stored in `~/.imputationbot`.
 
 
 ## List Jobs
@@ -13,24 +21,24 @@ imputation-butler configure
 Prints all jobs to stdout:
 
 ```
-imputation-butler jobs
+imputationbot list
 ```
 
 Write all jobs to a json file:
 
 ```
-imputation-butler jobs --json my-jobs.json
+imputationbot list --json my-jobs.json
 ```
 
 ## Submit Job
 
 ```
-imputation-butler run --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
+imputationbot run --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
 ```
 
 ## Download all Results
 
 ```
-imputation-butler download --job job-XXXXXXXX-XXXXXX-XXX
+imputationbot download --job job-XXXXXXXX-XXXXXX-XXX
 ```
 

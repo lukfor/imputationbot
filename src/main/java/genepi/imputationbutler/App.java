@@ -72,6 +72,7 @@ public class App extends Toolbox {
 		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("jobs", ListJobs.class);
+		toolbox.addTool("list", ListJobs.class);
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("status", GetJobStatus.class);
 		toolbox.addTool("version", ShowVersion.class);
