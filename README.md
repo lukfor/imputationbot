@@ -25,7 +25,7 @@ imputation-butler jobs --json my-jobs.json
 ## Submit Job
 
 ```
-imputation-butler run --files path/to/my.vcf.gz --refpanel hapmpa2 --population eur
+imputation-butler run --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
 ```
 
 ## Download all Results
