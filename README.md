@@ -1,5 +1,5 @@
 # Imputationbot :robot:
-Your personal butler for Imputationserver
+Your personal bot for Imputationserver
 
 ## Install
 
