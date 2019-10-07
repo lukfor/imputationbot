@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
@@ -13,6 +14,8 @@ import genepi.imputationbot.client.CloudgeneClientConfig;
 
 public abstract class BaseCommand extends Tool {
 
+	public static String CONFIG_FILENAME = "imputationbot.config"; 
+	
 	public BaseCommand(String[] args) {
 		super(args);
 	}
@@ -50,20 +53,21 @@ public abstract class BaseCommand extends Tool {
 	}
 	
 	public void writeConfig(CloudgeneClientConfig config) throws IOException {
-		YamlWriter writer = new YamlWriter(new FileWriter("imputationbutler.config"));
+		YamlWriter writer = new YamlWriter(new FileWriter(CONFIG_FILENAME));
+		writer.getConfig().writeConfig.setWriteClassname(YamlConfig.WriteClassName.NEVER);
 		writer.write(config);
 		writer.close();
 	}
 
 	public CloudgeneClientConfig readConfig() throws Exception {
 		
-		File file = new File("imputationbutler.config");
+		File file = new File(CONFIG_FILENAME);
 		
 		if (!file.exists()) {
-			throw new Exception("No configuration found. Please run 'imputation-butler configure'");
+			throw new Exception("No configuration found. Please run 'imputationbot configure'");
 		}
 		
-		YamlReader reader = new YamlReader(new FileReader("imputationbutler.config"));
+		YamlReader reader = new YamlReader(new FileReader(CONFIG_FILENAME));
 		CloudgeneClientConfig config = reader.read(CloudgeneClientConfig.class);
 		return config;
 	}
