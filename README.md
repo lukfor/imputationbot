@@ -4,7 +4,7 @@ Your personal bot for Imputationserver
 ## Install
 
 ```
-curl -s imputationbot.now.sh | bash
+curl -sL imputationbot.now.sh | bash
 ```
 
 ## Configure
