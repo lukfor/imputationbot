@@ -1,0 +1,3 @@
+#!/bin/bash
+export JAVA_PROGRAM_ARGS=`echo "$@"`
+java -jar imputationbot.jar $JAVA_PROGRAM_ARGS
