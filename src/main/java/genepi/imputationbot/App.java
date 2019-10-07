@@ -1,4 +1,4 @@
-package genepi.imputationbutler;
+package genepi.imputationbot;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,13 +14,13 @@ import org.restlet.engine.Engine;
 import org.restlet.ext.slf4j.Slf4jLoggerFacade;
 
 import genepi.base.Toolbox;
-import genepi.imputationbutler.commands.ConfigCloudgeneClient;
-import genepi.imputationbutler.commands.DownloadResults;
-import genepi.imputationbutler.commands.ListJobs;
-import genepi.imputationbutler.commands.RunImputationJob;
-import genepi.imputationbutler.commands.RunQualityControlJob;
-import genepi.imputationbutler.commands.ShowVersion;
-import genepi.imputationbutler.commands.GetJobStatus;
+import genepi.imputationbot.commands.ConfigCloudgeneClient;
+import genepi.imputationbot.commands.DownloadResults;
+import genepi.imputationbot.commands.GetJobStatus;
+import genepi.imputationbot.commands.ListJobs;
+import genepi.imputationbot.commands.RunImputationJob;
+import genepi.imputationbot.commands.RunQualityControlJob;
+import genepi.imputationbot.commands.ShowVersion;
 
 public class App extends Toolbox {
 
@@ -34,7 +34,7 @@ public class App extends Toolbox {
 
 	private void printHeader() {
 		System.out.println();
-		System.out.println("Imputation Butler " + App.VERSION + " 🤹");
+		System.out.println("Imputation Bot " + App.VERSION + " 🤖");
 		System.out.println("https://imputationserver.sph.umich.edu");
 		System.out.println("(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
 
@@ -67,7 +67,7 @@ public class App extends Toolbox {
 	
 	public static void main(String[] args) throws Exception {
 
-		App toolbox = new App("imputation-butler", args);
+		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
 		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);

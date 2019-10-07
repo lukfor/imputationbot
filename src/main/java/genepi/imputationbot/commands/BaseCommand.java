@@ -1,4 +1,4 @@
-package genepi.imputationbutler.commands;
+package genepi.imputationbot.commands;
 
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +9,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
-import genepi.imputationbutler.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneClientConfig;
 
 public abstract class BaseCommand extends Tool {
 

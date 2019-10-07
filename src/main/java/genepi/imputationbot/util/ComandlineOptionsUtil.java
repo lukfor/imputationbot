@@ -1,4 +1,4 @@
-package genepi.imputationbutler.util;
+package genepi.imputationbot.util;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;

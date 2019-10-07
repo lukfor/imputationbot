@@ -1,4 +1,4 @@
-package genepi.imputationbutler.commands;
+package genepi.imputationbot.commands;
 
 public class GetJobStatus extends BaseCommand {
 

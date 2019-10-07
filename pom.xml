@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>genepi</groupId>
-	<artifactId>imputationbutler</artifactId>
+	<artifactId>imputationbot</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>imputationbutler</name>
+	<name>imputationbot</name>
 	<url>https://imputationserver.sph.umich.edu</url>
 
 	<organization>
@@ -33,15 +33,14 @@
 	</developers>
 
 	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
 		<restlet.version>2.3.12</restlet.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-
-
 	<repositories>
-
 		<repository>
 			<id>genepi</id>
 			<name>Genepi Innsbruck repository</name>
@@ -51,13 +50,11 @@
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
 		</repository>
-
 		<repository>
 			<id>maven-restlet</id>
 			<name>Restlet Framework repository</name>
 			<url>http://maven.restlet.org</url>
 		</repository>
-
 	</repositories>
 
 
@@ -98,8 +95,8 @@
 			<artifactId>org.restlet.ext.slf4j</artifactId>
 			<version>${restlet.version}</version>
 		</dependency>
- 
-	<dependency>
+
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>

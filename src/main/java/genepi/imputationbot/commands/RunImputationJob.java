@@ -1,4 +1,4 @@
-package genepi.imputationbutler.commands;
+package genepi.imputationbot.commands;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -10,9 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.restlet.ext.html.FormDataSet;
 
-import genepi.imputationbutler.client.CloudgeneClient;
-import genepi.imputationbutler.client.CloudgeneClientConfig;
-import genepi.imputationbutler.util.ComandlineOptionsUtil;
+import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneClientConfig;
+import genepi.imputationbot.util.ComandlineOptionsUtil;
 
 public class RunImputationJob extends BaseCommand {
 

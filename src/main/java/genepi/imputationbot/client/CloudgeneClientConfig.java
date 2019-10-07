@@ -1,4 +1,4 @@
-package genepi.imputationbutler.client;
+package genepi.imputationbot.client;
 
 public class CloudgeneClientConfig {
 

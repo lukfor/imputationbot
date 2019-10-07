@@ -1,9 +1,9 @@
-package genepi.imputationbutler.commands;
+package genepi.imputationbot.commands;
 
 import org.json.JSONObject;
 
-import genepi.imputationbutler.client.CloudgeneClient;
-import genepi.imputationbutler.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneClientConfig;
 
 public class ShowVersion extends BaseCommand {
 

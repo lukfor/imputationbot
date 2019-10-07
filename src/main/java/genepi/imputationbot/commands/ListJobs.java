@@ -1,4 +1,4 @@
-package genepi.imputationbutler.commands;
+package genepi.imputationbot.commands;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -6,8 +6,8 @@ import org.json.JSONObject;
 import com.jakewharton.fliptables.FlipTable;
 
 import genepi.base.Tool;
-import genepi.imputationbutler.client.CloudgeneClient;
-import genepi.imputationbutler.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.io.FileUtil;
 
 public class ListJobs extends BaseCommand {

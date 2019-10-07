@@ -1,0 +1,4 @@
+#!/bin/bash
+export JAVA_PROGRAM_ARGS=`echo "$@"`
+mvn install
+mvn exec:java -Dexec.mainClass="genepi.imputationbot.App" -Dexec.args="$JAVA_PROGRAM_ARGS"

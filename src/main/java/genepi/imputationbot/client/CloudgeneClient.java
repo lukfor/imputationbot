@@ -1,4 +1,4 @@
-package genepi.imputationbutler.client;
+package genepi.imputationbot.client;
 
 import java.io.File;
 import java.io.FileOutputStream;
