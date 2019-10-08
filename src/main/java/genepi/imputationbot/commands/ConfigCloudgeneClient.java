@@ -37,6 +37,9 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		if (hostname.isEmpty()) {
 			hostname = DEFAULT_HOSTNAME;
 		}
+		
+		//remove trailing slashes
+		hostname = hostname.replaceFirst("/*$", "");
 
 		System.out.print("API Token [None]: ");
 		String token = scanner.nextLine();
