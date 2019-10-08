@@ -53,16 +53,28 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		config.setToken(token);
 
 		CloudgeneClient client = new CloudgeneClient(config);
+
+		// test api token by getting user profile
+		JSONObject user = client.getAuthUser();
+		println();
+		info("Hi " + user.getString("fullName") + " 👋");
+		println();
+
 		JSONObject server = client.getServerDetails();
 		JSONArray apps = server.getJSONArray("apps");
+		JSONObject defaultApp = null;
+
 		if (apps.length() == 0) {
+
 			error("No application found on '" + hostname + "'");
 			return 1;
+
 		} else if (apps.length() == 1) {
-			JSONObject app = apps.getJSONObject(0);
-			info("Use application '" + app.getString("name") + "' as default application for new jobs.");
-			config.setApp(app.getString("id"));
+
+			defaultApp = apps.getJSONObject(0);
+
 		} else {
+
 			info("More than one application found on '" + hostname + "'.");
 			info("Please select a default application:");
 			for (int i = 0; i < apps.length(); i++) {
@@ -73,23 +85,24 @@ public class ConfigCloudgeneClient extends BaseCommand {
 			String choice = scanner.nextLine();
 			try {
 				int choiceIndex = Integer.parseInt(choice);
-				if (choiceIndex > 0 && choiceIndex <= apps.length()) {
-					JSONObject app2 = apps.getJSONObject(choiceIndex - 1);
-					info("Use application '" + app2.getString("name") + "' as default application for new jobs.");
-					config.setApp(app2.getString("id"));
-				} else {
+				if (choiceIndex <= 0 || choiceIndex > apps.length()) {
 					error("Wrong choiche. Please enter a value between 1 to " + apps.length());
 					return 1;
 				}
+				defaultApp = apps.getJSONObject(choiceIndex - 1);
 			} catch (Exception e) {
 				error("Wrong choiche. Please enter a value between 1 to " + apps.length());
 				return 1;
 			}
+
 		}
 
+		config.setApp(defaultApp.getString("id"));
 		writeConfig(config);
 
-		printlnInGreen("Config file updated. Imputation Bot is ready to submit jobs 👍");
+		println();
+		println();
+		printlnInGreen("Imputation Bot is ready to submit jobs to '" + defaultApp.getString("name") + "' 👍");
 		System.out.println();
 		return 0;
 

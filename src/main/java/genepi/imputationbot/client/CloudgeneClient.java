@@ -3,13 +3,12 @@ package genepi.imputationbot.client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Header;
+import org.restlet.data.Status;
 import org.restlet.engine.header.HeaderConstants;
 import org.restlet.ext.html.FormDataSet;
 import org.restlet.resource.ClientResource;
@@ -140,17 +139,33 @@ public class CloudgeneClient {
 			return content;
 
 		} catch (JSONException e) {
-			throw new CloudgeneException("Parsing JSON object failed. " + e.getMessage());
+
+			throw new CloudgeneException(120, "Parsing JSON object failed. " + e.getMessage());
+
 		} catch (IOException e) {
-			throw new CloudgeneException("IO Exception");
+
+			throw new CloudgeneException(100, "IO Exception");
+
 		} catch (ResourceException e) {
+
 			try {
-				JSONObject object = new JSONObject(resource.getResponseEntity().getText());
+
+				String content = resource.getResponseEntity().getText();
+				JSONObject object = new JSONObject(content);
 				resource.release();
-				throw new CloudgeneException(e.getStatus().getCode() + " - " + object.getString("message"));
+				throw new CloudgeneException(e.getStatus().getCode(), object.getString("message"));
+			} catch (JSONException e2) {
+
+				if (e.getStatus().getCode() == 401) {
+					throw new CloudgeneException(e.getStatus().getCode(),
+							"The provided Token is invalid. Please check if your token is correct and not expired");
+				} else {
+					throw new CloudgeneException(e.getStatus().getCode(), e.toString());
+				}
+
 			} catch (IOException e2) {
-				e2.printStackTrace();
-				throw new CloudgeneException(e2.toString());
+
+				throw new CloudgeneException(100, e2.toString());
 			}
 		}
 	}

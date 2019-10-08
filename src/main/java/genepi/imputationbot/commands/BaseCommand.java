@@ -22,6 +22,10 @@ public abstract class BaseCommand extends Tool {
 		super(args);
 	}
 
+	public void println() {
+		System.out.println();
+	}
+	
 	public void info(String message) {
 		System.out.println(message);
 	}
