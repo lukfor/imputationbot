@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Scanner;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
+import genepi.imputationbot.App;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.util.AnsiColors;
@@ -23,6 +27,35 @@ public abstract class BaseCommand extends Tool {
 
 	public BaseCommand(String[] args) {
 		super(args);
+		printHeader();
+	}
+
+	public BaseCommand(String[] args, boolean header) {
+		super(args);
+		if (header) {
+			printHeader();
+		}
+	}
+
+	private void printHeader() {
+		System.out.println();
+		System.out.println("Imputation Bot " + App.VERSION + " 🤖");
+		System.out.println("https://imputationserver.sph.umich.edu");
+		System.out.println("(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
+
+		try {
+			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
+			Manifest manifest = new Manifest(url.openStream());
+			Attributes attr = manifest.getMainAttributes();
+			String buildTime = attr.getValue("Build-Time");
+			String builtBy = attr.getValue("Built-By");
+			System.out.println("Built by " + builtBy + " on " + buildTime);
+
+		} catch (IOException E) {
+			// handle
+		}
+
+		System.out.println();
 	}
 
 	public void println() {
@@ -54,9 +87,9 @@ public abstract class BaseCommand extends Tool {
 	public String read(String label) {
 		System.out.print(label + " [None]: ");
 		String value = scanner.nextLine();
-		return value;		
+		return value;
 	}
-	
+
 	public void error(String message) {
 		System.out.println();
 		printlnInRed("Error: " + message);

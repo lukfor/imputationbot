@@ -19,6 +19,7 @@ import genepi.imputationbot.commands.DownloadResults;
 import genepi.imputationbot.commands.ListJobs;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
+import genepi.imputationbot.commands.ShowCurlHeader;
 import genepi.imputationbot.commands.ShowVersion;
 
 public class App extends Toolbox {
@@ -28,28 +29,6 @@ public class App extends Toolbox {
 	public App(String command, String[] args) {
 		super(command, args);
 		turnLoggingOff();
-		printHeader();
-	}
-
-	private void printHeader() {
-		System.out.println();
-		System.out.println("Imputation Bot " + App.VERSION + " 🤖");
-		System.out.println("https://imputationserver.sph.umich.edu");
-		System.out.println("(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
-
-		try {
-			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
-			Manifest manifest = new Manifest(url.openStream());
-			Attributes attr = manifest.getMainAttributes();
-			String buildTime = attr.getValue("Build-Time");
-			String builtBy = attr.getValue("Built-By");
-			System.out.println("Built by " + builtBy + " on " + buildTime);
-
-		} catch (IOException E) {
-			// handle
-		}
-
-		System.out.println();
 	}
 
 	public void turnLoggingOff() {
@@ -68,6 +47,7 @@ public class App extends Toolbox {
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
+		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("run", RunImputationJob.class);
