@@ -2,7 +2,6 @@ package genepi.imputationbot.commands;
 
 import java.text.SimpleDateFormat;
 
-import genepi.base.Tool;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneJob;
@@ -18,7 +17,6 @@ public class ListJobs extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		addOptionalParameter("job", "job id", Tool.STRING);
 		addFlag("all", "Show all jobs");
 	}
 
@@ -32,9 +30,12 @@ public class ListJobs extends BaseCommand {
 		CloudgeneClientConfig config = readConfig();
 		CloudgeneClient client = new CloudgeneClient(config);
 
-		if (getValue("job") != null) {
+		String[] jobIds = getRemainingArgs();
 
-			String id = getValue("job").toString();
+		
+		if (jobIds.length > 0) {
+
+			String id = jobIds[0];
 			CloudgeneJob cloudgeneJob = client.getJobDetails(id);
 
 			println(cloudgeneJob.toString());

@@ -12,36 +12,49 @@ public class DownloadResults extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		addParameter("job", "job id");
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		String id = getValue("job").toString();
+		String[] jobIds = getRemainingArgs();
+
+		if (jobIds.length == 0) {
+			error("Please provide a job id.");
+			return 1;
+		}
 
 		CloudgeneClientConfig config = readConfig();
 		CloudgeneClient client = new CloudgeneClient(config);
 
-		CloudgeneJob job = client.getJobDetails(id);
+		for (int i = 0; i < jobIds.length; i++) {
+			String id = jobIds[i];
 
-		if (job.isRunning()) {
-			println("Job is running. Download starts automatically when job is finished...");
-			client.waitForJob(job.getId());
-			job = client.getJobDetails(job.getId());
+			CloudgeneJob job = client.getJobDetails(id);
 
-			println("Job completed. State: " + job.getJobStateAsText());
+			if (job.isRunning()) {
+				println("Job " + job.getId() + " is running. Download starts automatically when job is finished...");
+				client.waitForJob(job.getId());
+				job = client.getJobDetails(job.getId());
+
+				println("Job completed. State: " + job.getJobStateAsText());
+				println();
+				println();
+			}
+
+			println("Download job " + job.getId() + "...");
+			job.downloadAll(client);
 			println();
 			println();
 		}
 
-		job.downloadAll(client);
+		printlnInGreen("All data downloaded.");
+		println();
+		println();
 
 		return 0;
 

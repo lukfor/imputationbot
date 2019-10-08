@@ -27,18 +27,18 @@ imputationbot jobs
 Get details about a job:
 
 ```
-imputationbot jobs --job job-XXXXXXXX-XXXXXX-XXX 
+imputationbot jobs job-XXXXXXXX-XXXXXX-XXX 
 ```
 
 ## Submit Job
 
 ```
-imputationbot run --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
+imputationbot impute --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
 ```
 
 ## Download all Results
 
 ```
-imputationbot download --job job-XXXXXXXX-XXXXXX-XXX
+imputationbot download job-XXXXXXXX-XXXXXX-XXX
 ```
 
