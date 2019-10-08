@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Header;
-import org.restlet.data.Status;
 import org.restlet.engine.header.HeaderConstants;
 import org.restlet.ext.html.FormDataSet;
 import org.restlet.resource.ClientResource;
@@ -150,7 +149,11 @@ public class CloudgeneClient {
 
 			try {
 
+				if (resource.getResponseEntity() == null) {
+					throw new CloudgeneException(1000, "The provided server is not responding.");
+				}
 				String content = resource.getResponseEntity().getText();
+
 				JSONObject object = new JSONObject(content);
 				resource.release();
 				throw new CloudgeneException(e.getStatus().getCode(), object.getString("message"));
