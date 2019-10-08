@@ -32,7 +32,7 @@ public class DownloadResults extends BaseCommand {
 		CloudgeneJob job = client.getJobDetails(id);
 
 		if (job.isRunning()) {
-			println("Job is running....");
+			println("Job is running. Download starts automatically when job is finished...");
 			client.waitForJob(job.getId());
 			job = client.getJobDetails(job.getId());
 
