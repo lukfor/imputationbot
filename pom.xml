@@ -34,7 +34,7 @@
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
-    	<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<restlet.version>2.3.12</restlet.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -108,11 +108,18 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
 	</dependencies>
-	
-	
+
+
 	<build>
-	
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -122,7 +129,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-	
+
 
 			<!-- Build jar -->
 
@@ -195,5 +202,5 @@
 
 		</plugins>
 	</build>
-	
+
 </project>

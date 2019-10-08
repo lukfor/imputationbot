@@ -12,6 +12,8 @@ import org.json.JSONObject;
 
 import genepi.imputationbot.util.AnsiColors;
 import genepi.io.FileUtil;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 
 public class CloudgeneJob {
 
@@ -21,7 +23,13 @@ public class CloudgeneJob {
 		this.job = job;
 	}
 
-	public void downloadAll(CloudgeneClient client) throws JSONException, IOException, InterruptedException {
+	public void downloadAll(CloudgeneClient client)
+			throws JSONException, IOException, InterruptedException, ZipException {
+		downloadAll(client, null);
+	}
+
+	public void downloadAll(CloudgeneClient client, String password)
+			throws JSONException, IOException, InterruptedException, ZipException {
 
 		List<String> urls = new Vector<String>();
 
@@ -43,6 +51,17 @@ public class CloudgeneJob {
 			File file = new File(localPath);
 			FileUtil.createDirectory(file.getParent());
 			client.downloadResults(path, localPath);
+
+			// encrypt if file is zip
+			if (password != null && localPath.endsWith(".zip")) {
+				System.out.println("  Encrypt file " + path + "...");
+				File localFile = new File(localPath);
+				ZipFile zipFile = new ZipFile(localFile);
+				zipFile.setPassword(password);
+				zipFile.extractAll(localFile.getParent());
+				localFile.delete();
+			}
+
 		}
 
 	}
@@ -66,7 +85,7 @@ public class CloudgeneJob {
 	public long getExecutionTime() {
 		return ((job.getLong("endTime") - job.getLong("startTime")) / 1000);
 	}
-	
+
 	public boolean isRunning() {
 		return job.getInt("state") == 1 || job.getInt("state") == 2 || job.getInt("state") == 3;
 	}
@@ -99,7 +118,7 @@ public class CloudgeneJob {
 		}
 		return AnsiColors.makeGray("?");
 	}
-	
+
 	@Override
 	public String toString() {
 		String content = "Job " + getId() + "\n";
