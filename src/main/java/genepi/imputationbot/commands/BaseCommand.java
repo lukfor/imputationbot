@@ -26,6 +26,7 @@ public abstract class BaseCommand extends Tool {
 
 	public void error(String message) {
 		printlnInRed("\nError: " + message);
+		System.out.println();
 	}
 
 	public void printlnInRed(String text) {

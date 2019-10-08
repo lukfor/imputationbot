@@ -61,23 +61,42 @@ public class ConfigCloudgeneClient extends BaseCommand {
 				info("Use application '" + app.getString("name") + "' as default application for new jobs.");
 				config.setApp(app.getString("id"));
 			} else {
-				error("More than one application found on '" + hostname + "'");
-				return 1;
+				info("More than one application found on '" + hostname + "'.");
+				info("Please select a default application:");
+				for (int i = 0; i < apps.length(); i++) {
+					JSONObject app = apps.getJSONObject(i);
+					info("  [" + (i + 1) + "] " + app.get("name"));
+				}
+				System.out.print("Choice: ");
+				String choice = scanner.nextLine();
+				try {
+					int choiceIndex = Integer.parseInt(choice);
+					if (choiceIndex > 0 && choiceIndex <= apps.length()) {
+						JSONObject app2 = apps.getJSONObject(choiceIndex - 1);
+						info("Use application '" + app2.getString("name") + "' as default application for new jobs.");
+						config.setApp(app2.getString("id"));
+					} else {
+						error("Wrong choiche. Please enter a value between 1 to " + apps.length());
+						return 1;
+					}
+				} catch (Exception e) {
+					error("Wrong choiche. Please enter a value between 1 to " + apps.length());
+					return 1;
+				}
 			}
 
-			writeConfig(config);
+			writeConfig(config);			
+			
 		} catch (Exception e) {
 			error("Config file could not be written. " + e);
 			return 1;
 
 		}
 
-		// TODO: load https://imputationserver.sph.umich.edu/api/v2/server
-		// TODO: if apps > 1 ask user --> use app[0] name as default.
-
-		printlnInGreen("Config file updated.");
-
+		printlnInGreen("Config file updated. Imputation Bot is ready to submit jobs 👍");
+		System.out.println();		
 		return 0;
+		
 	}
 
 }
