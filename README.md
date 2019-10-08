@@ -21,13 +21,13 @@ your access token is stored in `~/.imputationbot`.
 Prints all jobs to stdout:
 
 ```
-imputationbot list
+imputationbot jobs
 ```
 
-Write all jobs to a json file:
+Get details about a job:
 
 ```
-imputationbot list --json my-jobs.json
+imputationbot jobs --job job-XXXXXXXX-XXXXXX-XXX 
 ```
 
 ## Submit Job

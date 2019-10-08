@@ -66,6 +66,10 @@ public class CloudgeneJob {
 	public long getExecutionTime() {
 		return ((job.getLong("endTime") - job.getLong("startTime")) / 1000);
 	}
+	
+	public boolean isRunning() {
+		return job.getInt("state") == 1 || job.getInt("state") == 2 || job.getInt("state") == 3;
+	}
 
 	public String getJobStateAsText() {
 		int state = job.getInt("state");
@@ -94,6 +98,11 @@ public class CloudgeneJob {
 			return AnsiColors.makeGray("Dead");
 		}
 		return AnsiColors.makeGray("?");
+	}
+	
+	@Override
+	public String toString() {
+		return "Job " + getId();
 	}
 
 }

@@ -39,6 +39,11 @@ public class RunImputationJob extends BaseCommand {
 	public int run() {
 		return 0;
 	}
+	
+	@Override
+	public int runAndHandleErrors() throws Exception {
+		return 0;
+	}
 
 	// we override start instead of run, because we use our own cli parser based
 	// on inputs defined in the yaml file
@@ -100,7 +105,7 @@ public class RunImputationJob extends BaseCommand {
 
 			return 0;
 		} catch (Exception e) {
-			error(e.toString());
+			error(e);
 			return 1;
 		}
 	}

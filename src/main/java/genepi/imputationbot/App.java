@@ -16,7 +16,6 @@ import org.restlet.ext.slf4j.Slf4jLoggerFacade;
 import genepi.base.Toolbox;
 import genepi.imputationbot.commands.ConfigCloudgeneClient;
 import genepi.imputationbot.commands.DownloadResults;
-import genepi.imputationbot.commands.GetJobStatus;
 import genepi.imputationbot.commands.ListJobs;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
@@ -29,7 +28,7 @@ public class App extends Toolbox {
 	public App(String command, String[] args) {
 		super(command, args);
 		turnLoggingOff();
-		printHeader();		
+		printHeader();
 	}
 
 	private void printHeader() {
@@ -54,17 +53,17 @@ public class App extends Toolbox {
 	}
 
 	public void turnLoggingOff() {
-		
+
 		Slf4jLoggerFacade loggerFacade = new Slf4jLoggerFacade();
 		Engine.getInstance().setLoggerFacade(loggerFacade);
-		
+
 		List<Logger> loggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
 		loggers.add(LogManager.getRootLogger());
 		for (Logger logger : loggers) {
 			logger.setLevel(Level.OFF);
 		}
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 
 		App toolbox = new App("imputationbot", args);
@@ -72,9 +71,7 @@ public class App extends Toolbox {
 		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("jobs", ListJobs.class);
-		toolbox.addTool("list", ListJobs.class);
 		toolbox.addTool("download", DownloadResults.class);
-		toolbox.addTool("status", GetJobStatus.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 

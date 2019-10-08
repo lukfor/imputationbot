@@ -11,6 +11,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
 import genepi.imputationbot.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.util.AnsiColors;
 
 public abstract class BaseCommand extends Tool {
@@ -23,6 +24,14 @@ public abstract class BaseCommand extends Tool {
 
 	public void info(String message) {
 		System.out.println(message);
+	}
+
+	public void error(Exception e) {
+		if (e instanceof CloudgeneException) {
+			error(e.getMessage());
+		} else {
+			error(e.toString());
+		}
 	}
 
 	public void error(String message) {
@@ -58,5 +67,19 @@ public abstract class BaseCommand extends Tool {
 		CloudgeneClientConfig config = reader.read(CloudgeneClientConfig.class);
 		return config;
 	}
+
+	@Override
+	public int run() {
+		try {
+
+			return runAndHandleErrors();
+
+		} catch (Exception e) {
+			error(e);
+			return 1;
+		}
+	}
+
+	public abstract int runAndHandleErrors() throws Exception;
 
 }

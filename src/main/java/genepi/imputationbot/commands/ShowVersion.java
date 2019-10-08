@@ -23,30 +23,26 @@ public class ShowVersion extends BaseCommand {
 	}
 
 	@Override
-	public int run() {
+	public int runAndHandleErrors() throws Exception {
 
-		try {
-			CloudgeneClientConfig config = readConfig();
-			CloudgeneClient client = new CloudgeneClient(config);
-			JSONObject app = client.getAppDetails(config.getApp());
-			JSONObject user = client.getAuthUser();
+		CloudgeneClientConfig config = readConfig();
+		CloudgeneClient client = new CloudgeneClient(config);
+		JSONObject app = client.getAppDetails(config.getApp());
+		JSONObject user = client.getAuthUser();
 
-			System.out.println("Application: ");
-			System.out.println("  Name: " + app.get("name"));
-			System.out.println("  Version: " + app.get("version"));
-			System.out.println("Hostname: " + config.getHostname());
-			if (user.has("mail")) {
-				System.out.println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
-			} else {
-				System.out.println("Username: " + user.get("username"));
-			}
-			System.out.println();
-
-			return 0;
-		} catch (Exception e) {
-			error(e.toString());
-			return 1;
+		System.out.println("Application: ");
+		System.out.println("  Name: " + app.get("name"));
+		System.out.println("  Version: " + app.get("version"));
+		System.out.println("Hostname: " + config.getHostname());
+		if (user.has("mail")) {
+			System.out.println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
+		} else {
+			System.out.println("Username: " + user.get("username"));
 		}
+		System.out.println();
+
+		return 0;
+
 	}
 
 }

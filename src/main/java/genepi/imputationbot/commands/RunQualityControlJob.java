@@ -19,7 +19,7 @@ public class RunQualityControlJob extends BaseCommand {
 	}
 
 	@Override
-	public int run() {
+	public int runAndHandleErrors() throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
