@@ -48,7 +48,8 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		// test api token by getting user profile
 		JSONObject user = client.getAuthUser();
 		println();
-		println("Hi " + user.getString("fullName") + " 👋");
+		String name = user.getString("fullName").isEmpty() ? "Mr. Shy" : user.getString("fullName");
+		println("Hi " + name + " 👋");
 		println();
 
 		JSONObject server = client.getServerDetails();
