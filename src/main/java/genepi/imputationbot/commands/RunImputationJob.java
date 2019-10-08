@@ -87,18 +87,19 @@ public class RunImputationJob extends BaseCommand {
 			CloudgeneJob job = client.submitJob(config.getApp(), form);
 
 			println();
-			printlnInGreen("Job submitted 👍");
+			printlnInGreen("Job submitted successfully 👍");
+			println();
+			println("👉 Check the job progress on " + config.getHostname() + "/index.html#!jobs/" + job.getId());
 			println();
 			println();
-			println("Job id is " + job.getId());
-
 			if (line.hasOption("wait")) {
 				println("Job is running....");
 				client.waitForJob(job.getId());
 				CloudgeneJob jobDetails = client.getJobDetails(job.getId());
 
 				println("Job completed. State: " + jobDetails.getJobStateAsText());
-
+				println();
+				println();
 			}
 
 			return 0;
