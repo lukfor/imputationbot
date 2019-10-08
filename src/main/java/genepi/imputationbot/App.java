@@ -1,11 +1,7 @@
 package genepi.imputationbot;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -47,10 +43,10 @@ public class App extends Toolbox {
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
-		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("download", DownloadResults.class);
+		toolbox.addTool("impute", RunImputationJob.class);
+		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("jobs", ListJobs.class);
-		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();

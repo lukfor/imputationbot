@@ -23,12 +23,13 @@ public class ComandlineOptionsUtil {
 			JSONObject param = params.getJSONObject(i);
 
 			String type = param.getString("type");
-
-			if (!type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
+			String id = param.getString("id");
+			
+			//ignore mode!
+			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
 					&& !type.equals("group") && !type.equals("agbcheckbox")) {
 
 				String description = param.getString("description");
-				String id = param.getString("id");
 				String value = param.getString("value");
 				boolean required = param.getBoolean("required");
 				boolean hasDefault = value != null && !value.trim().isEmpty();
@@ -108,8 +109,9 @@ public class ComandlineOptionsUtil {
 
 			String type = param.getString("type");
 			String id = param.getString("id");
-
-			if (!type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
+			
+			//ignore mode!
+			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
 					&& !type.equals("group") && !type.equals("agbcheckbox")) {
 
 				if (props.containsKey(id)) {
