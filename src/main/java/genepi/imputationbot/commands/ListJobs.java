@@ -49,16 +49,15 @@ public class ListJobs extends BaseCommand {
 					info("No jobs found.\n");
 					return 0;
 				}
-				
+
 				String[] header = new String[4];
 				header[0] = "";
 				header[1] = "Job";
 				header[2] = "Status";
 				header[3] = "Application";
 
-
 				int length = 10;
-				if (isFlagSet("all")) {
+				if (isFlagSet("all") || jobs.length() < length) {
 					length = jobs.length();
 				}
 
@@ -76,9 +75,9 @@ public class ListJobs extends BaseCommand {
 				info("Showing " + 1 + " to " + length + " of " + jobs.length() + " jobs.\n\n");
 			}
 			return 0;
-			
+
 		} catch (Exception e) {
-			
+
 			error(e.toString());
 			return 1;
 
