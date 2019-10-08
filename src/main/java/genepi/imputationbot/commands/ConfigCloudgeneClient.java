@@ -1,7 +1,5 @@
 package genepi.imputationbot.commands;
 
-import java.util.Scanner;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,8 +7,6 @@ import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 
 public class ConfigCloudgeneClient extends BaseCommand {
-
-	private static Scanner scanner = new Scanner(System.in);
 
 	public static final String DEFAULT_HOSTNAME = "https://imputationserver.sph.umich.edu";
 
@@ -32,17 +28,12 @@ public class ConfigCloudgeneClient extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		System.out.print("Imputationserver Url [" + DEFAULT_HOSTNAME + "]: ");
-		String hostname = scanner.nextLine();
-		if (hostname.isEmpty()) {
-			hostname = DEFAULT_HOSTNAME;
-		}
+		String hostname = read("Imputationserver Url", DEFAULT_HOSTNAME);
+		String token = read("API Token");
 
 		// remove trailing slashes
 		hostname = hostname.replaceFirst("/*$", "");
 
-		System.out.print("API Token [None]: ");
-		String token = scanner.nextLine();
 		if (token.isEmpty()) {
 			error("Please enter a API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
 			return 1;
@@ -57,7 +48,7 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		// test api token by getting user profile
 		JSONObject user = client.getAuthUser();
 		println();
-		info("Hi " + user.getString("fullName") + " 👋");
+		println("Hi " + user.getString("fullName") + " 👋");
 		println();
 
 		JSONObject server = client.getServerDetails();
@@ -75,14 +66,14 @@ public class ConfigCloudgeneClient extends BaseCommand {
 
 		} else {
 
-			info("More than one application found on '" + hostname + "'.");
-			info("Please select a default application:");
+			println("More than one application found on '" + hostname + "'.");
+			println("Please select a default application:");
 			for (int i = 0; i < apps.length(); i++) {
 				JSONObject app = apps.getJSONObject(i);
-				info("  [" + (i + 1) + "] " + app.get("name"));
+				println("  [" + (i + 1) + "] " + app.get("name"));
 			}
-			System.out.print("Choice: ");
-			String choice = scanner.nextLine();
+
+			String choice = read("Choice");
 			try {
 				int choiceIndex = Integer.parseInt(choice);
 				if (choiceIndex <= 0 || choiceIndex > apps.length()) {
@@ -103,7 +94,7 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		println();
 		println();
 		printlnInGreen("Imputation Bot is ready to submit jobs to '" + defaultApp.getString("name") + "' 👍");
-		System.out.println();
+		println();
 		return 0;
 
 	}

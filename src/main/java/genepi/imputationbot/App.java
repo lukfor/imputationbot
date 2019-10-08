@@ -68,10 +68,10 @@ public class App extends Toolbox {
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
+		toolbox.addTool("download", DownloadResults.class);
+		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("run", RunImputationJob.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
-		toolbox.addTool("jobs", ListJobs.class);
-		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 

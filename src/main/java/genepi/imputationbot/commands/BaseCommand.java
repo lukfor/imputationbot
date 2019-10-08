@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -18,6 +19,8 @@ public abstract class BaseCommand extends Tool {
 
 	public static String CONFIG_FILENAME = "imputationbot.config";
 
+	private static Scanner scanner = new Scanner(System.in);
+
 	public BaseCommand(String[] args) {
 		super(args);
 	}
@@ -25,8 +28,8 @@ public abstract class BaseCommand extends Tool {
 	public void println() {
 		System.out.println();
 	}
-	
-	public void info(String message) {
+
+	public void println(String message) {
 		System.out.println(message);
 	}
 
@@ -38,6 +41,22 @@ public abstract class BaseCommand extends Tool {
 		}
 	}
 
+	public String read(String label, String defaultValue) {
+		System.out.print(label + " [" + defaultValue + "]: ");
+		String value = scanner.nextLine();
+		if (value.isEmpty()) {
+			return defaultValue;
+		} else {
+			return value;
+		}
+	}
+
+	public String read(String label) {
+		System.out.print(label + " [None]: ");
+		String value = scanner.nextLine();
+		return value;		
+	}
+	
 	public void error(String message) {
 		System.out.println();
 		printlnInRed("Error: " + message);

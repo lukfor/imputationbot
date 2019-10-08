@@ -77,29 +77,27 @@ public class RunImputationJob extends BaseCommand {
 
 				HelpFormatter formatter = new HelpFormatter();
 				formatter.printHelp("imputation-butler run", "\nImputation Parameters", options, "", true);
-				System.out.println();
+				println();
 				error(e.getMessage());
-				System.out.println();
+				println();
 				return 1;
 			}
 
 			FormDataSet form = ComandlineOptionsUtil.createForm(params, line);
 			CloudgeneJob job = client.submitJob(config.getApp(), form);
 
-			System.out.println();
-
+			println();
 			printlnInGreen("Job submitted 👍");
-
-			System.out.println();
-
-			info("\nJob id is " + job.getId());
+			println();
+			println();
+			println("Job id is " + job.getId());
 
 			if (line.hasOption("wait")) {
-				info("Job is running....");
+				println("Job is running....");
 				client.waitForJob(job.getId());
 				CloudgeneJob jobDetails = client.getJobDetails(job.getId());
 
-				System.out.println("Job completed. State: " + jobDetails.getJobStateAsText());
+				println("Job completed. State: " + jobDetails.getJobStateAsText());
 
 			}
 

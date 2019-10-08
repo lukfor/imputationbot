@@ -30,16 +30,16 @@ public class ShowVersion extends BaseCommand {
 		JSONObject app = client.getAppDetails(config.getApp());
 		JSONObject user = client.getAuthUser();
 
-		System.out.println("Application: ");
-		System.out.println("  Name: " + app.get("name"));
-		System.out.println("  Version: " + app.get("version"));
-		System.out.println("Hostname: " + config.getHostname());
+		println("Application: ");
+		println("  Name: " + app.get("name"));
+		println("  Version: " + app.get("version"));
+		println("Hostname: " + config.getHostname());
 		if (user.has("mail")) {
-			System.out.println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
+			println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
 		} else {
-			System.out.println("Username: " + user.get("username"));
+			println("Username: " + user.get("username"));
 		}
-		System.out.println();
+		println();
 
 		return 0;
 

@@ -37,7 +37,7 @@ public class ListJobs extends BaseCommand {
 			String id = getValue("job").toString();
 			CloudgeneJob cloudgeneJob = client.getJobDetails(id);
 
-			info(cloudgeneJob.toString());
+			println(cloudgeneJob.toString());
 
 			return 0;
 
@@ -49,7 +49,7 @@ public class ListJobs extends BaseCommand {
 				jobs.setLimit(-1);
 			}
 
-			info(jobs.toString());
+			println(jobs.toString());
 
 			return 0;
 
