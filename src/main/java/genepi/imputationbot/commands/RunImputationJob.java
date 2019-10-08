@@ -8,6 +8,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.restlet.ext.html.FormData;
 import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneClient;
@@ -39,7 +40,7 @@ public class RunImputationJob extends BaseCommand {
 	public int run() {
 		return 0;
 	}
-	
+
 	@Override
 	public int runAndHandleErrors() throws Exception {
 		return 0;
@@ -63,9 +64,13 @@ public class RunImputationJob extends BaseCommand {
 			Options options = ComandlineOptionsUtil.createOptionsFromApp(params);
 
 			// add wait flag
-			Option option = new Option(null, "wait", false, "Wait until the job is executed");
-			option.setRequired(false);
-			options.addOption(option);
+			Option optionWait = new Option(null, "wait", false, "Wait until the job is executed");
+			optionWait.setRequired(false);
+			options.addOption(optionWait);
+
+			Option optionPassword = new Option(null, "password", true, "Password used to encrypt results");
+			optionPassword.setRequired(false);
+			options.addOption(optionPassword);
 
 			// parse the command line arguments
 			CommandLine line = null;
@@ -84,10 +89,19 @@ public class RunImputationJob extends BaseCommand {
 			}
 
 			FormDataSet form = ComandlineOptionsUtil.createForm(params, line);
+
+			// add password
+			if (line.hasOption("password")) {
+				// TODO: add password check! smae as for username?
+				form.getEntries().add(new FormData("password", line.getOptionValue("password")));
+				println();
+				println("💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
+			}
+
 			CloudgeneJob job = client.submitJob(config.getApp(), form);
 
 			println();
-			printlnInGreen("Job submitted successfully 👍");
+			printlnInGreen("👍 Job submitted successfully");
 			println();
 			println("👉 Check the job progress on " + config.getHostname() + "/index.html#!jobs/" + job.getId());
 			println();
@@ -104,6 +118,7 @@ public class RunImputationJob extends BaseCommand {
 
 			return 0;
 		} catch (Exception e) {
+			e.printStackTrace();
 			error(e);
 			return 1;
 		}
