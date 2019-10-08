@@ -29,9 +29,19 @@ public class DownloadResults extends BaseCommand {
 		CloudgeneClientConfig config = readConfig();
 		CloudgeneClient client = new CloudgeneClient(config);
 
-		CloudgeneJob cloudgeneJob = client.getJobDetails(id);
+		CloudgeneJob job = client.getJobDetails(id);
 
-		cloudgeneJob.downloadAll(client);
+		if (job.isRunning()) {
+			println("Job is running....");
+			client.waitForJob(job.getId());
+			job = client.getJobDetails(job.getId());
+
+			println("Job completed. State: " + job.getJobStateAsText());
+			println();
+			println();
+		}
+
+		job.downloadAll(client);
 
 		return 0;
 
