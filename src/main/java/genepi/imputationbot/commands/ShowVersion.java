@@ -35,9 +35,13 @@ public class ShowVersion extends BaseCommand {
 			System.out.println("  Name: " + app.get("name"));
 			System.out.println("  Version: " + app.get("version"));
 			System.out.println("Hostname: " + config.getHostname());
-			System.out.println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
+			if (user.has("mail")) {
+				System.out.println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
+			} else {
+				System.out.println("Username: " + user.get("username"));
+			}
 			System.out.println();
-			
+
 			return 0;
 		} catch (Exception e) {
 			error(e.toString());
