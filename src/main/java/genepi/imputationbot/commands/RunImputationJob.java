@@ -12,6 +12,7 @@ import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.util.ComandlineOptionsUtil;
 
 public class RunImputationJob extends BaseCommand {
@@ -78,22 +79,22 @@ public class RunImputationJob extends BaseCommand {
 			}
 
 			FormDataSet form = ComandlineOptionsUtil.createForm(params, line);
-			JSONObject job = client.submitJob(config.getApp(), form);
-
-			String id = job.getString("id");
+			CloudgeneJob job = client.submitJob(config.getApp(), form);
 
 			System.out.println();
 
 			printlnInGreen("Job submitted 👍");
-			
-			info("\nJob id is " + id);
+
+			System.out.println();
+
+			info("\nJob id is " + job.getId());
 
 			if (line.hasOption("wait")) {
 				info("Job is running....");
-				client.waitForJob(id);
-				JSONObject jobDetails = client.getJobDetails(id);
+				client.waitForJob(job.getId());
+				CloudgeneJob jobDetails = client.getJobDetails(job.getId());
 
-				System.out.println("Job completed. State: " + getJobStateAsText(jobDetails.getInt("state")));
+				System.out.println("Job completed. State: " + jobDetails.getJobStateAsText());
 
 			}
 

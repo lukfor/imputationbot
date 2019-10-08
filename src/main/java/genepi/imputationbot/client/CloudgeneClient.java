@@ -3,7 +3,9 @@ package genepi.imputationbot.client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +52,7 @@ public class CloudgeneClient {
 		return object;
 
 	}
-	
+
 	public JSONObject getServerDetails() throws IOException, JSONException, InterruptedException {
 
 		ClientResource resourceStatus = createClientResource("/api/v2/server");
@@ -77,14 +79,14 @@ public class CloudgeneClient {
 
 	}
 
-	public JSONObject submitJob(String app, FormDataSet form) throws JSONException, IOException {
+	public CloudgeneJob submitJob(String app, FormDataSet form) throws JSONException, IOException {
 
 		ClientResource resource = createClientResource("/api/v2/jobs/submit/" + app);
 		resource.post(form);
 
 		JSONObject object = new JSONObject(resource.getResponseEntity().getText());
 		resource.release();
-		return object;
+		return new CloudgeneJob(object);
 	}
 
 	public void waitForJob(String id) throws IOException, JSONException, InterruptedException {
@@ -102,7 +104,7 @@ public class CloudgeneClient {
 		}
 	}
 
-	public JSONObject getJobDetails(String id) throws IOException, JSONException, InterruptedException {
+	public CloudgeneJob getJobDetails(String id) throws IOException, JSONException, InterruptedException {
 
 		ClientResource resourceStatus = createClientResource("/api/v2/jobs/" + id);
 
@@ -111,11 +113,11 @@ public class CloudgeneClient {
 		JSONObject object = new JSONObject(resourceStatus.getResponseEntity().getText());
 		resourceStatus.release();
 
-		return object;
+		return new CloudgeneJob(object);
 
 	}
 
-	public JSONArray getJobs() throws JSONException, IOException {
+	public List<CloudgeneJob> getJobs() throws JSONException, IOException {
 		{
 
 			ClientResource resourceJobs = createClientResource("/api/v2/jobs");
@@ -123,9 +125,13 @@ public class CloudgeneClient {
 			resourceJobs.get();
 
 			JSONObject object = new JSONObject(resourceJobs.getResponseEntity().getText());
-			JSONArray result = object.getJSONArray("data");
+			JSONArray jobs = object.getJSONArray("data");
 			resourceJobs.release();
 
+			List<CloudgeneJob> result = new Vector<CloudgeneJob>();
+			for (int i = 0; i < jobs.length(); i++) {
+				result.add(new CloudgeneJob(jobs.getJSONObject(i)));
+			}
 			return result;
 
 		}

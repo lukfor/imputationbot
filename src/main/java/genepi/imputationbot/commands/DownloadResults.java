@@ -32,9 +32,7 @@ public class DownloadResults extends BaseCommand {
 			CloudgeneClientConfig config = readConfig();
 			CloudgeneClient client = new CloudgeneClient(config);
 
-			JSONObject job = client.getJobDetails(id);
-
-			CloudgeneJob cloudgeneJob = new CloudgeneJob(job);
+			CloudgeneJob cloudgeneJob = client.getJobDetails(id);
 
 			cloudgeneJob.downloadAll(client);
 
