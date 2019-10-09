@@ -15,6 +15,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
 import genepi.imputationbot.App;
+import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
@@ -70,7 +71,7 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public void error(Exception e) {
-		if (e instanceof CloudgeneException) {
+		if (e instanceof CloudgeneException || e instanceof CloudgeneAppException) {
 			error(e.getMessage());
 		} else {
 			error(e.toString());
@@ -132,7 +133,8 @@ public abstract class BaseCommand extends Tool {
 			File file = new File(CONFIG_FILENAME);
 
 			if (!file.exists()) {
-				throw new Exception("No configuration found. Please run 'imputationbot configure' and enter your API Token");
+				throw new Exception(
+						"No configuration found. Please run 'imputationbot configure' and enter your API Token");
 			}
 
 			YamlReader reader = new YamlReader(new FileReader(CONFIG_FILENAME));

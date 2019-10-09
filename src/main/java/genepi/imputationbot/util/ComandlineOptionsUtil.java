@@ -1,5 +1,6 @@
 package genepi.imputationbot.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,9 @@ import org.restlet.ext.html.FormData;
 import org.restlet.ext.html.FormDataSet;
 import org.restlet.representation.FileRepresentation;
 
+import genepi.imputationbot.client.CloudgeneAppException;
+import genepi.io.FileUtil;
+
 public class ComandlineOptionsUtil {
 
 	public static Options createOptionsFromApp(JSONArray params) {
@@ -24,15 +28,18 @@ public class ComandlineOptionsUtil {
 
 			String type = param.getString("type");
 			String id = param.getString("id");
-			
-			//ignore mode!
-			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
-					&& !type.equals("group") && !type.equals("agbcheckbox")) {
+
+			// ignore mode!
+			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox")
+					&& !type.equals("info") && !type.equals("group") && !type.equals("agbcheckbox")) {
 
 				String description = param.getString("description");
 				String value = param.getString("value");
 				boolean required = param.getBoolean("required");
 				boolean hasDefault = value != null && !value.trim().isEmpty();
+
+				// remove html tags from decription (e.g. links)
+				description = description.replaceAll("\\<.*?>", "");
 
 				Option option = new Option(null, id, true, description);
 				option.setRequired(required && !hasDefault);
@@ -46,7 +53,7 @@ public class ComandlineOptionsUtil {
 						if (j > 0) {
 							typeName += "|";
 						}
-						typeName += key;						
+						typeName += key;
 					}
 					option.setArgName(typeName);
 				} else if (type.equals("app_list")) {
@@ -57,7 +64,7 @@ public class ComandlineOptionsUtil {
 						if (j > 0) {
 							typeName += "|";
 						}
-						typeName += key.replaceAll("apps@", "");	
+						typeName += key.replaceAll("apps@", "");
 					}
 					option.setArgName(typeName);
 				} else if (type.equals("checkbox")) {
@@ -68,11 +75,11 @@ public class ComandlineOptionsUtil {
 						if (j > 0) {
 							typeName += "|";
 						}
-						typeName += label;						
+						typeName += label;
 					}
 					option.setArgName(typeName);
 				}
-				
+
 				if (hasDefault) {
 					description += "\n[Default: " + value + "]";
 				} else {
@@ -88,7 +95,7 @@ public class ComandlineOptionsUtil {
 
 	}
 
-	public static FormDataSet createForm(JSONArray params, CommandLine line) throws FileNotFoundException {
+	public static FormDataSet createForm(JSONArray params, CommandLine line) throws Exception {
 		Map<String, String> props = new HashMap<String, String>();
 
 		for (int i = 0; i < params.length(); i++) {
@@ -100,7 +107,7 @@ public class ComandlineOptionsUtil {
 		}
 
 		System.out.println("Parameters:");
-		
+
 		FormDataSet form = new FormDataSet();
 		form.setMultipart(true);
 		for (int i = 0; i < params.length(); i++) {
@@ -109,10 +116,10 @@ public class ComandlineOptionsUtil {
 
 			String type = param.getString("type");
 			String id = param.getString("id");
-			
-			//ignore mode!
-			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox") && !type.equals("info")
-					&& !type.equals("group") && !type.equals("agbcheckbox")) {
+
+			// ignore mode!
+			if (!id.equals("mode") && !type.equals("separator") && !type.equals("terms_checkbox")
+					&& !type.equals("info") && !type.equals("group") && !type.equals("agbcheckbox")) {
 
 				if (props.containsKey(id)) {
 
@@ -127,13 +134,40 @@ public class ComandlineOptionsUtil {
 							System.out.println("  " + id + ": " + value);
 						} else {
 
-							//split by,
-							//if folder: add all vcf.gz files
-							//if txt file: --> each line one file
-							
-							form.getEntries().add(new FormData(id,
-									new FileRepresentation(value, MediaType.APPLICATION_OCTET_STREAM)));
-							System.out.println("  " + id + ": " + value);
+							String[] tiles = value.split(",");
+							System.out.println("  " + id + ":");
+							for (String tile : tiles) {
+
+								File file = new File(tile);
+
+								if (file.exists()) {
+
+									if (file.isDirectory()) {
+
+										File[] files = file.listFiles();
+
+										for (File subfile : files) {
+											if (subfile.getAbsolutePath().endsWith(".vcf.gz")) {
+												form.getEntries()
+														.add(new FormData(id,
+																new FileRepresentation(subfile.getAbsolutePath(),
+																		MediaType.APPLICATION_OCTET_STREAM)));
+												System.out.println("   - " + subfile.getAbsolutePath());
+											}
+										}
+
+									} else {
+
+										form.getEntries().add(new FormData(id,
+												new FileRepresentation(tile, MediaType.APPLICATION_OCTET_STREAM)));
+										System.out.println("   - " + tile);
+
+									}
+
+								} else {
+									throw new CloudgeneAppException("File '" + file + "' not found.");
+								}
+							}
 						}
 					} else {
 						form.getEntries().add(new FormData(id, value));
