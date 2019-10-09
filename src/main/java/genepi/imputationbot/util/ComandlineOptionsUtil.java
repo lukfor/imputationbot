@@ -141,7 +141,7 @@ public class ComandlineOptionsUtil {
 					String key = values.getJSONObject(j).getString("key");
 					String value = values.getJSONObject(j).getString("value");
 
-					String temp = "--refpanel " + key.replaceAll("apps@", "");
+					String temp = "--refpanel " + prettyAppId(key);
 					while (temp.length() < 35) {
 						temp += " ";
 					}
@@ -187,7 +187,7 @@ public class ComandlineOptionsUtil {
 					String value = props.get(id);
 
 					if (type.equals("app_list")) {
-						String value2 = "apps@" + value;
+						String value2 = createAppId(param, value);
 						if (!isValidValue(param, value2)) {
 							throw new CloudgeneAppException(
 									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
@@ -203,7 +203,7 @@ public class ComandlineOptionsUtil {
 						System.out.println("  " + id + ": " + value);
 					} else if (type.equals("binded_list")) {
 						String bind = param.getString("bind");
-						String valueBind = "apps@" + props.get(bind);
+						String valueBind = createAppId(params, bind, props.get(bind));
 						if (!isValidBindedValue(param, valueBind, value)) {
 							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '"
 									+ param.getString("id") + "' in combination with " + bind + " '" + valueBind + "'");
@@ -286,6 +286,29 @@ public class ComandlineOptionsUtil {
 		return "unkown";
 	}
 
+	public static String createAppId(JSONObject param, String key) {
+		JSONArray values = param.getJSONArray("values");
+
+		for (int j = 0; j < values.length(); j++) {
+			String key2 = values.getJSONObject(j).getString("key");
+			if (key.equals(prettyAppId(key2))) {
+				return key2;
+			}
+		}
+
+		return key;
+	}
+
+	public static String createAppId(JSONArray params, String paramId, String key) {
+		for (int i = 0; i < params.length(); i++) {
+			JSONObject param = params.getJSONObject(i);
+			if (param.getString("id").equals(paramId)) {
+				return createAppId(param, key);
+			}
+		}
+		return key;
+	}
+
 	public static boolean isValidValue(JSONObject param, String key) {
 		JSONArray values = param.getJSONArray("values");
 
@@ -318,6 +341,11 @@ public class ComandlineOptionsUtil {
 			}
 		}
 		return false;
+	}
+
+	public static String prettyAppId(String id) {
+		String[] tiles = id.split("@");
+		return (tiles.length > 1 ? tiles[1] : id);
 	}
 
 }
