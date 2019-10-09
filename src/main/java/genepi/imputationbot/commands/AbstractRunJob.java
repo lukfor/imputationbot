@@ -134,7 +134,6 @@ public class AbstractRunJob extends BaseCommand {
 
 			return 0;
 		} catch (Exception e) {
-			e.printStackTrace();
 			error(e);
 			return 1;
 		}
