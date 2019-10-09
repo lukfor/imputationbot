@@ -58,7 +58,11 @@ public class CloudgeneApiToken {
 
 	@Override
 	public String toString() {
-		return token.getString("message");
+		if (token.has("message")) {
+			return token.getString("message");
+		} else {
+			return "The provided API token is malformed.";
+		}
 	}
 
 }
