@@ -3,7 +3,6 @@ package genepi.imputationbot.commands;
 import java.text.SimpleDateFormat;
 
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.client.CloudgeneJobList;
 
@@ -22,17 +21,16 @@ public class ListJobs extends BaseCommand {
 
 	@Override
 	public void init() {
+
 	}
 
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		CloudgeneClientConfig config = readConfig();
-		CloudgeneClient client = new CloudgeneClient(config);
+		CloudgeneClient client = getClient();
 
 		String[] jobIds = getRemainingArgs();
 
-		
 		if (jobIds.length > 0) {
 
 			String id = jobIds[0];

@@ -36,6 +36,11 @@ imputationbot jobs job-XXXXXXXX-XXXXXX-XXX
 imputationbot impute --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
 ```
 
+```
+imputationbot validate --files path/to/my.vcf.gz --refpanel hapmap2 --population eur
+```
+
+
 ## Download all Results
 
 ```

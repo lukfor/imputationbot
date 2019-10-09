@@ -3,7 +3,6 @@ package genepi.imputationbot.commands;
 import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 
 public class ShowVersion extends BaseCommand {
 
@@ -13,7 +12,6 @@ public class ShowVersion extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -25,15 +23,15 @@ public class ShowVersion extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		CloudgeneClientConfig config = readConfig();
-		CloudgeneClient client = new CloudgeneClient(config);
-		JSONObject app = client.getAppDetails(config.getApp());
+		CloudgeneClient client = getClient();
+
+		JSONObject app = client.getDefaultApp();
 		JSONObject user = client.getAuthUser();
 
 		println("Application: ");
 		println("  Name: " + app.get("name"));
 		println("  Version: " + app.get("version"));
-		println("Hostname: " + config.getHostname());
+		println("Hostname: " + getConfig().getHostname());
 		if (user.has("mail")) {
 			println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
 		} else {

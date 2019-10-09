@@ -12,7 +12,6 @@ import org.restlet.ext.html.FormData;
 import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.util.ComandlineOptionsUtil;
 
@@ -34,7 +33,6 @@ public class AbstractRunJob extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -59,9 +57,9 @@ public class AbstractRunJob extends BaseCommand {
 	public int start() {
 
 		try {
-			CloudgeneClientConfig config = readConfig();
-			CloudgeneClient client = new CloudgeneClient(config);
-			JSONObject app = client.getAppDetails(config.getApp());
+			CloudgeneClient client = getClient();
+			JSONObject app = client.getDefaultApp();
+
 			JSONArray params = app.getJSONArray("params");
 
 			// create the command line parser
@@ -108,7 +106,7 @@ public class AbstractRunJob extends BaseCommand {
 				println("💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
 			}
 
-			CloudgeneJob job = client.submitJob(config.getApp(), form);
+			CloudgeneJob job = client.submitJob(app.getString("id"), form);
 
 			println();
 
@@ -119,7 +117,7 @@ public class AbstractRunJob extends BaseCommand {
 			}
 
 			println();
-			println("👉 Check the job progress on " + config.getHostname() + "/index.html#!jobs/" + job.getId());
+			println("👉 Check the job progress on " + getConfig().getHostname() + "/index.html#!jobs/" + job.getId());
 			println();
 			println();
 			if (line.hasOption("wait")) {

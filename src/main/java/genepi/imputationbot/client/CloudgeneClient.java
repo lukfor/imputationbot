@@ -67,6 +67,12 @@ public class CloudgeneClient {
 		return object;
 
 	}
+	
+	public JSONObject getDefaultApp() throws CloudgeneException {
+		
+		 return getAppDetails(config.getApp());
+		
+	}
 
 	public CloudgeneJob submitJob(String app, FormDataSet form) throws JSONException, IOException {
 

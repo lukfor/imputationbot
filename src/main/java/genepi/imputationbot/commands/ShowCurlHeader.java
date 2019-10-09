@@ -10,7 +10,6 @@ public class ShowCurlHeader extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -22,8 +21,8 @@ public class ShowCurlHeader extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		CloudgeneClientConfig config = readConfig();
-		System.out.print("-H \"X-Auth-Token: " + config.getToken() +  "\" ");
+		CloudgeneClientConfig config = getConfig();
+		System.out.print("-H \"X-Auth-Token: " + config.getToken() + "\" ");
 
 		return 0;
 

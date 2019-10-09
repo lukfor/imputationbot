@@ -16,13 +16,12 @@ public class ConfigCloudgeneClient extends BaseCommand {
 
 	@Override
 	public void createParameters() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override

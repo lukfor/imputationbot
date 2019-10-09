@@ -15,6 +15,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
 import genepi.imputationbot.App;
+import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.util.AnsiColors;
@@ -24,6 +25,8 @@ public abstract class BaseCommand extends Tool {
 	public static String CONFIG_FILENAME = "imputationbot.config";
 
 	private static Scanner scanner = new Scanner(System.in);
+
+	private CloudgeneClientConfig config;
 
 	public BaseCommand(String[] args) {
 		super(args);
@@ -111,16 +114,30 @@ public abstract class BaseCommand extends Tool {
 		writer.close();
 	}
 
-	public CloudgeneClientConfig readConfig() throws Exception {
+	public CloudgeneClient getClient() throws Exception {
 
-		File file = new File(CONFIG_FILENAME);
+		CloudgeneClientConfig config = getConfig();
+		CloudgeneClient client = new CloudgeneClient(config);
 
-		if (!file.exists()) {
-			throw new Exception("No configuration found. Please run 'imputationbot configure'");
+		// test api token by getting user profile
+		client.getAuthUser();
+
+		return client;
+
+	}
+
+	public CloudgeneClientConfig getConfig() throws Exception {
+
+		if (config == null) {
+			File file = new File(CONFIG_FILENAME);
+
+			if (!file.exists()) {
+				throw new Exception("No configuration found. Please run 'imputationbot configure' and enter your API Token");
+			}
+
+			YamlReader reader = new YamlReader(new FileReader(CONFIG_FILENAME));
+			config = reader.read(CloudgeneClientConfig.class);
 		}
-
-		YamlReader reader = new YamlReader(new FileReader(CONFIG_FILENAME));
-		CloudgeneClientConfig config = reader.read(CloudgeneClientConfig.class);
 		return config;
 	}
 

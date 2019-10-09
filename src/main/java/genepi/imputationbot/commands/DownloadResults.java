@@ -2,7 +2,6 @@ package genepi.imputationbot.commands;
 
 import genepi.base.Tool;
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneJob;
 
 public class DownloadResults extends BaseCommand {
@@ -18,6 +17,7 @@ public class DownloadResults extends BaseCommand {
 
 	@Override
 	public void init() {
+
 	}
 
 	@Override
@@ -30,8 +30,7 @@ public class DownloadResults extends BaseCommand {
 			return 1;
 		}
 
-		CloudgeneClientConfig config = readConfig();
-		CloudgeneClient client = new CloudgeneClient(config);
+		CloudgeneClient client = getClient();
 
 		for (int i = 0; i < jobIds.length; i++) {
 			String id = jobIds[i];
