@@ -3,8 +3,10 @@ package genepi.imputationbot.commands;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
+import genepi.imputationbot.client.CloudgeneException;
 
 public class ConfigCloudgeneClient extends BaseCommand {
 
@@ -43,6 +45,23 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		config.setToken(token);
 
 		CloudgeneClient client = new CloudgeneClient(config);
+
+		// verify token
+		try {
+			CloudgeneApiToken apiToken = client.verifyToken(token);
+			if (!apiToken.isValid()) {
+				throw new CloudgeneException(100, apiToken.toString());
+			}
+
+		} catch (CloudgeneException e) {
+			if (e.getCode() == 404) {
+				throw new CloudgeneException(e.getCode(),
+						"Token could not be verified. Are you sure Imputationserver is running on '"
+								+ config.getHostname() + "'?");
+			} else {
+				throw e;
+			}
+		}
 
 		// test api token by getting user profile
 		JSONObject user = client.getAuthUser();

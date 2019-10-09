@@ -121,16 +121,27 @@ public abstract class BaseCommand extends Tool {
 		CloudgeneClientConfig config = getConfig();
 		CloudgeneClient client = new CloudgeneClient(config);
 
-		CloudgeneApiToken token = client.verifyToken(config.getToken());
+		try {
+			CloudgeneApiToken token = client.verifyToken(config.getToken());
 
-		if (!token.isValid()) {
-			throw new CloudgeneException(100, token.toString());
-		}
+			if (!token.isValid()) {
+				throw new CloudgeneException(100, token.toString());
+			}
 
-		if (token.getExpiresInDays() < 7) {
-			println();
-			println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
-			println();
+			if (token.getExpiresInDays() < 7) {
+				println();
+				println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
+				println();
+			}
+
+		} catch (CloudgeneException e) {
+			if (e.getCode() == 404) {
+				throw new CloudgeneException(e.getCode(),
+						"Token could not be verified. Are you sure Imputationserver is running on '"
+								+ config.getHostname() + "'?");
+			} else {
+				throw e;
+			}
 		}
 
 		return client;
