@@ -2,6 +2,7 @@ package genepi.imputationbot.commands;
 
 import org.json.JSONObject;
 
+import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneClient;
 
 public class ShowVersion extends BaseCommand {
@@ -37,6 +38,10 @@ public class ShowVersion extends BaseCommand {
 		} else {
 			println("Username: " + user.get("username"));
 		}
+		println();
+
+		CloudgeneApiToken token = client.verifyToken(getConfig().getToken());
+		println(token.toString());
 		println();
 
 		return 0;

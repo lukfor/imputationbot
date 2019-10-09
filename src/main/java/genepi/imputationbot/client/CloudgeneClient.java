@@ -48,6 +48,18 @@ public class CloudgeneClient {
 
 	}
 
+	public CloudgeneApiToken verifyToken(String token) throws CloudgeneException {
+
+		ClientResource resource = createClientResource("/api/v2/tokens/verify");
+
+		FormDataSet form = new FormDataSet();
+		form.add("token", token);
+		String content = post(resource, form);
+		JSONObject object = new JSONObject(content);
+		return new CloudgeneApiToken(object);
+
+	}
+
 	public JSONObject getServerDetails() throws CloudgeneException {
 
 		ClientResource resource = createClientResource("/api/v2/server");
@@ -67,24 +79,28 @@ public class CloudgeneClient {
 		return object;
 
 	}
-	
+
 	public JSONObject getDefaultApp() throws CloudgeneException {
-		
-		 return getAppDetails(config.getApp());
-		
+
+		return getAppDetails(config.getApp());
+
 	}
 
-	public CloudgeneJob submitJob(String app, FormDataSet form) throws JSONException, IOException {
+	public CloudgeneJob submitJob(String app, FormDataSet form) throws CloudgeneException {
 
 		ClientResource resource = createClientResource("/api/v2/jobs/submit/" + app);
-		resource.post(form);
 
-		JSONObject object = new JSONObject(resource.getResponseEntity().getText());
-		resource.release();
+		String content = post(resource, form);
+		JSONObject object = new JSONObject(content);
+
 		return new CloudgeneJob(object);
 	}
 
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
+		waitForJob(id, 10000);
+	}
+
+	public void waitForJob(String id, int pollingTime) throws CloudgeneException, InterruptedException {
 
 		ClientResource resource = createClientResource("/api/v2/jobs/" + id + "/status");
 
@@ -93,8 +109,8 @@ public class CloudgeneClient {
 		CloudgeneJob job = new CloudgeneJob(object);
 
 		if (job.isRunning()) {
-			Thread.sleep(10000);
-			waitForJob(id);
+			Thread.sleep(pollingTime);
+			waitForJob(id, pollingTime);
 		}
 	}
 
@@ -139,6 +155,50 @@ public class CloudgeneClient {
 
 		try {
 			resource.get();
+			String content = resource.getResponseEntity().getText();
+			resource.release();
+			return content;
+
+		} catch (JSONException e) {
+
+			throw new CloudgeneException(120, "Parsing JSON object failed. " + e.getMessage());
+
+		} catch (IOException e) {
+
+			throw new CloudgeneException(100, "IO Exception");
+
+		} catch (ResourceException e) {
+
+			try {
+
+				if (resource.getResponseEntity() == null) {
+					throw new CloudgeneException(1000, "The provided server is not responding.");
+				}
+				String content = resource.getResponseEntity().getText();
+
+				JSONObject object = new JSONObject(content);
+				resource.release();
+				throw new CloudgeneException(e.getStatus().getCode(), object.getString("message"));
+			} catch (JSONException e2) {
+
+				if (e.getStatus().getCode() == 401) {
+					throw new CloudgeneException(e.getStatus().getCode(),
+							"The provided Token is invalid. Please check if your token is correct and not expired");
+				} else {
+					throw new CloudgeneException(e.getStatus().getCode(), e.toString());
+				}
+
+			} catch (IOException e2) {
+
+				throw new CloudgeneException(100, e2.toString());
+			}
+		}
+	}
+
+	public String post(ClientResource resource, FormDataSet form) throws CloudgeneException {
+
+		try {
+			resource.post(form);
 			String content = resource.getResponseEntity().getText();
 			resource.release();
 			return content;

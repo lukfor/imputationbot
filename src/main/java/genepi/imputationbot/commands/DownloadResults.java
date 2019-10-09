@@ -51,7 +51,7 @@ public class DownloadResults extends BaseCommand {
 				println();
 			}
 
-			println("Download job " + job.getId() + "...");
+			println("Downloading job " + job.getId() + "...");
 			Object password = getValue("password");
 			Object output = getValue("output");
 			String outputFolder = null;
@@ -66,7 +66,7 @@ public class DownloadResults extends BaseCommand {
 				job.downloadAll(client, outputFolder);
 			}
 			println();
-			printlnInGreen("All data downloaded to file://" + (new File(outputFolder)).getAbsolutePath());
+			printlnInGreen("All data downloaded and stored file://" + (new File(outputFolder)).getAbsolutePath());
 			println();
 			println();
 		}

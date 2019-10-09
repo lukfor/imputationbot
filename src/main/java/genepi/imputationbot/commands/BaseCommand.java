@@ -15,6 +15,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
 import genepi.imputationbot.App;
+import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
@@ -120,8 +121,17 @@ public abstract class BaseCommand extends Tool {
 		CloudgeneClientConfig config = getConfig();
 		CloudgeneClient client = new CloudgeneClient(config);
 
-		// test api token by getting user profile
-		client.getAuthUser();
+		CloudgeneApiToken token = client.verifyToken(config.getToken());
+
+		if (!token.isValid()) {
+			throw new CloudgeneException(100, token.toString());
+		}
+
+		if (token.getExpiresInDays() < 7) {
+			println();
+			println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
+			println();
+		}
 
 		return client;
 
