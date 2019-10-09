@@ -50,6 +50,7 @@ public class App extends Toolbox {
 		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
+		toolbox.addTool("info", ShowVersion.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 
