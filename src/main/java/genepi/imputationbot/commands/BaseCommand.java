@@ -154,7 +154,7 @@ public abstract class BaseCommand extends Tool {
 			File file = new File(CONFIG_FILENAME);
 
 			if (!file.exists()) {
-				throw new Exception(
+				throw new CloudgeneAppException(
 						"No configuration found. Please run 'imputationbot configure' and enter your API Token");
 			}
 
