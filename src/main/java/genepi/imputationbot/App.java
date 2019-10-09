@@ -13,6 +13,7 @@ import genepi.base.Toolbox;
 import genepi.imputationbot.commands.ConfigCloudgeneClient;
 import genepi.imputationbot.commands.DownloadResults;
 import genepi.imputationbot.commands.ListJobs;
+import genepi.imputationbot.commands.ListRefPanels;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowCurlHeader;
@@ -45,6 +46,7 @@ public class App extends Toolbox {
 		toolbox.addTool("configure", ConfigCloudgeneClient.class);
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("impute", RunImputationJob.class);
+		toolbox.addTool("refpanels", ListRefPanels.class);
 		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
