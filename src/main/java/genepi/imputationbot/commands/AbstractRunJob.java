@@ -88,6 +88,8 @@ public class AbstractRunJob extends BaseCommand {
 				HelpFormatter formatter = new HelpFormatter();
 				formatter.printHelp("imputation-butler run", "\nImputation Parameters", options, "", true);
 				println();
+				ComandlineOptionsUtil.printDetails(params);
+				println();
 				error(e.getMessage());
 				println();
 				return 1;

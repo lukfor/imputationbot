@@ -55,16 +55,12 @@ public class ComandlineOptionsUtil {
 					}
 					option.setArgName(typeName);
 				} else if (type.equals("app_list")) {
-					JSONArray values = param.getJSONArray("values");
-					String typeName = "";
-					for (int j = 0; j < values.length(); j++) {
-						String key = values.getJSONObject(j).getString("key");
-						if (j > 0) {
-							typeName += "|";
-						}
-						typeName += key.replaceAll("apps@", "");
-					}
-					option.setArgName(typeName);
+					// details in print AppList and bindedList
+					description += "\n(see below)";
+					option.setArgName(id);
+				} else if (type.equals("binded_list")) {
+					option.setArgName(id);
+					description += "\n(see below)";
 				} else if (type.equals("checkbox")) {
 					JSONArray values = param.getJSONArray("values");
 					String typeName = "";
@@ -79,9 +75,9 @@ public class ComandlineOptionsUtil {
 				}
 
 				if (hasDefault) {
-					description += "\n[Default: " + value + "]";
+					description += "\n(default: " + value + ")";
 				} else {
-					description += "\n[Required]";
+					// description += "\n[Required]";
 				}
 
 				option.setDescription(description);
@@ -90,6 +86,73 @@ public class ComandlineOptionsUtil {
 			}
 		}
 		return options;
+
+	}
+
+	public static void printDetails(JSONArray params) {
+
+		Map<String, String> populations = new HashMap<String, String>();
+
+		for (int i = 0; i < params.length(); i++) {
+
+			JSONObject param = params.getJSONObject(i);
+			String id = param.getString("id");
+
+			if (id.equals("population")) {
+
+				JSONArray values = param.getJSONArray("values");
+				for (int j = 0; j < values.length(); j++) {
+					String key = values.getJSONObject(j).getString("key");
+					JSONArray valuesKey = values.getJSONObject(j).getJSONArray("values");
+					String description = "";
+					for (int k = 0; k < valuesKey.length(); k++) {
+						String keyPop = valuesKey.getJSONObject(k).getString("key");
+						String value = valuesKey.getJSONObject(k).getString("value");
+
+						String temp = "--population " + keyPop;
+						while (temp.length() < 35) {
+							temp += " ";
+						}
+
+						description += "        " + temp + value + "\n";
+					}
+					populations.put(key, description);
+				}
+
+			}
+
+		}
+
+		for (int i = 0; i < params.length(); i++) {
+
+			JSONObject param = params.getJSONObject(i);
+			String id = param.getString("id");
+
+			// ignore mode!
+
+			// remove html tags from decription (e.g. links)
+
+			if (id.equals("refpanel")) {
+
+				System.out.println("Reference Panels:");
+
+				JSONArray values = param.getJSONArray("values");
+				for (int j = 0; j < values.length(); j++) {
+					String key = values.getJSONObject(j).getString("key");
+					String value = values.getJSONObject(j).getString("value");
+
+					String temp = "--refpanel " + key.replaceAll("apps@", "");
+					while (temp.length() < 35) {
+						temp += " ";
+					}
+
+					System.out.println("    " + temp + value);
+					System.out.println(populations.get(key));
+				}
+
+			}
+
+		}
 
 	}
 
@@ -126,13 +189,24 @@ public class ComandlineOptionsUtil {
 					if (type.equals("app_list")) {
 						String value2 = "apps@" + value;
 						if (!isValidValue(param, value2)) {
-							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+							throw new CloudgeneAppException(
+									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
 						}
 						form.getEntries().add(new FormData(id, value2));
 						System.out.println("  " + id + ": " + value2);
 					} else if (type.equals("list")) {
 						if (!isValidValue(param, value)) {
-							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+							throw new CloudgeneAppException(
+									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+						}
+						form.getEntries().add(new FormData(id, value));
+						System.out.println("  " + id + ": " + value);
+					} else if (type.equals("binded_list")) {
+						String bind = param.getString("bind");
+						String valueBind = "apps@" + props.get(bind);
+						if (!isValidBindedValue(param, valueBind, value)) {
+							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '"
+									+ param.getString("id") + "' in combination with " + bind + " '" + valueBind + "'");
 						}
 						form.getEntries().add(new FormData(id, value));
 						System.out.println("  " + id + ": " + value);
@@ -160,7 +234,7 @@ public class ComandlineOptionsUtil {
 														.add(new FormData(id,
 																new FileRepresentation(subfile.getAbsolutePath(),
 																		MediaType.APPLICATION_OCTET_STREAM)));
-												System.out.println("   - " + subfile.getAbsolutePath());
+												System.out.println("    - " + subfile.getAbsolutePath());
 											}
 										}
 
@@ -211,7 +285,7 @@ public class ComandlineOptionsUtil {
 
 		return "unkown";
 	}
-	
+
 	public static boolean isValidValue(JSONObject param, String key) {
 		JSONArray values = param.getJSONArray("values");
 
@@ -222,6 +296,27 @@ public class ComandlineOptionsUtil {
 			}
 		}
 
+		return false;
+	}
+
+	public static boolean isValidBindedValue(JSONObject param, String valueBind, String key) {
+
+		for (int i = 0; i < param.getJSONArray("values").length(); i++) {
+
+			JSONObject object = param.getJSONArray("values").getJSONObject(i);
+
+			if (object.getString("key").equals(valueBind)) {
+
+				JSONArray values = object.getJSONArray("values");
+
+				for (int j = 0; j < values.length(); j++) {
+					String key2 = values.getJSONObject(j).getString("key");
+					if (key.equals(key2)) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
