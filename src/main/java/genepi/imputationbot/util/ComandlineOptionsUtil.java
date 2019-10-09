@@ -1,7 +1,6 @@
 package genepi.imputationbot.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import org.restlet.ext.html.FormDataSet;
 import org.restlet.representation.FileRepresentation;
 
 import genepi.imputationbot.client.CloudgeneAppException;
-import genepi.io.FileUtil;
 
 public class ComandlineOptionsUtil {
 
@@ -126,8 +124,18 @@ public class ComandlineOptionsUtil {
 					String value = props.get(id);
 
 					if (type.equals("app_list")) {
-						form.getEntries().add(new FormData(id, "apps@" + value));
-						System.out.println("  " + id + ": " + "apps@" + value);
+						String value2 = "apps@" + value;
+						if (!isValidValue(param, value2)) {
+							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+						}
+						form.getEntries().add(new FormData(id, value2));
+						System.out.println("  " + id + ": " + value2);
+					} else if (type.equals("list")) {
+						if (!isValidValue(param, value)) {
+							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+						}
+						form.getEntries().add(new FormData(id, value));
+						System.out.println("  " + id + ": " + value);
 					} else if (isFile(type)) {
 						if (value.startsWith("http://") || value.startsWith("https://")) {
 							form.getEntries().add(new FormData(id, value));
@@ -160,7 +168,7 @@ public class ComandlineOptionsUtil {
 
 										form.getEntries().add(new FormData(id,
 												new FileRepresentation(tile, MediaType.APPLICATION_OCTET_STREAM)));
-										System.out.println("   - " + tile);
+										System.out.println("    - " + tile);
 
 									}
 
@@ -202,6 +210,19 @@ public class ComandlineOptionsUtil {
 		}
 
 		return "unkown";
+	}
+	
+	public static boolean isValidValue(JSONObject param, String key) {
+		JSONArray values = param.getJSONArray("values");
+
+		for (int j = 0; j < values.length(); j++) {
+			String key2 = values.getJSONObject(j).getString("key");
+			if (key.equals(key2)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
