@@ -23,12 +23,12 @@ public class CloudgeneJob {
 		this.job = job;
 	}
 
-	public void downloadAll(CloudgeneClient client)
+	public void downloadAll(CloudgeneClient client, String outputFolder)
 			throws JSONException, IOException, InterruptedException, ZipException {
-		downloadAll(client, null);
+		downloadAll(client, outputFolder, null);
 	}
 
-	public void downloadAll(CloudgeneClient client, String password)
+	public void downloadAll(CloudgeneClient client, String outputFolder, String password)
 			throws JSONException, IOException, InterruptedException, ZipException {
 
 		List<String> urls = new Vector<String>();
@@ -48,6 +48,10 @@ public class CloudgeneJob {
 			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
 			System.out.println("  Downloading file " + path + " (" + i + "/" + urls.size() + ")");
+
+			if (outputFolder != null) {
+				localPath = localPath.replaceAll(getId(), outputFolder);
+			}
 			File file = new File(localPath);
 			FileUtil.createDirectory(file.getParent());
 			client.downloadResults(path, localPath);
@@ -59,7 +63,6 @@ public class CloudgeneJob {
 				ZipFile zipFile = new ZipFile(localFile);
 				zipFile.setPassword(password);
 				zipFile.extractAll(localFile.getParent());
-				localFile.delete();
 			}
 
 		}
