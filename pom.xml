@@ -184,7 +184,6 @@
 				<configuration>
 					<archiveDir>imputationbot-${project.version}-assembly</archiveDir>
 					<fileName>imputationbot-installer.sh</fileName>
-					<label>Install Imputation Bot ${project.version}</label>
 					<notemp>true</notemp>
 					<current>true</current>
 					<nox11>true</nox11>
