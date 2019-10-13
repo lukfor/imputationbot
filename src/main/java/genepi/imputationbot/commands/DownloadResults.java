@@ -66,7 +66,7 @@ public class DownloadResults extends BaseCommand {
 				job.downloadAll(client, outputFolder);
 			}
 			println();
-			printlnInGreen("All data downloaded and stored in file://" + (new File(outputFolder)).getAbsolutePath());
+			printlnInGreen("All data downloaded and stored in " + (new File(outputFolder)).getAbsolutePath());
 			println();
 			println();
 		}
