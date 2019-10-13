@@ -58,7 +58,7 @@ public class CloudgeneJob {
 
 			// encrypt if file is zip
 			if (password != null && localPath.endsWith(".zip")) {
-				System.out.println("  Encrypt file " + path + "...");
+				System.out.println("  Decrypting file " + path + "...");
 				File localFile = new File(localPath);
 				ZipFile zipFile = new ZipFile(localFile);
 				zipFile.setPassword(password);
