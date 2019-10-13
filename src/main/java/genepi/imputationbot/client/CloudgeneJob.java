@@ -47,7 +47,7 @@ public class CloudgeneJob {
 			String path = urls.get(i);
 			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
-			System.out.println("  Downloading file " + path + " (" + i + "/" + urls.size() + ")");
+			System.out.println("  Downloading file " + path + " (" + (i + 1) + "/" + urls.size() + ")");
 
 			if (outputFolder != null) {
 				localPath = localPath.replaceAll(getId(), outputFolder);
