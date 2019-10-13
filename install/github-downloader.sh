@@ -28,4 +28,7 @@ chmod +x ./${EXECUTABLE}
 rm ./${INSTALLER_SCRIPT}
 
 echo ""
-echo "${NAME} ${CLOUDGENE_VERSION} installation completed. Have fun!"
+GREEN='\033[0;32m'
+NC='\033[0m'
+echo -e "${GREEN}${NAME} ${VERSION} installation completed. Have fun!${NC}"
+echo ""
