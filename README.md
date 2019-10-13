@@ -1,4 +1,6 @@
 # Imputationbot :robot:
+[![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
+
 Your personal bot for Imputationserver
 
 ## Install
