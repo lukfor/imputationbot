@@ -30,7 +30,7 @@ Enable API access from your Profile page.
 
 Api Tokens are valid for 30 days. You can check the status in the web interface or with `imputationbot info`
 
-![Image1](@attachment/Screenshot from 2019-10-09 18-05-21.png)
+![Image1](assets/token4.png)
 
 1. Next, configure imputationbot with the following command:
 
