@@ -1,4 +1,4 @@
-# Imputationbot
+# Imputation Bot
 
 Your personal bot for Imputationserver
 
