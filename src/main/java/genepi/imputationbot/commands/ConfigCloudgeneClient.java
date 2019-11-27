@@ -70,49 +70,14 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		println("Hi " + name + " 👋");
 		println();
 
-		JSONObject server = client.getServerDetails();
-		JSONArray apps = server.getJSONArray("apps");
-		JSONObject defaultApp = null;
+		JSONObject defaultApp = client.getDefaultApp();
 
-		if (apps.length() == 0) {
-
-			error("No application found on '" + hostname + "'");
-			return 1;
-
-		} else if (apps.length() == 1) {
-
-			defaultApp = apps.getJSONObject(0);
-
-		} else {
-
-			println("More than one application found on '" + hostname + "'.");
-			println("Please select a default application:");
-			for (int i = 0; i < apps.length(); i++) {
-				JSONObject app = apps.getJSONObject(i);
-				println("  [" + (i + 1) + "] " + app.get("name"));
-			}
-
-			String choice = read("Choice");
-			try {
-				int choiceIndex = Integer.parseInt(choice);
-				if (choiceIndex <= 0 || choiceIndex > apps.length()) {
-					error("Wrong choice. Please enter a value between 1 to " + apps.length());
-					return 1;
-				}
-				defaultApp = apps.getJSONObject(choiceIndex - 1);
-			} catch (Exception e) {
-				error("Wrong choice. Please enter a value between 1 to " + apps.length());
-				return 1;
-			}
-
-		}
-
-		config.setApp(defaultApp.getString("id"));
 		writeConfig(config);
 
 		println();
 		println();
-		printlnInGreen("Imputation Bot is ready to submit jobs to '" + defaultApp.getString("name") + "' 👍");
+		printlnInGreen("Imputation Bot is ready to submit jobs to '" + defaultApp.getString("name") + " "
+				+ defaultApp.getString("version") + "' 👍");
 		println();
 		return 0;
 

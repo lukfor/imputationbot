@@ -14,7 +14,13 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.util.Series;
 
+import genepi.imputationbot.util.Version;
+
 public class CloudgeneClient {
+
+	public static final String[] IMPUTATIONSERVER_ID = { "minimac4", "imputationserver" };
+
+	public static final Version IMPUTATIONSERVER_MIN_VERSION = Version.parse("1.2.4");
 
 	private CloudgeneClientConfig config;
 
@@ -70,6 +76,39 @@ public class CloudgeneClient {
 
 	}
 
+	public JSONObject getAppByIds(String[] ids, Version minVersion) throws CloudgeneException, CloudgeneAppException {
+
+		JSONObject server = getServerDetails();
+		JSONArray apps = server.getJSONArray("apps");
+
+		// search for application by id
+		for (int i = 0; i < apps.length(); i++) {
+			JSONObject app = apps.getJSONObject(i);
+			String id = app.get("id").toString();
+			CloudgeneAppId appId = new CloudgeneAppId(id);
+
+			for (String _id : ids) {
+				if (appId.getId().equals(_id)) {
+
+					JSONObject appDetails = getAppDetails(id);
+					String versionString = appDetails.getString("version");
+					Version version = Version.parse(versionString);
+
+					if (version.compareTo(minVersion) != -1) {
+						return appDetails;
+					} else {
+						throw new CloudgeneAppException(
+								"Found Imputationserver " + version + " but needs Imputationserver >= " + minVersion);
+					}
+				}
+			}
+
+		}
+
+		throw new CloudgeneAppException("No imputationserver application found on " + config.getHostname());
+
+	}
+
 	public JSONObject getAppDetails(String app) throws CloudgeneException {
 
 		ClientResource resource = createClientResource("/api/v2/server/apps/" + app);
@@ -80,10 +119,8 @@ public class CloudgeneClient {
 
 	}
 
-	public JSONObject getDefaultApp() throws CloudgeneException {
-
-		return getAppDetails(config.getApp());
-
+	public JSONObject getDefaultApp() throws CloudgeneException, CloudgeneAppException {
+		return getAppByIds(IMPUTATIONSERVER_ID, IMPUTATIONSERVER_MIN_VERSION);
 	}
 
 	public CloudgeneJob submitJob(String app, FormDataSet form) throws CloudgeneException {
