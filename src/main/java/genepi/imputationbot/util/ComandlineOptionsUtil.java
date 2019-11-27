@@ -187,13 +187,23 @@ public class ComandlineOptionsUtil {
 					String value = props.get(id);
 
 					if (type.equals("app_list")) {
-						String value2 = createAppId(param, value);
-						if (!isValidValue(param, value2)) {
-							throw new CloudgeneAppException(
-									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
+						String[] tiles = value.split(",");
+						String temp = "";
+						for (int j = 0; j < tiles.length; j++) {
+							String tile = tiles[j];
+							String value2 = createAppId(param, tile);
+							if (!isValidValue(param, value2)) {
+								throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '"
+										+ param.getString("id") + "'.");
+							}
+							if (j > 0) {
+								temp += ",";
+							}
+							temp += value2;
+
 						}
-						form.getEntries().add(new FormData(id, value2));
-						System.out.println("  " + id + ": " + value2);
+						form.getEntries().add(new FormData(id, temp));
+						System.out.println("  " + id + ": " + temp);
 					} else if (type.equals("list")) {
 						if (!isValidValue(param, value)) {
 							throw new CloudgeneAppException(
@@ -203,10 +213,14 @@ public class ComandlineOptionsUtil {
 						System.out.println("  " + id + ": " + value);
 					} else if (type.equals("binded_list")) {
 						String bind = param.getString("bind");
-						String valueBind = createAppId(params, bind, props.get(bind));
-						if (!isValidBindedValue(param, valueBind, value)) {
-							throw new CloudgeneAppException("Value '" + value + "' is not a valid option for '"
-									+ param.getString("id") + "' in combination with " + bind + " '" + valueBind + "'");
+						String[] tiles = props.get(bind).split(",");
+						for (int j = 0; j < tiles.length; j++) {
+							String valueBind = createAppId(params, bind, tiles[j]);
+							if (!isValidBindedValue(param, valueBind, value)) {
+								throw new CloudgeneAppException(
+										"Value '" + value + "' is not a valid option for '" + param.getString("id")
+												+ "' in combination with " + bind + " '" + valueBind + "'");
+							}
 						}
 						form.getEntries().add(new FormData(id, value));
 						System.out.println("  " + id + ": " + value);

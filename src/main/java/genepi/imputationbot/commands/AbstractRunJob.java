@@ -86,7 +86,7 @@ public class AbstractRunJob extends BaseCommand {
 			} catch (Exception e) {
 
 				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp("imputation-butler run", "\nImputation Parameters", options, "", true);
+				formatter.printHelp("imputationbot impute", "\nImputation Parameters", options, "", true);
 				println();
 				ComandlineOptionsUtil.printDetails(params);
 				println();
@@ -108,28 +108,43 @@ public class AbstractRunJob extends BaseCommand {
 				println("💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
 			}
 
-			CloudgeneJob job = client.submitJob(app.getString("id"), form);
+			String[] referencePanels = form.getEntries().getFirst("refpanel").getValue().split(",");
+			
+			for (String referencePanel : referencePanels) {
 
-			println();
+				FormDataSet newForm = new FormDataSet();
+				newForm.setMultipart(true);
+				newForm.getEntries().addAll(form.getEntries());				
+				newForm.getEntries().getFirst("refpanel").setValue(referencePanel);
+				
+				println();
+				println("Submitting job with reference panel " + referencePanel + "...");				
 
-			if (mode.equals(QC_JOB)) {
-				printlnInGreen("Quality Control job submitted successfully");
-			} else {
-				printlnInGreen("Imputation job submitted successfully");
-			}
+				CloudgeneJob job = client.submitJob(app.getString("id"), newForm);
 
-			println();
-			println("👉 Check the job progress on " + getConfig().getHostname() + "/index.html#!jobs/" + job.getId());
-			println();
-			println();
-			if (line.hasOption("wait")) {
-				println("Job is running....");
-				client.waitForJob(job.getId());
-				CloudgeneJob jobDetails = client.getJobDetails(job.getId());
+				if (mode.equals(QC_JOB)) {
+					printlnInGreen("Quality Control job submitted successfully");
+				} else {
+					printlnInGreen("Imputation job submitted successfully");
+				}
 
-				println("Job completed. State: " + jobDetails.getJobStateAsText());
+				println();
+				println("👉 Check the job progress on " + getConfig().getHostname() + "/index.html#!jobs/"
+						+ job.getId());
 				println();
 				println();
+
+				// TODO: wait for all jobs after submission!
+				if (line.hasOption("wait")) {
+					println("Job is running....");
+					client.waitForJob(job.getId());
+					CloudgeneJob jobDetails = client.getJobDetails(job.getId());
+
+					println("Job completed. State: " + jobDetails.getJobStateAsText());
+					println();
+					println();
+				}
+
 			}
 
 			return 0;
