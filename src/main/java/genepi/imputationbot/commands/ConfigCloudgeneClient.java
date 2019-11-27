@@ -96,12 +96,12 @@ public class ConfigCloudgeneClient extends BaseCommand {
 			try {
 				int choiceIndex = Integer.parseInt(choice);
 				if (choiceIndex <= 0 || choiceIndex > apps.length()) {
-					error("Wrong choiche. Please enter a value between 1 to " + apps.length());
+					error("Wrong choice. Please enter a value between 1 to " + apps.length());
 					return 1;
 				}
 				defaultApp = apps.getJSONObject(choiceIndex - 1);
 			} catch (Exception e) {
-				error("Wrong choiche. Please enter a value between 1 to " + apps.length());
+				error("Wrong choice. Please enter a value between 1 to " + apps.length());
 				return 1;
 			}
 
