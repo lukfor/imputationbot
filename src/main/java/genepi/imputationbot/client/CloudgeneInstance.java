@@ -1,8 +1,12 @@
 package genepi.imputationbot.client;
 
+import java.util.List;
 import java.util.Vector;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import genepi.imputationbot.util.CommandlineOptionsUtil;
 
 public class CloudgeneInstance {
 
@@ -12,6 +16,8 @@ public class CloudgeneInstance {
 
 	private String name = null;
 
+	private List<String> referencePanels = null;
+	
 	public String getHostname() {
 		return hostname;
 	}
@@ -37,4 +43,42 @@ public class CloudgeneInstance {
 		return name;
 	}
 
+	public List<String> getReferencePanels() throws CloudgeneException, CloudgeneAppException{
+		if (referencePanels == null) {
+			CloudgeneClient client = new CloudgeneClient(new Vector<CloudgeneInstance>());
+			JSONObject app = client.getDefaultApp(this);
+			JSONArray params = app.getJSONArray("params");
+
+			referencePanels = new Vector<String>();
+			
+			for (int i = 0; i < params.length(); i++) {
+
+				JSONObject param = params.getJSONObject(i);
+				String id = param.getString("id");
+
+				// ignore mode!
+
+				// remove html tags from decription (e.g. links)
+
+				if (id.equals("refpanel")) {
+
+					//System.out.println("Reference Panels:");
+
+					JSONArray values = param.getJSONArray("values");
+					for (int j = 0; j < values.length(); j++) {
+						String key = values.getJSONObject(j).getString("key");
+						String value = values.getJSONObject(j).getString("value");
+
+						referencePanels.add(CommandlineOptionsUtil.prettyAppId(key));
+						
+					}
+
+				}
+
+			}
+			
+		}
+		return referencePanels;
+	}
+	
 }

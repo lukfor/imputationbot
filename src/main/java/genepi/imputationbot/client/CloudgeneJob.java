@@ -20,7 +20,7 @@ public class CloudgeneJob {
 	private JSONObject job;
 
 	private CloudgeneInstance instance;
-	
+
 	public CloudgeneJob(JSONObject job, CloudgeneInstance instance) {
 		this.job = job;
 		this.instance = instance;
@@ -94,18 +94,21 @@ public class CloudgeneJob {
 	}
 
 	public long getExecutionTime() {
-		return ((job.getLong("endTime") - job.getLong("startTime")) / 1000);
+		if (isRunning()) {
+			return ((System.currentTimeMillis() - job.getLong("startTime")) / 1000);
+		} else {
+			return ((job.getLong("endTime") - job.getLong("startTime")) / 1000);
+		}
 	}
 
 	public boolean isRunning() {
 		return job.getInt("state") == 1 || job.getInt("state") == 2 || job.getInt("state") == 3;
 	}
 
-	
 	public CloudgeneInstance getInstance() {
 		return instance;
 	}
-	
+
 	public String getJobStateAsText() {
 		int state = job.getInt("state");
 		switch (state) {

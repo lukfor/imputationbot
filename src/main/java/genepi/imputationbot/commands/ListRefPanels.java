@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.util.ComandlineOptionsUtil;
+import genepi.imputationbot.util.CommandlineOptionsUtil;
 
 public class ListRefPanels extends BaseCommand {
 
@@ -37,7 +37,7 @@ public class ListRefPanels extends BaseCommand {
 			JSONArray params = app.getJSONArray("params");
 
 			println(instance.getName() + ":");
-			ComandlineOptionsUtil.printDetails(params);
+			CommandlineOptionsUtil.printDetails(params);
 			println();
 
 		}

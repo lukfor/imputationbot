@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -17,8 +15,6 @@ public class CloudgeneInstanceList {
 
 	private List<CloudgeneInstance> instances;
 
-	private Map<CloudgeneInstance, String> names;
-	
 	public void add(CloudgeneInstance instance) {
 		instances.add(instance);
 	}
@@ -39,7 +35,17 @@ public class CloudgeneInstanceList {
 		}
 		return null;
 	}
-	
+
+	public CloudgeneInstance getInstanceByReferencePanel(String referencePanel)
+			throws CloudgeneException, CloudgeneAppException {
+		for (CloudgeneInstance instance : instances) {
+			if (instance.getReferencePanels().contains(referencePanel)) {
+				return instance;
+			}
+		}
+		return null;
+	}
+
 	public void save(String filename) throws IOException {
 		YamlWriter writer = new YamlWriter(new FileWriter(filename));
 		writer.getConfig().writeConfig.setWriteClassname(YamlConfig.WriteClassName.NEVER);

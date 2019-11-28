@@ -16,7 +16,7 @@ import org.restlet.representation.FileRepresentation;
 
 import genepi.imputationbot.client.CloudgeneAppException;
 
-public class ComandlineOptionsUtil {
+public class CommandlineOptionsUtil {
 
 	public static Options createOptionsFromApp(JSONArray params) {
 		Options options = new Options();
@@ -167,7 +167,7 @@ public class ComandlineOptionsUtil {
 			props.put(id, value);
 		}
 
-		System.out.println("Parameters:");
+		System.out.println("  Parameters:");
 
 		FormDataSet form = new FormDataSet();
 		form.setMultipart(true);
@@ -203,14 +203,14 @@ public class ComandlineOptionsUtil {
 
 						}
 						form.getEntries().add(new FormData(id, temp));
-						System.out.println("  " + id + ": " + temp);
+						System.out.println("    " + id + ": " + temp);
 					} else if (type.equals("list")) {
 						if (!isValidValue(param, value)) {
 							throw new CloudgeneAppException(
 									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
 						}
 						form.getEntries().add(new FormData(id, value));
-						System.out.println("  " + id + ": " + value);
+						System.out.println("    " + id + ": " + value);
 					} else if (type.equals("binded_list")) {
 						String bind = param.getString("bind");
 						String[] tiles = props.get(bind).split(",");
@@ -223,15 +223,15 @@ public class ComandlineOptionsUtil {
 							}
 						}
 						form.getEntries().add(new FormData(id, value));
-						System.out.println("  " + id + ": " + value);
+						System.out.println("    " + id + ": " + value);
 					} else if (isFile(type)) {
 						if (value.startsWith("http://") || value.startsWith("https://")) {
 							form.getEntries().add(new FormData(id, value));
-							System.out.println("  " + id + ": " + value);
+							System.out.println("    " + id + ": " + value);
 						} else {
 
 							String[] tiles = value.split(",");
-							System.out.println("  " + id + ":");
+							System.out.println("    " + id + ":");
 							for (String tile : tiles) {
 
 								File file = new File(tile);
@@ -256,7 +256,7 @@ public class ComandlineOptionsUtil {
 
 										form.getEntries().add(new FormData(id,
 												new FileRepresentation(tile, MediaType.APPLICATION_OCTET_STREAM)));
-										System.out.println("    - " + tile);
+										System.out.println("      - " + tile);
 
 									}
 
@@ -267,12 +267,12 @@ public class ComandlineOptionsUtil {
 						}
 					} else {
 						form.getEntries().add(new FormData(id, value));
-						System.out.println("  " + id + ": " + value);
+						System.out.println("    " + id + ": " + value);
 					}
 				} else {
 					if (type.equals("checkbox")) {
 						form.getEntries().add(new FormData(id, getValueByKey(param, "false")));
-						System.out.println("  " + id + ": " + getValueByKey(param, "false"));
+						System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 					}
 				}
 			}
