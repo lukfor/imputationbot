@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.client.CloudgeneJobList;
+import genepi.imputationbot.model.Project;
+import genepi.imputationbot.model.ProjectList;
 
 public class ListJobs extends BaseCommand {
 
@@ -34,11 +36,27 @@ public class ListJobs extends BaseCommand {
 		if (jobIds.length > 0) {
 
 			String id = jobIds[0];
-			CloudgeneJob cloudgeneJob = client.getJobDetails(id);
 
-			println(cloudgeneJob.toString());
+			ProjectList projects = getProjects();
+			Project project = projects.getByName(id);
 
-			return 0;
+			if (project != null) {
+
+				println("Project: " + project.getName());
+				println();
+
+				CloudgeneJobList jobs = client.getJobs(project);
+				println(jobs.toString());
+
+				return 0;
+
+			} else {
+
+				CloudgeneJob cloudgeneJob = client.getJobDetails(id);
+				println(cloudgeneJob.toString());
+
+				return 0;
+			}
 
 		} else {
 

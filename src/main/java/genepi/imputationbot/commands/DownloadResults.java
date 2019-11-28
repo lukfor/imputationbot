@@ -5,6 +5,8 @@ import java.io.File;
 import genepi.base.Tool;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneJob;
+import genepi.imputationbot.model.Project;
+import genepi.imputationbot.model.ProjectList;
 
 public class DownloadResults extends BaseCommand {
 
@@ -36,6 +38,22 @@ public class DownloadResults extends BaseCommand {
 
 		CloudgeneClient client = getClient();
 
+		ProjectList projects = getProjects();
+		Project project = projects.getByName(jobIds[0]);
+
+		if (project != null) {
+
+			println("Project: " + project.getName());
+			println();
+			
+			//use all ids from project
+			jobIds = new String[project.getJobs().size()];
+			for (int i = 0; i< project.getJobs().size(); i++) {
+				jobIds[i] = project.getJobs().get(i).getJob();
+			}
+			
+		}
+		
 		for (int i = 0; i < jobIds.length; i++) {
 			String id = jobIds[i];
 
@@ -51,7 +69,7 @@ public class DownloadResults extends BaseCommand {
 				println();
 			}
 
-			println("Downloading job " + job.getId() + "...");
+			println("Downloading job " + job.getId() + "... " + "[" + (i+1) + "/" + jobIds.length + "]");
 			Object password = getValue("password");
 			Object output = getValue("output");
 			String outputFolder = null;

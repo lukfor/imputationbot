@@ -14,6 +14,8 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.util.Series;
 
+import genepi.imputationbot.model.Project;
+import genepi.imputationbot.model.ProjectJob;
 import genepi.imputationbot.util.Version;
 
 public class CloudgeneClient {
@@ -133,6 +135,18 @@ public class CloudgeneClient {
 		return new CloudgeneJob(object);
 	}
 
+	public void waitForProject(Project project) throws CloudgeneException, InterruptedException {
+		waitForProject(project, 10000);
+	}
+	
+	public void waitForProject(Project project, int pollingTime) throws CloudgeneException, InterruptedException {
+
+		for (ProjectJob job: project.getJobs()) {
+			waitForJob(job.getJob(), pollingTime);
+		}
+		
+	}
+	
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
 		waitForJob(id, 10000);
 	}
@@ -177,6 +191,19 @@ public class CloudgeneClient {
 
 	}
 
+	public CloudgeneJobList getJobs(Project project) throws CloudgeneException {
+
+		CloudgeneJobList result = new CloudgeneJobList();
+
+		for (ProjectJob job: project.getJobs()) {
+			CloudgeneJob jobDetails = getJobDetails(job.getJob());
+			result.add(jobDetails);
+		}
+		
+		return result;
+
+	}
+	
 	public void downloadResults(String remotePath, String localPath)
 			throws IOException, JSONException, InterruptedException {
 

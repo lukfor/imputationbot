@@ -13,11 +13,13 @@ import genepi.base.Toolbox;
 import genepi.imputationbot.commands.ConfigCloudgeneClient;
 import genepi.imputationbot.commands.DownloadResults;
 import genepi.imputationbot.commands.ListJobs;
+import genepi.imputationbot.commands.ListProjects;
 import genepi.imputationbot.commands.ListRefPanels;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowCurlHeader;
 import genepi.imputationbot.commands.ShowVersion;
+import genepi.imputationbot.model.ProjectList;
 
 public class App extends Toolbox {
 
@@ -51,6 +53,7 @@ public class App extends Toolbox {
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("info", ShowVersion.class);
+		toolbox.addTool("projects", ListProjects.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 

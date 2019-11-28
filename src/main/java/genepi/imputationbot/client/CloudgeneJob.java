@@ -73,6 +73,11 @@ public class CloudgeneJob {
 		return job.getString("id");
 	}
 
+	public String getName() {
+		return job.getString("name");
+	}
+
+	
 	public String getApplication() {
 		return job.getString("application");
 	}

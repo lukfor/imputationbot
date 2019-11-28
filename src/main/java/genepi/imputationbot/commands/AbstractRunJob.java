@@ -13,6 +13,9 @@ import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneJob;
+import genepi.imputationbot.model.Project;
+import genepi.imputationbot.model.ProjectJob;
+import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.ComandlineOptionsUtil;
 
 public class AbstractRunJob extends BaseCommand {
@@ -77,6 +80,10 @@ public class AbstractRunJob extends BaseCommand {
 			optionPassword.setRequired(false);
 			options.addOption(optionPassword);
 
+			Option optionProjectName = new Option(null, "name", true, "Optional project name");
+			optionProjectName.setRequired(false);
+			options.addOption(optionProjectName);
+
 			// parse the command line arguments
 			CommandLine line = null;
 			try {
@@ -109,42 +116,70 @@ public class AbstractRunJob extends BaseCommand {
 			}
 
 			String[] referencePanels = form.getEntries().getFirst("refpanel").getValue().split(",");
-			
-			for (String referencePanel : referencePanels) {
+
+			String projectName = line.getOptionValue("name");
+			Project project = new Project();
+			project.setName(projectName);
+
+			for (int i = 0; i < referencePanels.length; i++) {
+
+				String referencePanel = referencePanels[i];
 
 				FormDataSet newForm = new FormDataSet();
 				newForm.setMultipart(true);
-				newForm.getEntries().addAll(form.getEntries());				
+				newForm.getEntries().addAll(form.getEntries());
 				newForm.getEntries().getFirst("refpanel").setValue(referencePanel);
-				
-				println();
-				println("Submitting job with reference panel " + referencePanel + "...");				
 
-				CloudgeneJob job = client.submitJob(app.getString("id"), newForm);
-
-				if (mode.equals(QC_JOB)) {
-					printlnInGreen("Quality Control job submitted successfully");
-				} else {
-					printlnInGreen("Imputation job submitted successfully");
+				if (projectName != null) {
+					newForm.getEntries().add(new FormData("job-name",
+							projectName + " (" + referencePanel.replaceAll("apps@", "") + ")"));
 				}
 
 				println();
+				println("Submitting job... [" + (i + 1) + "/" + referencePanels.length + "]");
+
+				CloudgeneJob job = client.submitJob(app.getString("id"), newForm);
+				//reload job to get job name etc..
+				job = client.getJobDetails(job.getId());
+
+				if (mode.equals(QC_JOB)) {
+					printlnInGreen("Quality Control job '" + job.getName() + "' submitted successfully");
+				} else {
+					printlnInGreen("Imputation job '" + job.getName() + "' submitted successfully");
+				}
+
 				println("👉 Check the job progress on " + getConfig().getHostname() + "/index.html#!jobs/"
 						+ job.getId());
 				println();
+
+
+				ProjectJob projectJob = new ProjectJob();
+				projectJob.setJob(job.getId());
+				// projectJob.setParams(params);
+
+				project.getJobs().add(projectJob);
+
+			}
+
+			if (project.getName() != null) {
+				ProjectList projects = getProjects();
+				projects.add(project);
+				saveProjects();
+				printlnInGreen("Project " + project + " created.");
 				println();
+				println();
+			}
 
-				// TODO: wait for all jobs after submission!
-				if (line.hasOption("wait")) {
-					println("Job is running....");
-					client.waitForJob(job.getId());
-					CloudgeneJob jobDetails = client.getJobDetails(job.getId());
-
-					println("Job completed. State: " + jobDetails.getJobStateAsText());
-					println();
-					println();
+			if (line.hasOption("wait")) {
+				println("Jobs are running....");
+				client.waitForProject(project);
+				println("All jobs completed.");
+				for (ProjectJob projectJob : project.getJobs()) {
+					CloudgeneJob jobDetails = client.getJobDetails(projectJob.getJob());
+					println("  " + projectJob.getJob() + ": " + jobDetails.getJobStateAsText());
 				}
-
+				println();
+				println();
 			}
 
 			return 0;

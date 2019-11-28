@@ -28,8 +28,8 @@ public class CloudgeneJobList extends Vector<CloudgeneJob> {
 		header[0] = "";
 		header[1] = "Queue";
 		header[1] = "Status";
-		header[2] = "Application";
-		header[3] = "Job";
+		header[2] = "Job-Name";
+		header[3] = "Job-ID";
 		header[4] = "Submitted On";
 		header[5] = "Execution Time";
 
@@ -45,7 +45,7 @@ public class CloudgeneJobList extends Vector<CloudgeneJob> {
 			data[i][0] = "#" + (size() - i);
 			data[i][1] = job.getQueuePosition() + "";
 			data[i][1] = job.getJobStateAsText();
-			data[i][2] = job.getApplication();
+			data[i][2] = job.getName();
 			data[i][3] = job.getId();
 			data[i][4] = DATE_FORMAT.format(job.getSubmittedOn());
 			data[i][5] = job.getExecutionTime() + " sec";

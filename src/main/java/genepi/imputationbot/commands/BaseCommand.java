@@ -20,15 +20,20 @@ import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
+import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.AnsiColors;
 
 public abstract class BaseCommand extends Tool {
 
 	public static String CONFIG_FILENAME = "imputationbot.config";
 
+	public static String PROJECTS_FILENAME = "imputationbot.projects";
+
 	private static Scanner scanner = new Scanner(System.in);
 
 	private CloudgeneClientConfig config;
+
+	private ProjectList projects;
 
 	public BaseCommand(String[] args) {
 		super(args);
@@ -162,6 +167,24 @@ public abstract class BaseCommand extends Tool {
 			config = reader.read(CloudgeneClientConfig.class);
 		}
 		return config;
+	}
+
+	public ProjectList getProjects() throws Exception {
+
+		if (projects == null) {
+			File file = new File(PROJECTS_FILENAME);
+
+			if (file.exists()) {
+				projects = ProjectList.load(PROJECTS_FILENAME);
+			} else {
+				projects = new ProjectList();
+			}
+		}
+		return projects;
+	}
+	
+	public void saveProjects() throws IOException {
+		projects.save(PROJECTS_FILENAME);
 	}
 
 	@Override
