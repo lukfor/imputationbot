@@ -134,7 +134,7 @@ public class ComandlineOptionsUtil {
 
 			if (id.equals("refpanel")) {
 
-				System.out.println("Reference Panels:");
+				//System.out.println("Reference Panels:");
 
 				JSONArray values = param.getJSONArray("values");
 				for (int j = 0; j < values.length(); j++) {

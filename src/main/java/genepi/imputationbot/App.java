@@ -17,7 +17,6 @@ import genepi.imputationbot.commands.ListProjects;
 import genepi.imputationbot.commands.ListRefPanels;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
-import genepi.imputationbot.commands.ShowCurlHeader;
 import genepi.imputationbot.commands.ShowVersion;
 import genepi.imputationbot.model.ProjectList;
 
@@ -49,7 +48,6 @@ public class App extends Toolbox {
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("impute", RunImputationJob.class);
 		toolbox.addTool("refpanels", ListRefPanels.class);
-		toolbox.addTool("token", ShowCurlHeader.class);
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("info", ShowVersion.class);

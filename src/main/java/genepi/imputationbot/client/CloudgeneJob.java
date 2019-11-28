@@ -19,17 +19,20 @@ public class CloudgeneJob {
 
 	private JSONObject job;
 
-	public CloudgeneJob(JSONObject job) {
+	private CloudgeneInstance instance;
+	
+	public CloudgeneJob(JSONObject job, CloudgeneInstance instance) {
 		this.job = job;
+		this.instance = instance;
 	}
 
 	public void downloadAll(CloudgeneClient client, String outputFolder)
-			throws JSONException, IOException, InterruptedException, ZipException {
+			throws JSONException, IOException, InterruptedException, ZipException, CloudgeneException {
 		downloadAll(client, outputFolder, null);
 	}
 
 	public void downloadAll(CloudgeneClient client, String outputFolder, String password)
-			throws JSONException, IOException, InterruptedException, ZipException {
+			throws JSONException, IOException, InterruptedException, ZipException, CloudgeneException {
 
 		List<String> urls = new Vector<String>();
 
@@ -47,14 +50,15 @@ public class CloudgeneJob {
 			String path = urls.get(i);
 			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
-			System.out.println("  Downloading file " + path + " (" + (i + 1) + "/" + urls.size() + ")");
+			System.out.println("  Downloading file " + path + " from " + instance.getHostname() + " (" + (i + 1) + "/"
+					+ urls.size() + ")");
 
 			if (outputFolder != null) {
 				localPath = localPath.replaceAll(getId(), outputFolder);
 			}
 			File file = new File(localPath);
 			FileUtil.createDirectory(file.getParent());
-			client.downloadResults(path, localPath);
+			client.downloadResults(instance, path, localPath);
 
 			// encrypt if file is zip
 			if (password != null && localPath.endsWith(".zip")) {
@@ -77,7 +81,6 @@ public class CloudgeneJob {
 		return job.getString("name");
 	}
 
-	
 	public String getApplication() {
 		return job.getString("application");
 	}
@@ -98,6 +101,11 @@ public class CloudgeneJob {
 		return job.getInt("state") == 1 || job.getInt("state") == 2 || job.getInt("state") == 3;
 	}
 
+	
+	public CloudgeneInstance getInstance() {
+		return instance;
+	}
+	
 	public String getJobStateAsText() {
 		int state = job.getInt("state");
 		switch (state) {

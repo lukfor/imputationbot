@@ -5,8 +5,9 @@ import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
+import genepi.imputationbot.client.CloudgeneInstance;
+import genepi.imputationbot.client.CloudgeneInstanceList;
 
 public class ConfigCloudgeneClient extends BaseCommand {
 
@@ -40,15 +41,16 @@ public class ConfigCloudgeneClient extends BaseCommand {
 			return 1;
 		}
 
-		CloudgeneClientConfig config = new CloudgeneClientConfig();
-		config.setHostname(hostname);
-		config.setToken(token);
+		CloudgeneInstance instance = new CloudgeneInstance();
+		instance.setHostname(hostname);
+		instance.setToken(token);
 
-		CloudgeneClient client = new CloudgeneClient(config);
+		CloudgeneInstanceList instances = getInstances(false);
+		CloudgeneClient client = getClient();
 
 		// verify token
 		try {
-			CloudgeneApiToken apiToken = client.verifyToken(token);
+			CloudgeneApiToken apiToken = client.verifyToken(instance, token);
 			if (!apiToken.isValid()) {
 				throw new CloudgeneException(100, apiToken.toString());
 			}
@@ -57,27 +59,27 @@ public class ConfigCloudgeneClient extends BaseCommand {
 			if (e.getCode() == 404) {
 				throw new CloudgeneException(e.getCode(),
 						"Token could not be verified. Are you sure Imputationserver is running on '"
-								+ config.getHostname() + "'?");
+								+ instance.getHostname() + "'?");
 			} else {
 				throw e;
 			}
 		}
 
 		// test api token by getting user profile
-		JSONObject user = client.getAuthUser();
+		JSONObject user = client.getAuthUser(instance);
 		println();
 		String name = user.getString("fullName").isEmpty() ? "Mr. Shy" : user.getString("fullName");
 		println("Hi " + name + " 👋");
 		println();
 
-		JSONObject defaultApp = client.getDefaultApp();
-
-		writeConfig(config);
+		JSONObject defaultApp = client.getDefaultApp(instance);
+		instances.add(instance);	
+		saveInstances();
 
 		println();
 		println();
-		printlnInGreen("Imputation Bot is ready to submit jobs to '" + defaultApp.getString("name") + " "
-				+ defaultApp.getString("version") + "' 👍");
+		printlnInGreen("Imputation Bot is ready to submit jobs to "+instance.getHostname() + " (" + defaultApp.getString("name") + ") "
+				+ defaultApp.getString("version") + ") 👍");
 		println();
 		return 0;
 

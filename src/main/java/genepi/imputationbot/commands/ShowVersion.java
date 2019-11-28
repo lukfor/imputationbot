@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneInstance;
 
 public class ShowVersion extends BaseCommand {
 
@@ -24,26 +25,29 @@ public class ShowVersion extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		CloudgeneClient client = getClient();
+		for (CloudgeneInstance instance : getInstances().getInstances()) {
 
-		JSONObject app = client.getDefaultApp();
-		JSONObject user = client.getAuthUser();
+			CloudgeneClient client = getClient();
 
-		println("Application: ");
-		println("  Name: " + app.get("name"));
-		println("  Version: " + app.get("version"));
-		println("Hostname: " + getConfig().getHostname());
-		if (user.has("mail")) {
-			println("Username: " + user.get("username") + " <" + user.get("mail") + ">");
-		} else {
-			println("Username: " + user.get("username"));
+			JSONObject server = client.getServerDetails(instance);
+			JSONObject app = client.getDefaultApp(instance);
+			JSONObject user = client.getAuthUser(instance);
+
+			println(server.getString("name") + ":");
+			println("  Hostname: " + instance.getHostname());
+			if (user.has("mail")) {
+				println("  Username: " + user.get("username") + " <" + user.get("mail") + ">");
+			} else {
+				println("  Username: " + user.get("username"));
+			}
+			println("  Application: ");
+			println("    Name: " + app.get("name"));
+			println("    Version: " + app.get("version"));
+
+			CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
+			println("  " + token.toString());
+			println();
 		}
-		println();
-
-		CloudgeneApiToken token = client.verifyToken(getConfig().getToken());
-		println(token.toString());
-		println();
-
 		return 0;
 
 	}

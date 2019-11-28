@@ -18,8 +18,9 @@ import genepi.imputationbot.App;
 import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneClientConfig;
 import genepi.imputationbot.client.CloudgeneException;
+import genepi.imputationbot.client.CloudgeneInstance;
+import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.AnsiColors;
 
@@ -27,11 +28,13 @@ public abstract class BaseCommand extends Tool {
 
 	public static String CONFIG_FILENAME = "imputationbot.config";
 
+	public static String INSTANCES_FILENAME = "imputationbot.instances";
+
 	public static String PROJECTS_FILENAME = "imputationbot.projects";
 
 	private static Scanner scanner = new Scanner(System.in);
 
-	private CloudgeneClientConfig config;
+	private CloudgeneInstanceList instances;
 
 	private ProjectList projects;
 
@@ -114,38 +117,33 @@ public abstract class BaseCommand extends Tool {
 		System.out.println(AnsiColors.makeGreen(text));
 	}
 
-	public void writeConfig(CloudgeneClientConfig config) throws IOException {
-		YamlWriter writer = new YamlWriter(new FileWriter(CONFIG_FILENAME));
-		writer.getConfig().writeConfig.setWriteClassname(YamlConfig.WriteClassName.NEVER);
-		writer.write(config);
-		writer.close();
-	}
-
 	public CloudgeneClient getClient() throws Exception {
 
-		CloudgeneClientConfig config = getConfig();
-		CloudgeneClient client = new CloudgeneClient(config);
+		CloudgeneClient client = new CloudgeneClient(getInstances().getInstances());
 
-		try {
-			CloudgeneApiToken token = client.verifyToken(config.getToken());
+		for (CloudgeneInstance instance : getInstances().getInstances()) {
 
-			if (!token.isValid()) {
-				throw new CloudgeneException(100, token.toString());
-			}
+			try {
+				CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
 
-			if (token.getExpiresInDays() < 7) {
-				println();
-				println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
-				println();
-			}
+				if (!token.isValid()) {
+					throw new CloudgeneException(100, token.toString());
+				}
 
-		} catch (CloudgeneException e) {
-			if (e.getCode() == 404) {
-				throw new CloudgeneException(e.getCode(),
-						"Token could not be verified. Are you sure Imputationserver is running on '"
-								+ config.getHostname() + "'?");
-			} else {
-				throw e;
+				if (token.getExpiresInDays() < 7) {
+					println();
+					println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
+					println();
+				}
+
+			} catch (CloudgeneException e) {
+				if (e.getCode() == 404) {
+					throw new CloudgeneException(e.getCode(),
+							"Token could not be verified. Are you sure Imputationserver is running on '"
+									+ instance.getHostname() + "'?");
+				} else {
+					throw e;
+				}
 			}
 		}
 
@@ -153,23 +151,35 @@ public abstract class BaseCommand extends Tool {
 
 	}
 
-	public CloudgeneClientConfig getConfig() throws Exception {
-
-		if (config == null) {
-			File file = new File(CONFIG_FILENAME);
-
-			if (!file.exists()) {
-				throw new CloudgeneAppException(
-						"No configuration found. Please run 'imputationbot configure' and enter your API Token");
-			}
-
-			YamlReader reader = new YamlReader(new FileReader(CONFIG_FILENAME));
-			config = reader.read(CloudgeneClientConfig.class);
-		}
-		return config;
+	public CloudgeneInstanceList getInstances() throws IOException, CloudgeneAppException {
+		return getInstances(true);
 	}
 
-	public ProjectList getProjects() throws Exception {
+	public CloudgeneInstanceList getInstances(boolean check) throws IOException, CloudgeneAppException {
+
+		if (instances == null) {
+			File file = new File(INSTANCES_FILENAME);
+
+			if (!file.exists() && check) {
+				throw new CloudgeneAppException(
+						"No instance found. Please run 'imputationbot instances -add' and enter your API Token");
+			}
+
+			if (file.exists()) {
+				instances = CloudgeneInstanceList.load(INSTANCES_FILENAME);
+			} else {
+				instances = new CloudgeneInstanceList();
+			}
+
+		}
+		return instances;
+	}
+
+	public void saveInstances() throws IOException, CloudgeneAppException {
+		getInstances().save(INSTANCES_FILENAME);
+	}
+
+	public ProjectList getProjects() throws IOException {
 
 		if (projects == null) {
 			File file = new File(PROJECTS_FILENAME);
@@ -182,9 +192,9 @@ public abstract class BaseCommand extends Tool {
 		}
 		return projects;
 	}
-	
+
 	public void saveProjects() throws IOException {
-		projects.save(PROJECTS_FILENAME);
+		getProjects().save(PROJECTS_FILENAME);
 	}
 
 	@Override

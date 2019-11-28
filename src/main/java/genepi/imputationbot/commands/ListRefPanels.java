@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.util.ComandlineOptionsUtil;
 
 public class ListRefPanels extends BaseCommand {
@@ -28,14 +29,19 @@ public class ListRefPanels extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		CloudgeneClient client = getClient();
-		JSONObject app = client.getDefaultApp();
+		for (CloudgeneInstance instance : getInstances().getInstances()) {
 
-		JSONArray params = app.getJSONArray("params");
-		
-		ComandlineOptionsUtil.printDetails(params);
-		println();
-		
+			CloudgeneClient client = getClient();
+			JSONObject app = client.getDefaultApp(instance);
+
+			JSONArray params = app.getJSONArray("params");
+
+			println(instance.getName() + ":");
+			ComandlineOptionsUtil.printDetails(params);
+			println();
+
+		}
+
 		return 0;
 	}
 

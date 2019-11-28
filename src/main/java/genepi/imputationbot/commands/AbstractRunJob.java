@@ -12,6 +12,7 @@ import org.restlet.ext.html.FormData;
 import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectJob;
@@ -61,7 +62,11 @@ public class AbstractRunJob extends BaseCommand {
 
 		try {
 			CloudgeneClient client = getClient();
-			JSONObject app = client.getDefaultApp();
+
+			//TODO: select the correct instance
+			CloudgeneInstance instance = getInstances().getInstances().iterator().next();
+
+			JSONObject app = client.getDefaultApp(instance);
 
 			JSONArray params = app.getJSONArray("params");
 
@@ -138,8 +143,8 @@ public class AbstractRunJob extends BaseCommand {
 				println();
 				println("Submitting job... [" + (i + 1) + "/" + referencePanels.length + "]");
 
-				CloudgeneJob job = client.submitJob(app.getString("id"), newForm);
-				//reload job to get job name etc..
+				CloudgeneJob job = client.submitJob(instance, app.getString("id"), newForm);
+				// reload job to get job name etc..
 				job = client.getJobDetails(job.getId());
 
 				if (mode.equals(QC_JOB)) {
@@ -148,10 +153,8 @@ public class AbstractRunJob extends BaseCommand {
 					printlnInGreen("Imputation job '" + job.getName() + "' submitted successfully");
 				}
 
-				println("👉 Check the job progress on " + getConfig().getHostname() + "/index.html#!jobs/"
-						+ job.getId());
+				println("👉 Check the job progress on " + instance.getHostname() + "/index.html#!jobs/" + job.getId());
 				println();
-
 
 				ProjectJob projectJob = new ProjectJob();
 				projectJob.setJob(job.getId());
