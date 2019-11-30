@@ -1,6 +1,8 @@
 package genepi.imputationbot.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -17,7 +19,7 @@ public class CloudgeneInstance {
 	private String name = null;
 
 	private List<String> referencePanels = null;
-	
+		
 	public String getHostname() {
 		return hostname;
 	}
@@ -56,21 +58,12 @@ public class CloudgeneInstance {
 				JSONObject param = params.getJSONObject(i);
 				String id = param.getString("id");
 
-				// ignore mode!
-
-				// remove html tags from decription (e.g. links)
-
 				if (id.equals("refpanel")) {
-
-					//System.out.println("Reference Panels:");
 
 					JSONArray values = param.getJSONArray("values");
 					for (int j = 0; j < values.length(); j++) {
 						String key = values.getJSONObject(j).getString("key");
-						String value = values.getJSONObject(j).getString("value");
-
-						referencePanels.add(CommandlineOptionsUtil.prettyAppId(key));
-						
+						referencePanels.add(CommandlineOptionsUtil.prettyAppId(key));						
 					}
 
 				}
@@ -79,6 +72,12 @@ public class CloudgeneInstance {
 			
 		}
 		return referencePanels;
+	}
+	
+	public Map<String, String> getHttpHeader() {
+		Map<String, String> httpHeader = new HashMap<String, String>();
+		httpHeader.put("X-Auth-Token", token);
+		return httpHeader;
 	}
 	
 }

@@ -2,6 +2,7 @@ package genepi.imputationbot.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -11,6 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import genepi.imputationbot.util.AnsiColors;
+import genepi.imputationbot.util.downloads.Download;
+import genepi.imputationbot.util.downloads.Downloader;
+import genepi.imputationbot.util.downloads.IDownloadProgressListener;
 import genepi.io.FileUtil;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -26,13 +30,11 @@ public class CloudgeneJob {
 		this.instance = instance;
 	}
 
-	public void downloadAll(CloudgeneClient client, String outputFolder)
-			throws JSONException, IOException, InterruptedException, ZipException, CloudgeneException {
+	public void downloadAll(CloudgeneClient client, String outputFolder) throws Exception {
 		downloadAll(client, outputFolder, null);
 	}
 
-	public void downloadAll(CloudgeneClient client, String outputFolder, String password)
-			throws JSONException, IOException, InterruptedException, ZipException, CloudgeneException {
+	public void downloadAll(CloudgeneClient client, String outputFolder, String password) throws Exception {
 
 		List<String> urls = new Vector<String>();
 
@@ -46,29 +48,64 @@ public class CloudgeneJob {
 			}
 		}
 
+		Downloader downloader = new Downloader();
+		downloader.setHttpHeader(instance.getHttpHeader());
+		downloader.addListener(new IDownloadProgressListener() {
+			
+			public void downloadStarted(Download download) {
+				System.out.println("  Downloading from " + download.getSource() + "...");
+				
+			}
+			
+			public void downloadSkipped(Download download) {
+				System.out.println("  Skip file " + download.getSource());
+			}
+			
+			public void downloadResumed(Download download) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void downloadProgress(Download download, byte[] buffer, int length) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void downloadError(Download download, Exception exception) {
+				System.out.println("  Downloading from " + download.getSource() + " failed.");
+				exception.printStackTrace();
+				
+			}
+			
+			public void downloadCompleted(Download download) {
+				System.out.println("  Downloaded from " + download.getSource());				
+			}
+		});
+		List<File> zipFiles = new Vector<File>();
+
 		for (int i = 0; i < urls.size(); i++) {
 			String path = urls.get(i);
 			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
-			System.out.println("  Downloading file " + path + " from " + instance.getHostname() + " (" + (i + 1) + "/"
-					+ urls.size() + ")");
+			
+			URL source = new URL(instance.getHostname() + "/results/" + path);
+			File target = new File(localPath);
+			downloader.addDownload(new Download(source, target));
 
-			if (outputFolder != null) {
-				localPath = localPath.replaceAll(getId(), outputFolder);
-			}
-			File file = new File(localPath);
-			FileUtil.createDirectory(file.getParent());
-			client.downloadResults(instance, path, localPath);
-
-			// encrypt if file is zip
 			if (password != null && localPath.endsWith(".zip")) {
-				System.out.println("  Decrypting file " + path + "...");
-				File localFile = new File(localPath);
-				ZipFile zipFile = new ZipFile(localFile);
-				zipFile.setPassword(password);
-				zipFile.extractAll(localFile.getParent());
+				zipFiles.add(target);
 			}
 
+		}
+
+		downloader.downloadAll();
+
+		// encrypt if file is zip
+		for (File file : zipFiles) {
+			System.out.println("  Decrypting file " + file.getAbsolutePath() + "...");
+			ZipFile zipFile = new ZipFile(file);
+			zipFile.setPassword(password);
+			zipFile.extractAll(file.getParent());
 		}
 
 	}
