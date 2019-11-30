@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -13,7 +14,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 
 public class CloudgeneInstanceList {
 
-	private List<CloudgeneInstance> instances;
+	private List<CloudgeneInstance> instances = new Vector<CloudgeneInstance>();
 
 	public void add(CloudgeneInstance instance) {
 		instances.add(instance);
