@@ -71,9 +71,24 @@ public class AbstractRunJob extends BaseCommand {
 
 		String[] referencePanels = refPanelsArg.split(",");
 
-		String projectName = parseArgs(args, "--name");
-		Project project = new Project();
-		project.setName(projectName);
+		String projectName = parseArgs(args, "--project");
+		Project project = null;
+
+		try {
+			if (projectName != null) {
+				project = getProjects().getByName(projectName);
+				if (project == null) {
+					// new project
+					project = new Project();
+					project.setName(projectName);
+					ProjectList projects = getProjects();
+					projects.add(project);
+				}
+			}
+		} catch (Exception e) {
+			error(e);
+			return 1;
+		}
 
 		try {
 
@@ -104,28 +119,20 @@ public class AbstractRunJob extends BaseCommand {
 				if (projectJob == null) {
 					return -1;
 				}
-				project.getJobs().add(projectJob);
-
+				if (project != null) {
+					project.getJobs().add(projectJob);
+				}
 			}
 
-			if (project.getName() != null) {
-				ProjectList projects = getProjects();
-				projects.add(project);
+			if (project != null) {
 				saveProjects();
 				printlnInGreen("Project " + project + " created.");
 				println();
 				println();
 			}
-
-			/*
-			 * if (line.hasOption("wait")) { println("Jobs are running....");
-			 * client.waitForProject(project); println("All jobs completed."); for
-			 * (ProjectJob projectJob : project.getJobs()) { CloudgeneJob jobDetails =
-			 * client.getJobDetails(projectJob.getJob()); println("  " + projectJob.getJob()
-			 * + ": " + jobDetails.getJobStateAsText()); } println(); println(); }
-			 */
-
+			
 			return 0;
+			
 		} catch (Exception e) {
 			error(e);
 			return 1;
@@ -156,9 +163,13 @@ public class AbstractRunJob extends BaseCommand {
 		optionPassword.setRequired(false);
 		options.addOption(optionPassword);
 
-		Option optionProjectName = new Option(null, "name", true, "Optional project name");
+		Option optionProjectName = new Option(null, "project", true, "Optional project name");
 		optionProjectName.setRequired(false);
 		options.addOption(optionProjectName);
+
+		Option optionStudyName = new Option(null, "name", true, "Optional project name");
+		optionStudyName.setRequired(false);
+		options.addOption(optionStudyName);
 
 		// parse the command line arguments
 		CommandLine line = null;
@@ -191,10 +202,19 @@ public class AbstractRunJob extends BaseCommand {
 			println("  💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
 		}
 
-		String projectName = line.getOptionValue("name");
+		String projectName = line.getOptionValue("project");
+		String studyName = line.getOptionValue("name");
+
+		String jobName = null;
 		if (projectName != null) {
-			form.getEntries()
-					.add(new FormData("job-name", projectName + " (" + referencePanel.replaceAll("apps@", "") + ")"));
+			jobName = projectName + "_";
+		}
+		if (studyName != null) {
+			jobName += studyName + "_";
+		}
+
+		if (jobName != null) {
+			form.getEntries().add(new FormData("job-name", jobName + referencePanel.replaceAll("apps@", "")));
 		}
 
 		println();

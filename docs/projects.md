@@ -1,0 +1,68 @@
+# Projects
+
+Imputation-Bot helps you to manage projects consisting of multiple jobs. By defining projects, all jobs of a project can be listed at once as well as downloading results with a single command.
+
+## List Projects
+
+All projects can be listed with the `projects` command:
+
+```
+imputationbot projects
+```
+
+## Multiple Reference Panels
+
+Impute study 1 against 1000 Genomes and Hapmap-2:
+
+```
+imputationbot impute --files /path/to/study_1.vcf.gz --refpanel 1000g-phase-3-v5,hapmap-2 --population eur --project study1
+```
+
+Submits in background two jobs and add both to project "study1"
+
+Job-Name: study1_1000g-phase-3-v5
+Job-Name: study1_hapmap-2
+
+The project name can be used to list both jobs at once:
+
+```
+imputationbot jobs study1
+```
+
+The project name can be used to download both jobs at once:
+
+```
+imputationbot download study1
+```
+
+
+
+## Multiple GWAS data
+
+Submit job for study 1 and create project "my-consortia":
+
+```
+imputationbot impute --files /path/to/study_1.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --name study1 --project my-consortia
+```
+
+Job-Name: my-consortia_study1_1000g-phase-3-v5
+
+Submit job for study 2 and add it to project "my-consortia":
+
+```
+imputationbot impute --files /path/to/study_2.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --name study2 --project my-consortia
+
+Job-Name: my-consortia_study2_1000g-phase-3-v5
+```
+
+Check all studies that are part of this project:
+
+```
+imputationbot jobs my-consortia
+```
+
+Download all results of jobs that are part of this project:
+
+```
+imputationbot download my-consortia
+```

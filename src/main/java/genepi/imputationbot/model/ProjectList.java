@@ -34,7 +34,7 @@ public class ProjectList {
 
 	public Project getByName(String name) {
 		for (Project project : projects) {
-			if (project.getName().equalsIgnoreCase(name)) {
+			if (project.getName() != null && project.getName().equalsIgnoreCase(name)) {
 				return project;
 			}
 		}
