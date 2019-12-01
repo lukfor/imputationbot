@@ -5,6 +5,7 @@ Your personal bot for Imputationserver
 ![Image1](assets/logo.png)
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
+[![Documentation Status](https://readthedocs.org/projects/imputationbot/badge/?version=latest)](https://imputationbot.readthedocs.io/en/latest/?badge=latest)
 
 
 ## Requirements
