@@ -1,0 +1,26 @@
+site_name: Imputation-Bot
+theme: readthedocs
+
+pages:
+- Installation: index.md
+- Getting Started: getting-started.md
+- List Reference Panels: reference-panels.md
+- Configure Instances: instances.md
+- Submit Jobs: submit-jobs.md
+- List Jobs: list-jobs.md
+- Download Results: download-results.md
+
+
+repo_name: lukfor/imputationbot
+repo_url: https://github.com/lukfor/imputationbot
+edit_uri: edit/master/docs
+
+extra:
+  social:
+    - type: github-alt
+      link: https://github.com/lukfor/imputationbot
+
+markdown_extensions:
+    - toc:
+        permalink:
+    - admonition:

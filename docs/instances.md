@@ -1,0 +1,3 @@
+# Configure Instances
+
+TODO: describe configure command, how to list all available instances, how to check tokens, ...
