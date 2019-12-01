@@ -21,6 +21,7 @@ imputationbot impute --files /path/to/study_1.vcf.gz --refpanel 1000g-phase-3-v5
 Submits in background two jobs and add both to project "study1"
 
 Job-Name: study1_1000g-phase-3-v5
+
 Job-Name: study1_hapmap-2
 
 The project name can be used to list both jobs at once:
@@ -51,9 +52,9 @@ Submit job for study 2 and add it to project "my-consortia":
 
 ```
 imputationbot impute --files /path/to/study_2.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --name study2 --project my-consortia
+```
 
 Job-Name: my-consortia_study2_1000g-phase-3-v5
-```
 
 Check all studies that are part of this project:
 
