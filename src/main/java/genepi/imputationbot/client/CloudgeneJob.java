@@ -52,7 +52,7 @@ public class CloudgeneJob {
 
 		for (int i = 0; i < urls.size(); i++) {
 			String path = urls.get(i);
-			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
+			String localPath = path.replaceAll(getId(), getName()).replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
 
 			URL source = new URL(instance.getHostname() + "/results/" + path);

@@ -69,7 +69,7 @@ public class DownloadResults extends BaseCommand {
 				println();
 			}
 
-			println("Downloading job " + job.getId() + "... " + "[" + (i+1) + "/" + jobIds.length + "]");
+			println("Downloading job " + job.getName() + "... " + "[" + (i+1) + "/" + jobIds.length + "]");
 			Object password = getValue("password");
 			Object output = getValue("output");
 			String outputFolder = null;
