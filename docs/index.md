@@ -1,6 +1,10 @@
 # Imputation-Bot
 
+![Image1](assets/logo.png)
+
 Your personal bot for [Michigian Imputation Server](https://imputationserver.sph.umich.edu).
+
+
 
 ## Requirements
 
@@ -22,7 +26,7 @@ curl -sL imputationbot.now.sh | bash
 Test the installation with the following command:
 
 ```sh
-impuationbot version
+imputationbot version
 ```
 
 

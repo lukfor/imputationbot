@@ -6,11 +6,29 @@ Your personal bot for Imputationserver
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
 
-## Install
+
+## Requirements
+
+You will need the following things properly installed on your computer.
+
+* [Java 8 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+
+## Download and Install
+
+Download and install the latest version from our download page using the following commands:
 
 ```
 curl -sL imputationbot.now.sh | bash
 ```
+
+
+Test the installation with the following command:
+
+```sh
+imputationbot version
+```
+
 
 ## Get your API Token
 
@@ -93,3 +111,11 @@ You can provide Imputation Bot the password we sent you via email and it decrypt
 ```
 imputationbot download job-XXXXXXXX-XXXXXX-XXX --password MYPASSWORD
 ```
+
+## Documentation
+
+The documentation is available at [http://imputationbot.readthedocs.io](http://imputationbot.readthedocs.io).
+
+## Contact
+
+Feel free to contact [us](https://imputationserver.sph.umich.edu/index.html#!pages/contact) in case of any problems.
