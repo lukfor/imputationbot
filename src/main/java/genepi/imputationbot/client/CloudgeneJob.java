@@ -1,23 +1,19 @@
 package genepi.imputationbot.client;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import genepi.imputationbot.util.AnsiColors;
 import genepi.imputationbot.util.downloads.Download;
+import genepi.imputationbot.util.downloads.DownloadProgressPrinter;
 import genepi.imputationbot.util.downloads.Downloader;
-import genepi.imputationbot.util.downloads.IDownloadProgressListener;
-import genepi.io.FileUtil;
 import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 
 public class CloudgeneJob {
 
@@ -50,44 +46,15 @@ public class CloudgeneJob {
 
 		Downloader downloader = new Downloader();
 		downloader.setHttpHeader(instance.getHttpHeader());
-		downloader.addListener(new IDownloadProgressListener() {
-			
-			public void downloadStarted(Download download) {
-				System.out.println("  Downloading from " + download.getSource() + "...");
-				
-			}
-			
-			public void downloadSkipped(Download download) {
-				System.out.println("  Skip file " + download.getSource());
-			}
-			
-			public void downloadResumed(Download download) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			public void downloadProgress(Download download, byte[] buffer, int length) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			public void downloadError(Download download, Exception exception) {
-				System.out.println("  Downloading from " + download.getSource() + " failed.");
-				exception.printStackTrace();
-				
-			}
-			
-			public void downloadCompleted(Download download) {
-				System.out.println("  Downloaded from " + download.getSource());				
-			}
-		});
+		downloader.addListener(new DownloadProgressPrinter());
+
 		List<File> zipFiles = new Vector<File>();
 
 		for (int i = 0; i < urls.size(); i++) {
 			String path = urls.get(i);
 			String localPath = path.replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
 					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
-			
+
 			URL source = new URL(instance.getHostname() + "/results/" + path);
 			File target = new File(localPath);
 			downloader.addDownload(new Download(source, target));
