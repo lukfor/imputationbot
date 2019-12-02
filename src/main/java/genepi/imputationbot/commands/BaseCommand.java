@@ -34,7 +34,7 @@ public abstract class BaseCommand extends Tool {
 
 	private static Scanner scanner = new Scanner(System.in);
 
-	private CloudgeneInstanceList instances;
+	private CloudgeneInstanceList instanceList;
 
 	private ProjectList projects;
 
@@ -85,6 +85,7 @@ public abstract class BaseCommand extends Tool {
 		} else {
 			error(e.toString());
 		}
+		e.printStackTrace();
 	}
 
 	public String read(String label, String defaultValue) {
@@ -119,9 +120,9 @@ public abstract class BaseCommand extends Tool {
 
 	public CloudgeneClient getClient() throws Exception {
 
-		CloudgeneClient client = new CloudgeneClient(getInstances().getInstances());
+		CloudgeneClient client = new CloudgeneClient(getInstanceList().getAll());
 
-		for (CloudgeneInstance instance : getInstances().getInstances()) {
+		for (CloudgeneInstance instance : getInstanceList().getAll()) {
 
 			try {
 				CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
@@ -151,13 +152,13 @@ public abstract class BaseCommand extends Tool {
 
 	}
 
-	public CloudgeneInstanceList getInstances() throws IOException, CloudgeneAppException {
-		return getInstances(true);
+	public CloudgeneInstanceList getInstanceList() throws IOException, CloudgeneAppException {
+		return getInstanceList(true);
 	}
 
-	public CloudgeneInstanceList getInstances(boolean check) throws IOException, CloudgeneAppException {
+	public CloudgeneInstanceList getInstanceList(boolean check) throws IOException, CloudgeneAppException {
 
-		if (instances == null) {
+		if (instanceList == null) {
 			File file = new File(INSTANCES_FILENAME);
 
 			if (!file.exists() && check) {
@@ -166,17 +167,17 @@ public abstract class BaseCommand extends Tool {
 			}
 
 			if (file.exists()) {
-				instances = CloudgeneInstanceList.load(INSTANCES_FILENAME);
+				instanceList = CloudgeneInstanceList.load(INSTANCES_FILENAME);
 			} else {
-				instances = new CloudgeneInstanceList();
+				instanceList = new CloudgeneInstanceList();
 			}
 
 		}
-		return instances;
+		return instanceList;
 	}
 
-	public void saveInstances() throws IOException, CloudgeneAppException {
-		getInstances().save(INSTANCES_FILENAME);
+	public void saveInstanceList() throws IOException, CloudgeneAppException {
+		getInstanceList().save(INSTANCES_FILENAME);
 	}
 
 	public ProjectList getProjects() throws IOException {

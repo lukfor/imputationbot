@@ -8,7 +8,7 @@ The `impute` command can be used to submit a job:
 
 The complete command looks like this:
 
-```
+```sh
 imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
 ```
 
@@ -18,6 +18,6 @@ After submission we get the URL where we can monitor the progress of our job.
 
 Imputation-Bot allows to impute a VCF file against multiple reference panels with a single command. The `--refpanel` parameter supports multiple reference panels separated by a semicolon:
 
-```
+```sh
 imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5,hapmap-2 --population eur
 ```

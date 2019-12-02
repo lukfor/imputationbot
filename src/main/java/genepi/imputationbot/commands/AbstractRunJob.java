@@ -105,7 +105,7 @@ public class AbstractRunJob extends BaseCommand {
 					}
 				}
 
-				CloudgeneInstance instance = getInstances().getInstanceByReferencePanel(referencePanel);
+				CloudgeneInstance instance = getInstanceList().getByReferencePanel(referencePanel);
 
 				if (instance == null) {
 					error("No instance found that provides reference panel '" + referencePanel + "'");

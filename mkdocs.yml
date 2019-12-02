@@ -4,8 +4,8 @@ theme: readthedocs
 pages:
 - Installation: index.md
 - Getting Started: getting-started.md
-- List Reference Panels: reference-panels.md
 - Configure Instances: instances.md
+- List Reference Panels: reference-panels.md
 - Submit Jobs: submit-jobs.md
 - List Jobs: list-jobs.md
 - Download Results: download-results.md

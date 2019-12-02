@@ -48,13 +48,13 @@ public class CloudgeneClient {
 
 	}
 
-	public JSONObject getAuthUser(CloudgeneInstance instance) throws CloudgeneException {
+	public CloudgeneUser getAuthUser(CloudgeneInstance instance) throws CloudgeneException {
 
 		ClientResource resource = createClientResource(instance, "/api/v2/users/me/profile");
 
 		String content = get(resource);
 		JSONObject object = new JSONObject(content);
-		return object;
+		return new CloudgeneUser(object);
 
 	}
 

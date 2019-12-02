@@ -20,7 +20,7 @@ public class CloudgeneInstanceList {
 		instances.add(instance);
 	}
 
-	public Collection<CloudgeneInstance> getInstances() {
+	public Collection<CloudgeneInstance> getAll() {
 		return Collections.unmodifiableCollection(instances);
 	}
 
@@ -28,7 +28,7 @@ public class CloudgeneInstanceList {
 		instances.remove(instance);
 	}
 
-	public CloudgeneInstance getInstanceByHostname(String hostname) {
+	public CloudgeneInstance getByHostname(String hostname) {
 		for (CloudgeneInstance instance : instances) {
 			if (instance.getHostname().equalsIgnoreCase(hostname)) {
 				return instance;
@@ -37,7 +37,7 @@ public class CloudgeneInstanceList {
 		return null;
 	}
 
-	public CloudgeneInstance getInstanceByReferencePanel(String referencePanel)
+	public CloudgeneInstance getByReferencePanel(String referencePanel)
 			throws CloudgeneException, CloudgeneAppException {
 		for (CloudgeneInstance instance : instances) {
 			if (instance.getReferencePanels().contains(referencePanel)) {

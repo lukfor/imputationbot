@@ -1,6 +1,5 @@
 package genepi.imputationbot.commands;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneApiToken;
@@ -8,12 +7,13 @@ import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneInstanceList;
+import genepi.imputationbot.client.CloudgeneUser;
 
-public class ConfigCloudgeneClient extends BaseCommand {
+public class AddInstance extends BaseCommand {
 
 	public static final String DEFAULT_HOSTNAME = "https://imputationserver.sph.umich.edu";
 
-	public ConfigCloudgeneClient(String[] args) {
+	public AddInstance(String[] args) {
 		super(args);
 	}
 
@@ -45,7 +45,7 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		instance.setHostname(hostname);
 		instance.setToken(token);
 
-		CloudgeneInstanceList instances = getInstances(false);
+		CloudgeneInstanceList instances = getInstanceList(false);
 		CloudgeneClient client = getClient();
 
 		// verify token
@@ -66,15 +66,14 @@ public class ConfigCloudgeneClient extends BaseCommand {
 		}
 
 		// test api token by getting user profile
-		JSONObject user = client.getAuthUser(instance);
+		CloudgeneUser user = client.getAuthUser(instance);
 		println();
-		String name = user.getString("fullName").isEmpty() ? "Mr. Shy" : user.getString("fullName");
-		println("Hi " + name + " 👋");
+		println("Hi " + user.getFullName() + " 👋");
 		println();
 
 		JSONObject defaultApp = client.getDefaultApp(instance);
 		instances.add(instance);	
-		saveInstances();
+		saveInstanceList();
 
 		println();
 		println();

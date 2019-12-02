@@ -10,15 +10,16 @@ import org.restlet.engine.Engine;
 import org.restlet.ext.slf4j.Slf4jLoggerFacade;
 
 import genepi.base.Toolbox;
-import genepi.imputationbot.commands.ConfigCloudgeneClient;
+import genepi.imputationbot.commands.AddInstance;
 import genepi.imputationbot.commands.DownloadResults;
+import genepi.imputationbot.commands.ListInstances;
 import genepi.imputationbot.commands.ListJobs;
 import genepi.imputationbot.commands.ListProjects;
 import genepi.imputationbot.commands.ListRefPanels;
+import genepi.imputationbot.commands.RemoveInstance;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowVersion;
-import genepi.imputationbot.model.ProjectList;
 
 public class App extends Toolbox {
 
@@ -44,13 +45,14 @@ public class App extends Toolbox {
 	public static void main(String[] args) throws Exception {
 
 		App toolbox = new App("imputationbot", args);
-		toolbox.addTool("configure", ConfigCloudgeneClient.class);
+		toolbox.addTool("add-instance", AddInstance.class);
+		toolbox.addTool("remove-instance", RemoveInstance.class);
+		toolbox.addTool("instances", ListInstances.class);
 		toolbox.addTool("download", DownloadResults.class);
 		toolbox.addTool("impute", RunImputationJob.class);
 		toolbox.addTool("refpanels", ListRefPanels.class);
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
-		toolbox.addTool("info", ShowVersion.class);
 		toolbox.addTool("projects", ListProjects.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();

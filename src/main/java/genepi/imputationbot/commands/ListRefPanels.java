@@ -29,7 +29,7 @@ public class ListRefPanels extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		for (CloudgeneInstance instance : getInstances().getInstances()) {
+		for (CloudgeneInstance instance : getInstanceList().getAll()) {
 
 			CloudgeneClient client = getClient();
 			JSONObject app = client.getDefaultApp(instance);
