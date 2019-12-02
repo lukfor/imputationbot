@@ -46,6 +46,8 @@ public class App extends Toolbox {
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("add-instance", AddInstance.class);
+		//old alias
+		toolbox.addTool("configure", AddInstance.class);
 		toolbox.addTool("remove-instance", RemoveInstance.class);
 		toolbox.addTool("instances", ListInstances.class);
 		toolbox.addTool("download", DownloadResults.class);
