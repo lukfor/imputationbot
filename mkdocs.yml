@@ -9,7 +9,7 @@ pages:
 - Submit Jobs: submit-jobs.md
 - List Jobs: list-jobs.md
 - Download Results: download-results.md
-- Projects: projects.md
+- Manage Projects: projects.md
 - Contact: contact.md
 
 repo_name: lukfor/imputationbot

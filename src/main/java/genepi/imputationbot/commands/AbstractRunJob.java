@@ -182,7 +182,7 @@ public class AbstractRunJob extends BaseCommand {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("imputationbot impute", "\nImputation Parameters", options, "", true);
 			println();
-			CommandlineOptionsUtil.printDetails(params);
+			//CommandlineOptionsUtil.printDetails(params);
 			println();
 			error(e.getMessage());
 			println();

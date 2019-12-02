@@ -1,4 +1,4 @@
-# Projects
+# Manage Projects
 
 Imputation-Bot helps you to manage projects consisting of multiple jobs. By defining projects, all jobs of a project can be listed at once as well as downloading results with a single command.
 

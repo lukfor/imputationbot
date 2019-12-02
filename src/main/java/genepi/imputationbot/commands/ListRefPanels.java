@@ -31,13 +31,7 @@ public class ListRefPanels extends BaseCommand {
 
 		for (CloudgeneInstance instance : getInstanceList().getAll()) {
 
-			CloudgeneClient client = getClient();
-			JSONObject app = client.getDefaultApp(instance);
-
-			JSONArray params = app.getJSONArray("params");
-
-			println(instance.getName() + ":");
-			CommandlineOptionsUtil.printDetails(params);
+			instance.printReferencePanels();
 			println();
 
 		}

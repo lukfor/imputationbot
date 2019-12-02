@@ -14,7 +14,10 @@ import org.restlet.ext.html.FormData;
 import org.restlet.ext.html.FormDataSet;
 import org.restlet.representation.FileRepresentation;
 
+import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneAppException;
+import genepi.imputationbot.client.CloudgeneInstance;
+import genepi.imputationbot.client.CloudgeneUser;
 
 public class CommandlineOptionsUtil {
 
@@ -86,73 +89,6 @@ public class CommandlineOptionsUtil {
 			}
 		}
 		return options;
-
-	}
-
-	public static void printDetails(JSONArray params) {
-
-		Map<String, String> populations = new HashMap<String, String>();
-
-		for (int i = 0; i < params.length(); i++) {
-
-			JSONObject param = params.getJSONObject(i);
-			String id = param.getString("id");
-
-			if (id.equals("population")) {
-
-				JSONArray values = param.getJSONArray("values");
-				for (int j = 0; j < values.length(); j++) {
-					String key = values.getJSONObject(j).getString("key");
-					JSONArray valuesKey = values.getJSONObject(j).getJSONArray("values");
-					String description = "";
-					for (int k = 0; k < valuesKey.length(); k++) {
-						String keyPop = valuesKey.getJSONObject(k).getString("key");
-						String value = valuesKey.getJSONObject(k).getString("value");
-
-						String temp = "--population " + keyPop;
-						while (temp.length() < 35) {
-							temp += " ";
-						}
-
-						description += "        " + temp + value + "\n";
-					}
-					populations.put(key, description);
-				}
-
-			}
-
-		}
-
-		for (int i = 0; i < params.length(); i++) {
-
-			JSONObject param = params.getJSONObject(i);
-			String id = param.getString("id");
-
-			// ignore mode!
-
-			// remove html tags from decription (e.g. links)
-
-			if (id.equals("refpanel")) {
-
-				//System.out.println("Reference Panels:");
-
-				JSONArray values = param.getJSONArray("values");
-				for (int j = 0; j < values.length(); j++) {
-					String key = values.getJSONObject(j).getString("key");
-					String value = values.getJSONObject(j).getString("value");
-
-					String temp = "--refpanel " + prettyAppId(key);
-					while (temp.length() < 35) {
-						temp += " ";
-					}
-
-					System.out.println("    " + temp + value);
-					System.out.println(populations.get(key));
-				}
-
-			}
-
-		}
 
 	}
 
