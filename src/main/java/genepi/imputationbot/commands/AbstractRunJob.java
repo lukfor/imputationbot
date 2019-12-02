@@ -76,12 +76,12 @@ public class AbstractRunJob extends BaseCommand {
 
 		try {
 			if (projectName != null) {
-				project = getProjects().getByName(projectName);
+				project = getProjectList().getByName(projectName);
 				if (project == null) {
 					// new project
 					project = new Project();
 					project.setName(projectName);
-					ProjectList projects = getProjects();
+					ProjectList projects = getProjectList();
 					projects.add(project);
 				}
 			}

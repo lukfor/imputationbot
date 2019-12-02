@@ -36,7 +36,7 @@ public abstract class BaseCommand extends Tool {
 
 	private CloudgeneInstanceList instanceList;
 
-	private ProjectList projects;
+	private ProjectList projectList;
 
 	public BaseCommand(String[] args) {
 		super(args);
@@ -180,22 +180,22 @@ public abstract class BaseCommand extends Tool {
 		getInstanceList().save(INSTANCES_FILENAME);
 	}
 
-	public ProjectList getProjects() throws IOException {
+	public ProjectList getProjectList() throws IOException {
 
-		if (projects == null) {
+		if (projectList == null) {
 			File file = new File(PROJECTS_FILENAME);
 
 			if (file.exists()) {
-				projects = ProjectList.load(PROJECTS_FILENAME);
+				projectList = ProjectList.load(PROJECTS_FILENAME);
 			} else {
-				projects = new ProjectList();
+				projectList = new ProjectList();
 			}
 		}
-		return projects;
+		return projectList;
 	}
 
 	public void saveProjects() throws IOException {
-		getProjects().save(PROJECTS_FILENAME);
+		getProjectList().save(PROJECTS_FILENAME);
 	}
 
 	@Override

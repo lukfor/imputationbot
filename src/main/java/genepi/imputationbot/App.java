@@ -17,6 +17,7 @@ import genepi.imputationbot.commands.ListJobs;
 import genepi.imputationbot.commands.ListProjects;
 import genepi.imputationbot.commands.ListRefPanels;
 import genepi.imputationbot.commands.RemoveInstance;
+import genepi.imputationbot.commands.RemoveProject;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowVersion;
@@ -56,6 +57,7 @@ public class App extends Toolbox {
 		toolbox.addTool("jobs", ListJobs.class);
 		toolbox.addTool("validate", RunQualityControlJob.class);
 		toolbox.addTool("projects", ListProjects.class);
+		toolbox.addTool("remove-project", RemoveProject.class);
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 

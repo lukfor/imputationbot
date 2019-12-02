@@ -38,7 +38,7 @@ public class DownloadResults extends BaseCommand {
 
 		CloudgeneClient client = getClient();
 
-		ProjectList projects = getProjects();
+		ProjectList projects = getProjectList();
 		Project project = projects.getByName(jobIds[0]);
 
 		if (project != null) {

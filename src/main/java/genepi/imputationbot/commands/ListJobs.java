@@ -37,7 +37,7 @@ public class ListJobs extends BaseCommand {
 
 			String id = jobIds[0];
 
-			ProjectList projects = getProjects();
+			ProjectList projects = getProjectList();
 			Project project = projects.getByName(id);
 
 			if (project != null) {
