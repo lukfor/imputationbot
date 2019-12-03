@@ -3,7 +3,7 @@
 set -e
 
 NAME="Imputation Bot"
-VERSION="v0.1.3"
+VERSION="v0.5.0"
 GITHUB_USER="lukfor"
 GITHUB_REPO="imputationbot"
 EXECUTABLE="imputationbot"
