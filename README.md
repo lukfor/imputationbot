@@ -1,12 +1,12 @@
-# Imputation Bot
-
-Your personal bot for Imputationserver
-
 ![Image1](assets/logo.png)
+
+# Imputation Bot
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
 [![Documentation Status](https://readthedocs.org/projects/imputationbot/badge/?version=latest)](https://imputationbot.readthedocs.io/en/latest/?badge=latest)
 
+
+Your personal bot for Imputationserver
 
 ## Requirements
 
@@ -43,11 +43,11 @@ Enable API access from your Profile page.
 
 ![Image1](assets/token2.png)
 
-1. Copy your API Token and paste it when `imputationbot configure` ask for it.
+1. Copy your API Token and paste it when `imputationbot add-instance` ask for it.
 
 ![Image1](assets/token3.png)
 
-Api Tokens are valid for 30 days. You can check the status in the web interface or with `imputationbot info`
+Api Tokens are valid for 30 days. You can check the status in the web interface or with `imputationbot instances`
 
 ![Image1](assets/token4.png)
 
