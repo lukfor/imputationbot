@@ -85,7 +85,6 @@ public abstract class BaseCommand extends Tool {
 		} else {
 			error(e.toString());
 		}
-		e.printStackTrace();
 	}
 
 	public String read(String label, String defaultValue) {
