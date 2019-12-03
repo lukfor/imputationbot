@@ -54,7 +54,7 @@ Api Tokens are valid for 30 days. You can check the status in the web interface 
 1. Next, configure imputationbot with the following command:
 
 ```
-imputationbot configure
+imputationbot add-instance
 ```
 
 ```
