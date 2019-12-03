@@ -162,7 +162,7 @@ public abstract class BaseCommand extends Tool {
 
 			if (!file.exists() && check) {
 				throw new CloudgeneAppException(
-						"No instance found. Please run 'imputationbot add-instances' and enter your API Token");
+						"No instance found. Please run 'imputationbot add-instance' and enter your API Token");
 			}
 
 			if (file.exists()) {
