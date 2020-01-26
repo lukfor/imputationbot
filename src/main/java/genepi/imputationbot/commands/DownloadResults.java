@@ -76,7 +76,11 @@ public class DownloadResults extends BaseCommand {
 			if (output != null) {
 				outputFolder = output.toString();
 			} else {
-				outputFolder = job.getId();
+				if (job.getId().equals(job.getName())) {
+					outputFolder = job.getId();
+				} else {
+					outputFolder = job.getId() + "-" + job.getName();
+				}
 			}
 			if (password != null) {
 				job.downloadAll(client, outputFolder, password.toString());
