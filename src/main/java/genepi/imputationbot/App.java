@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.restlet.engine.Engine;
-import org.restlet.ext.slf4j.Slf4jLoggerFacade;
+//import org.restlet.engine.Engine;
+//import org.restlet.ext.slf4j.Slf4jLoggerFacade;
 
 import genepi.base.Toolbox;
 import genepi.imputationbot.commands.AddInstance;
@@ -33,8 +33,8 @@ public class App extends Toolbox {
 
 	public void turnLoggingOff() {
 
-		Slf4jLoggerFacade loggerFacade = new Slf4jLoggerFacade();
-		Engine.getInstance().setLoggerFacade(loggerFacade);
+		//Slf4jLoggerFacade loggerFacade = new Slf4jLoggerFacade();
+		//Engine.getInstance().setLoggerFacade(loggerFacade);
 
 		List<Logger> loggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
 		loggers.add(LogManager.getRootLogger());

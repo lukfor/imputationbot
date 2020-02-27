@@ -7,17 +7,12 @@ import java.util.Map;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.restlet.data.MediaType;
-import org.restlet.ext.html.FormData;
-import org.restlet.ext.html.FormDataSet;
-import org.restlet.representation.FileRepresentation;
 
-import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneAppException;
-import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.client.CloudgeneUser;
 
 public class CommandlineOptionsUtil {
 
@@ -92,7 +87,7 @@ public class CommandlineOptionsUtil {
 
 	}
 
-	public static FormDataSet createForm(JSONArray params, CommandLine line) throws Exception {
+	public static MultipartEntityBuilder createForm(JSONArray params, CommandLine line) throws Exception {
 		Map<String, String> props = new HashMap<String, String>();
 
 		for (int i = 0; i < params.length(); i++) {
@@ -105,8 +100,8 @@ public class CommandlineOptionsUtil {
 
 		System.out.println("  Parameters:");
 
-		FormDataSet form = new FormDataSet();
-		form.setMultipart(true);
+        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+
 		for (int i = 0; i < params.length(); i++) {
 
 			JSONObject param = params.getJSONObject(i);
@@ -138,14 +133,14 @@ public class CommandlineOptionsUtil {
 							temp += value2;
 
 						}
-						form.getEntries().add(new FormData(id, temp));
+						multipartEntityBuilder.addTextBody(id, temp);
 						System.out.println("    " + id + ": " + temp);
 					} else if (type.equals("list")) {
 						if (!isValidValue(param, value)) {
 							throw new CloudgeneAppException(
 									"Value '" + value + "' is not a valid option for '" + param.getString("id") + "'.");
 						}
-						form.getEntries().add(new FormData(id, value));
+						multipartEntityBuilder.addTextBody(id, value);
 						System.out.println("    " + id + ": " + value);
 					} else if (type.equals("binded_list")) {
 						String bind = param.getString("bind");
@@ -158,11 +153,11 @@ public class CommandlineOptionsUtil {
 												+ "' in combination with " + bind + " '" + valueBind + "'");
 							}
 						}
-						form.getEntries().add(new FormData(id, value));
+						multipartEntityBuilder.addTextBody(id, value);
 						System.out.println("    " + id + ": " + value);
 					} else if (isFile(type)) {
 						if (value.startsWith("http://") || value.startsWith("https://")) {
-							form.getEntries().add(new FormData(id, value));
+							multipartEntityBuilder.addTextBody(id, value);
 							System.out.println("    " + id + ": " + value);
 						} else {
 
@@ -180,18 +175,14 @@ public class CommandlineOptionsUtil {
 
 										for (File subfile : files) {
 											if (subfile.getAbsolutePath().endsWith(".vcf.gz")) {
-												form.getEntries()
-														.add(new FormData(id,
-																new FileRepresentation(subfile.getAbsolutePath(),
-																		MediaType.APPLICATION_OCTET_STREAM)));
+   											    multipartEntityBuilder.addBinaryBody(id, subfile);
 												System.out.println("    - " + subfile.getAbsolutePath());
 											}
 										}
 
 									} else {
 
-										form.getEntries().add(new FormData(id,
-												new FileRepresentation(tile, MediaType.APPLICATION_OCTET_STREAM)));
+										 multipartEntityBuilder.addBinaryBody(id, file);
 										System.out.println("      - " + tile);
 
 									}
@@ -202,19 +193,19 @@ public class CommandlineOptionsUtil {
 							}
 						}
 					} else {
-						form.getEntries().add(new FormData(id, value));
+						multipartEntityBuilder.addTextBody(id, value);
 						System.out.println("    " + id + ": " + value);
 					}
 				} else {
 					if (type.equals("checkbox")) {
-						form.getEntries().add(new FormData(id, getValueByKey(param, "false")));
+						multipartEntityBuilder.addTextBody(id,  getValueByKey(param, "false"));
 						System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 					}
 				}
 			}
 		}
 
-		return form;
+		return multipartEntityBuilder;
 	}
 
 	public static boolean isFile(String type) {

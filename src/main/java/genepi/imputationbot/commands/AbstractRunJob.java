@@ -8,10 +8,10 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.restlet.ext.html.FormData;
-import org.restlet.ext.html.FormDataSet;
 
 import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
@@ -189,15 +189,15 @@ public class AbstractRunJob extends BaseCommand {
 			return null;
 		}
 
-		FormDataSet form = CommandlineOptionsUtil.createForm(params, line);
+		MultipartEntityBuilder form = CommandlineOptionsUtil.createForm(params, line);
 
 		// add mode
-		form.getEntries().add(new FormData("mode", mode));
+		form.addTextBody("mode", mode);
 
 		// add password
 		if (line.hasOption("password")) {
 			// TODO: add password check! smae as for username?
-			form.getEntries().add(new FormData("password", line.getOptionValue("password")));
+			form.addTextBody("password", line.getOptionValue("password"));
 			println();
 			println("  💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
 		}
@@ -214,12 +214,13 @@ public class AbstractRunJob extends BaseCommand {
 		}
 
 		if (jobName != null) {
-			form.getEntries().add(new FormData("job-name", jobName + referencePanel.replaceAll("apps@", "")));
+			form.addTextBody("job-name", jobName + referencePanel.replaceAll("apps@", ""));
 		}
 
 		println();
 
-		CloudgeneJob job = client.submitJob(instance, app.getString("id"), form);
+		HttpEntity entity = form.build();
+		CloudgeneJob job = client.submitJob(instance, app.getString("id"), entity);
 		// reload job to get job name etc..
 		job = client.getJobDetails(job.getId());
 
