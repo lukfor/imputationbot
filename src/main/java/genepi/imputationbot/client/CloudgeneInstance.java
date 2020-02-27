@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import genepi.imputationbot.util.CommandlineOptionsUtil;
-import genepi.imputationbot.util.FlipTable;
 
 public class CloudgeneInstance {
 
@@ -75,7 +74,7 @@ public class CloudgeneInstance {
 		return referencePanels;
 	}
 
-	public void printReferencePanels() throws CloudgeneException, CloudgeneAppException {
+	public String[][] getReferencePanelsWithDetails() throws CloudgeneException, CloudgeneAppException {
 
 		CloudgeneClient client = new CloudgeneClient(new Vector<CloudgeneInstance>());
 
@@ -114,12 +113,6 @@ public class CloudgeneInstance {
 
 		}
 
-		String[] header = new String[4];
-		header[0] = "ID";
-		header[1] = "Name";
-		header[2] = "Populations";
-		header[3] = "Instance";
-
 		for (int i = 0; i < params.length(); i++) {
 
 			JSONObject param = params.getJSONObject(i);
@@ -134,7 +127,7 @@ public class CloudgeneInstance {
 				// System.out.println("Reference Panels:");
 
 				JSONArray values = param.getJSONArray("values");
-				String[][] data = new String[values.length()][header.length];
+				String[][] data = new String[values.length()][4];
 
 				for (int j = 0; j < values.length(); j++) {
 					String key = values.getJSONObject(j).getString("key");
@@ -144,14 +137,15 @@ public class CloudgeneInstance {
 					data[j][1] = value;
 					data[j][2] = populations.get(key);
 					data[j][3] = getName();
-
+					
 				}
-
-				String table = FlipTable.of(header, data) + "\n";
-				System.out.println(table);
+				
+				return data;
 			}
 
 		}
+		
+		return new String[0][4]; 
 
 	}
 

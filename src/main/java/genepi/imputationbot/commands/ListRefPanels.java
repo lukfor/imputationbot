@@ -1,13 +1,10 @@
 package genepi.imputationbot.commands;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.util.CommandlineOptionsUtil;
+import genepi.imputationbot.util.FlipTable;
 
 public class ListRefPanels extends BaseCommand {
 
@@ -29,14 +26,37 @@ public class ListRefPanels extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
+		String[] header = new String[4];
+		header[0] = "ID";
+		header[1] = "Name";
+		header[2] = "Populations";
+		header[3] = "Instance";
+
+		String[][] data = new String[0][4]; 
+		
 		for (CloudgeneInstance instance : getInstanceList().getAll()) {
-
-			instance.printReferencePanels();
-			println();
-
+			String[][] dataRefPanel = instance.getReferencePanelsWithDetails();
+			data = concatenate(data, dataRefPanel);
 		}
 
+		String table = FlipTable.of(header, data) + "\n";
+		System.out.println(table);
+
+		println();
+		
 		return 0;
 	}
 
+	public <T> T[] concatenate(T[] a, T[] b) {
+	    int aLen = a.length;
+	    int bLen = b.length;
+
+	    @SuppressWarnings("unchecked")
+	    T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+	    System.arraycopy(a, 0, c, 0, aLen);
+	    System.arraycopy(b, 0, c, aLen, bLen);
+
+	    return c;
+	}
+	
 }
