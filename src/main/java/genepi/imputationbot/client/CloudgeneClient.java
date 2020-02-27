@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectJob;
 import genepi.imputationbot.util.Version;
+import genepi.imputationbot.util.uploads.ProgressEntityWrapper;
+import genepi.imputationbot.util.uploads.UploadProgressPrinter;
 
 public class CloudgeneClient {
 
@@ -112,9 +114,13 @@ public class CloudgeneClient {
 
 	public CloudgeneJob submitJob(CloudgeneInstance instance, String app, HttpEntity form) throws CloudgeneException {
 
-		String content = post(instance, "/api/v2/jobs/submit/" + app, form);
+		ProgressEntityWrapper wrapper = new ProgressEntityWrapper(form, new UploadProgressPrinter());
+		
+		String content = post(instance, "/api/v2/jobs/submit/" + app, wrapper);
 		JSONObject object = new JSONObject(content);
-
+	
+		System.out.println("  Uploading files" + " [100%]\n");
+		
 		return new CloudgeneJob(object, instance);
 	}
 
