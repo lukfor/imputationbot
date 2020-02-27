@@ -13,6 +13,7 @@ import genepi.imputationbot.util.AnsiColors;
 import genepi.imputationbot.util.downloads.Download;
 import genepi.imputationbot.util.downloads.DownloadProgressPrinter;
 import genepi.imputationbot.util.downloads.Downloader;
+import genepi.io.FileUtil;
 import net.lingala.zip4j.core.ZipFile;
 
 public class CloudgeneJob {
@@ -32,17 +33,7 @@ public class CloudgeneJob {
 
 	public void downloadAll(CloudgeneClient client, String outputFolder, String password) throws Exception {
 
-		List<String> urls = new Vector<String>();
-
 		JSONArray outputs = job.getJSONArray("outputParams");
-		for (int i = 0; i < outputs.length(); i++) {
-			JSONObject output = outputs.getJSONObject(i);
-			JSONArray files = output.getJSONArray("files");
-			for (int j = 0; j < files.length(); j++) {
-				String path = files.getJSONObject(j).getString("path");
-				urls.add(path);
-			}
-		}
 
 		Downloader downloader = new Downloader();
 		downloader.setHttpHeader(instance.getHttpHeader());
@@ -50,19 +41,27 @@ public class CloudgeneJob {
 
 		List<File> zipFiles = new Vector<File>();
 
-		for (int i = 0; i < urls.size(); i++) {
-			String path = urls.get(i);
-			String localPath = path.replaceAll(getId(), outputFolder).replaceAll("/local/", "/vcfs/").replaceAll("/logfile/", "/logs/")
-					.replaceAll("/statisticDir/", "/statistics/").replaceAll("/qcreport/", "/statistics/");
+		for (int i = 0; i < outputs.length(); i++) {
+			JSONObject output = outputs.getJSONObject(i);
+			JSONArray files = output.getJSONArray("files");
+			for (int j = 0; j < files.length(); j++) {
 
-			URL source = new URL(instance.getHostname() + "/results/" + path);
-			File target = new File(localPath);
-			downloader.addDownload(new Download(source, target));
+				JSONObject file = files.getJSONObject(j);
 
-			if (password != null && localPath.endsWith(".zip")) {
-				zipFiles.add(target);
+				String hash = file.getString("hash");
+				String name = file.getString("name");
+
+				String localPath = FileUtil.path(outputFolder, output.getString("name"), name);
+
+				URL source = new URL(instance.getHostname() + "/share/results/" + hash + "/" + name);
+				File target = new File(localPath);
+				downloader.addDownload(new Download(source, target));
+
+				if (password != null && localPath.endsWith(".zip")) {
+					zipFiles.add(target);
+				}
+
 			}
-
 		}
 
 		downloader.downloadAll();
