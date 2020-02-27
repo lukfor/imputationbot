@@ -52,7 +52,7 @@ imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5 --
 
 After submission we get the URL where we can monitor the progress of our job. However, we can also use Imputation Bot to get a list all our jobs and their status:
 
-```
+```sh
 imputationbot jobs
 ```
 

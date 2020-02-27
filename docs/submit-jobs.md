@@ -13,11 +13,3 @@ imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5 --
 ```
 
 After submission we get the URL where we can monitor the progress of our job.
-
-## Multiple Reference Panels
-
-Imputation-Bot allows to impute a VCF file against multiple reference panels with a single command. The `--refpanel` parameter supports multiple reference panels separated by a semicolon:
-
-```sh
-imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5,hapmap-2 --population eur
-```

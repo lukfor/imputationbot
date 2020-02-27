@@ -63,13 +63,11 @@ public class AbstractRunJob extends BaseCommand {
 	// on inputs defined in the yaml file
 	@Override
 	public int start() {
-		String refPanelsArg = parseArgs(args, "--refpanel");
-		if (refPanelsArg == null) {
+		String referencePanel = parseArgs(args, "--refpanel");
+		if (referencePanel == null) {
 			error("No reference panel provided. Please use --refpanel to set a reference panel");
 			return -1;
 		}
-
-		String[] referencePanels = refPanelsArg.split(",");
 
 		String projectName = parseArgs(args, "--project");
 		Project project = null;
@@ -92,36 +90,31 @@ public class AbstractRunJob extends BaseCommand {
 
 		try {
 
-			for (int i = 0; i < referencePanels.length; i++) {
-				String referencePanel = referencePanels[i];
-
-				String[] argsJob = new String[args.length];
-				for (int j = 0; j < args.length; j++) {
-					argsJob[j] = args[j];
-					if (j > 0) {
-						if (args[j - 1].equals("--refpanel")) {
-							argsJob[j] = referencePanel;
-						}
+			String[] argsJob = new String[args.length];
+			for (int j = 0; j < args.length; j++) {
+				argsJob[j] = args[j];
+				if (j > 0) {
+					if (args[j - 1].equals("--refpanel")) {
+						argsJob[j] = referencePanel;
 					}
 				}
+			}
 
-				CloudgeneInstance instance = getInstanceList().getByReferencePanel(referencePanel);
+			CloudgeneInstance instance = getInstanceList().getByReferencePanel(referencePanel);
 
-				if (instance == null) {
-					error("No instance found that provides reference panel '" + referencePanel + "'");
-					return -1;
-				}
+			if (instance == null) {
+				error("No instance found that provides reference panel '" + referencePanel + "'");
+				return -1;
+			}
 
-				println("Submitting job for " + referencePanel + " to " + instance.getName() + "... [" + (i + 1) + "/"
-						+ referencePanels.length + "]");
+			println("Submitting job for " + referencePanel + " to " + instance.getName() + "...");
 
-				ProjectJob projectJob = submitJob(instance, referencePanel, argsJob);
-				if (projectJob == null) {
-					return -1;
-				}
-				if (project != null) {
-					project.getJobs().add(projectJob);
-				}
+			ProjectJob projectJob = submitJob(instance, referencePanel, argsJob);
+			if (projectJob == null) {
+				return -1;
+			}
+			if (project != null) {
+				project.getJobs().add(projectJob);
 			}
 
 			if (project != null) {
@@ -130,9 +123,9 @@ public class AbstractRunJob extends BaseCommand {
 				println();
 				println();
 			}
-			
+
 			return 0;
-			
+
 		} catch (Exception e) {
 			error(e);
 			return 1;
@@ -182,7 +175,7 @@ public class AbstractRunJob extends BaseCommand {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("imputationbot impute", "\nImputation Parameters", options, "", true);
 			println();
-			//CommandlineOptionsUtil.printDetails(params);
+			// CommandlineOptionsUtil.printDetails(params);
 			println();
 			error(e.getMessage());
 			println();
