@@ -160,7 +160,7 @@ public class AbstractRunJob extends BaseCommand {
 		optionProjectName.setRequired(false);
 		options.addOption(optionProjectName);
 
-		Option optionStudyName = new Option(null, "name", true, "Optional project name");
+		Option optionStudyName = new Option(null, "name", true, "Optional job name");
 		optionStudyName.setRequired(false);
 		options.addOption(optionStudyName);
 
