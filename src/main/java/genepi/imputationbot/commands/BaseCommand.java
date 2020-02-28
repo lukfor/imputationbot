@@ -54,7 +54,7 @@ public abstract class BaseCommand extends Tool {
 		System.out.println();
 		System.out.println("Imputation Bot " + App.VERSION + " 🤖");
 		System.out.println("https://imputationserver.sph.umich.edu");
-		System.out.println("(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
+		System.out.println("(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
 
 		try {
 			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
