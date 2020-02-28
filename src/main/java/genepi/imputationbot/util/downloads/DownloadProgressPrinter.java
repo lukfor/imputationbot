@@ -65,8 +65,7 @@ public class DownloadProgressPrinter implements IDownloadProgressListener {
 
 	public void downloadError(Download download, Exception exception) {
 		System.out.println("  Downloading from " + download.getSource() + " failed.");
-		exception.printStackTrace();
-
+		//exception.printStackTrace();
 	}
 
 	public void downloadCompleted(Download download) {

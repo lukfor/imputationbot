@@ -5,14 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+
+import genepi.imputationbot.client.CloudgeneException;
 
 public class Download {
 
@@ -24,8 +30,6 @@ public class Download {
 
 	private long targetSize = -1;
 
-	private Map<String, String> httpHeader = new HashMap<String, String>();
-
 	protected static final int DEFAULT_BUFFER_SIZE = 4 * 1024;
 	protected static final int MAXIMUM_BUFFER_SIZE = 512 * 1024;
 	protected static final int BUFFER_SEGMENT_SIZE = 4 * 1024;
@@ -36,9 +40,6 @@ public class Download {
 		this.target = target;
 	}
 
-	public void setHttpHeader(Map<String, String> httpHeader) {
-		this.httpHeader = httpHeader;
-	}
 
 	public URL getSource() {
 		return source;
@@ -48,31 +49,25 @@ public class Download {
 		return target;
 	}
 
-	public long getSourceSize() throws URISyntaxException {
+	protected long getSourceSize() throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
 
 		if (sourceSize == -1) {
 
-			HttpURLConnection conn = null;
-			try {
-				conn = (HttpURLConnection) source.openConnection();
-				for (String key : httpHeader.keySet()) {
-					conn.setRequestProperty(key, httpHeader.get(key));
-				}
-				conn.setRequestMethod("HEAD");
-				sourceSize = conn.getContentLengthLong();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			} finally {
-				if (conn != null) {
-					conn.disconnect();
-				}
+			HttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpget = new HttpGet(source.toString());
+			HttpResponse response = httpclient.execute(httpget);
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new CloudgeneException(400, "File could not be downloaded. Max download limit exceeded.");
 			}
+			HttpEntity responseEntity = response.getEntity();
+			sourceSize = responseEntity.getContentLength();
 
 		}
 		return sourceSize;
 	}
 
-	public long getTargetSize() {
+	protected long getTargetSize() {
 		if (targetSize == -1 && target.exists()) {
 			targetSize = target.length();
 		}
@@ -83,7 +78,7 @@ public class Download {
 		return target.exists();
 	}
 
-	public boolean isDownloadComplete() throws URISyntaxException {
+	public boolean isDownloadComplete() throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
 		if (getSourceSize() == -1 || getTargetSize() == -1) {
 			return false;
 		} else {
@@ -92,14 +87,14 @@ public class Download {
 	}
 
 	public void resumeTransfer(IDownloadProgressListener listener)
-			throws URISyntaxException, FileNotFoundException, IOException {
+			throws URISyntaxException, FileNotFoundException, IOException, CloudgeneException {
 		// listener.downloadResumed(this);
 		restartTransfer(listener);
 		// listener.downloadCompleted(this);
 	}
 
 	public void restartTransfer(IDownloadProgressListener listener)
-			throws URISyntaxException, FileNotFoundException, IOException {
+			throws URISyntaxException, FileNotFoundException, IOException, CloudgeneException {
 
 		// delete target on restart
 		if (target.exists()) {
@@ -110,17 +105,27 @@ public class Download {
 		if (!target.getParentFile().exists()) {
 			target.getParentFile().mkdirs();
 		}
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpget = new HttpGet(source.toString());
+		// httpget.addHeader("X-Auth-Token", instance.getToken());
 
-		OutputStream output = new FileOutputStream(target);
-		HttpURLConnection conn = (HttpURLConnection) source.openConnection();
-		for (String key : httpHeader.keySet()) {
-			conn.setRequestProperty(key, httpHeader.get(key));
+		// Execute and get the response.
+		HttpResponse response = httpclient.execute(httpget);
+		int statusCode = response.getStatusLine().getStatusCode();
+
+		if (statusCode != 200) {
+			throw new CloudgeneException(400, "File could not be downloaded. Max download limit exceeded.");
 		}
 
+		HttpEntity responseEntity = response.getEntity();
+		long sourceSize = getSourceSize();
+
 		listener.downloadStarted(this);
-		ReadableByteChannel input = Channels.newChannel(conn.getInputStream());
+		ReadableByteChannel input = Channels.newChannel(responseEntity.getContent());
 		ByteBuffer buffer = ByteBuffer.allocate(getBufferCapacityForTransfer(sourceSize));
 		int halfBufferCapacity = buffer.capacity() / 2;
+
+		OutputStream output = new FileOutputStream(target);
 
 		long remaining = sourceSize < 0L ? Long.MAX_VALUE : sourceSize;
 		while (remaining > 0L) {

@@ -1,8 +1,6 @@
 package genepi.imputationbot.util.downloads;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 public class Downloader implements IDownloadProgressListener {
@@ -11,18 +9,11 @@ public class Downloader implements IDownloadProgressListener {
 
 	private List<IDownloadProgressListener> listeners = new Vector<IDownloadProgressListener>();
 
-	private Map<String, String> httpHeader = new HashMap<String, String>();
-
 	public Downloader() {
 
 	}
 
-	public void setHttpHeader(Map<String, String> httpHeader) {
-		this.httpHeader = httpHeader;
-	}
-
 	public void addDownload(Download download) {
-		download.setHttpHeader(httpHeader);
 		downloads.add(download);
 	}
 

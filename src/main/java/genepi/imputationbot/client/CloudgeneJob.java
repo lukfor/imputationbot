@@ -33,10 +33,17 @@ public class CloudgeneJob {
 
 	public void downloadAll(CloudgeneClient client, String outputFolder, String password) throws Exception {
 
+		if (isRetired()) {
+			throw new CloudgeneException(400, "File could not be downloaded. Job is retired."); 
+		}
+		
+		if (!isSuccessful()) {
+			throw new CloudgeneException(400, "File could not be downloaded. Job execution was not successfull."); 
+		}
+		
 		JSONArray outputs = job.getJSONArray("outputParams");
 
 		Downloader downloader = new Downloader();
-		downloader.setHttpHeader(instance.getHttpHeader());
 		downloader.addListener(new DownloadProgressPrinter());
 
 		List<File> zipFiles = new Vector<File>();
@@ -107,7 +114,16 @@ public class CloudgeneJob {
 	public boolean isRunning() {
 		return job.getInt("state") == 1 || job.getInt("state") == 2 || job.getInt("state") == 3;
 	}
+	
+	public boolean isSuccessful() {
+		return job.getInt("state") == 4;
+	}
 
+	public boolean isRetired() {
+		return job.getInt("state") == 7;
+	}
+
+	
 	public CloudgeneInstance getInstance() {
 		return instance;
 	}
