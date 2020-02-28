@@ -1,6 +1,12 @@
 # Configure Instances
 
-Instead of storing usernames and passwords, Imputation-Bot is using API tokens to communicate with Michigan Imputation Server or any other clone. This approach has several advantages compared to user credentials: (1) API tokens can be revoked by the user at any time (e.g. if token is compromised), (2) API tokens have only access to a limited number of API endpoints (e.g. job handling) and it is therefore not possible to change user credentials via the API and (3) tokens are valid for 30 days but can be easily renewed using Imputation-Bot. The complete data exchange between Imputation-Bot and MIS is encrypted using Secure Sockets Layer (SSL).
+Instead of storing usernames and passwords, Imputation-Bot is using API tokens to communicate with Michigan Imputation Server or any other clone. This approach has several advantages compared to user credentials:
+
+- tokens can be revoked by the user at any time (e.g. if token is compromised),
+- tokens have only access to a limited number of API endpoints (e.g. job handling) and it is therefore not possible to change user credentials via the API
+- tokens are valid for 30 days but can be easily renewed using Imputation-Bot.
+
+The complete data exchange between Imputation-Bot and MIS is encrypted using Secure Sockets Layer (SSL).
 
 ## Obtain API Token
 

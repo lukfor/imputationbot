@@ -13,6 +13,7 @@ You will need the following things properly installed on your computer.
 
 * [Java 8 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
+ImputationBot works on Linux and MacOS.
 
 ## Download and Installation
 
@@ -41,7 +42,7 @@ https://imputationserver.sph.umich.edu
 Built by lukas on 2019-12-02
 ```
 
-Now you are ready to configure Imputation-Bot and impute your GWAS data.
+Now you are ready to configure Imputation-Bot and impute your GWAS data. Read the [Getting started](getting-started) section to learn more about how to submit your first job.
 
 
 ## Manual installation

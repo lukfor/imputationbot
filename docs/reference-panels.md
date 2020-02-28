@@ -1,6 +1,8 @@
 # List Reference Panels
 
-The `refpanels` command can be used to list available reference panels of all configured instances. In addition, it lists all supported populations that can be used in Quality Control.
+The `refpanels` command can be used to list available reference panels of all configured instances. In addition, it lists all supported populations that can be used for quality control.
+
+## Examples
 
 ```sh
 imputationbot refpanels
