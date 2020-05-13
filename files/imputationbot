@@ -1,3 +1,6 @@
 #!/bin/bash
+
+# Get directory with imputationbot.jar
+BASEDIR=$(dirname "$0")
 export JAVA_PROGRAM_ARGS=`echo "$@"`
-java -jar imputationbot.jar $JAVA_PROGRAM_ARGS
+java -jar $BASEDIR/imputationbot.jar $JAVA_PROGRAM_ARGS
