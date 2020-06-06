@@ -1,17 +1,11 @@
 package genepi.imputationbot.commands;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
-import com.esotericsoftware.yamlbeans.YamlConfig;
-import com.esotericsoftware.yamlbeans.YamlReader;
-import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import genepi.base.Tool;
 import genepi.imputationbot.App;
@@ -23,11 +17,14 @@ import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.AnsiColors;
+import genepi.io.FileUtil;
 
 public abstract class BaseCommand extends Tool {
 
-	public static String CONFIG_FILENAME = "imputationbot.config";
+	public static String USER_HOME = System.getProperty("user.home");
 
+	public static String APP_HOME = FileUtil.path(USER_HOME, ".imputationbot");
+	
 	public static String INSTANCES_FILENAME = "imputationbot.instances";
 
 	public static String PROJECTS_FILENAME = "imputationbot.projects";
@@ -40,11 +37,13 @@ public abstract class BaseCommand extends Tool {
 
 	public BaseCommand(String[] args) {
 		super(args);
+		FileUtil.createDirectory(APP_HOME);
 		printHeader();
 	}
 
 	public BaseCommand(String[] args, boolean header) {
 		super(args);
+		FileUtil.createDirectory(APP_HOME);
 		if (header) {
 			printHeader();
 		}
@@ -158,7 +157,7 @@ public abstract class BaseCommand extends Tool {
 	public CloudgeneInstanceList getInstanceList(boolean check) throws IOException, CloudgeneAppException {
 
 		if (instanceList == null) {
-			File file = new File(INSTANCES_FILENAME);
+			File file = new File(FileUtil.path(APP_HOME, INSTANCES_FILENAME));
 
 			if (!file.exists() && check) {
 				throw new CloudgeneAppException(
@@ -166,7 +165,7 @@ public abstract class BaseCommand extends Tool {
 			}
 
 			if (file.exists()) {
-				instanceList = CloudgeneInstanceList.load(INSTANCES_FILENAME);
+				instanceList = CloudgeneInstanceList.load(FileUtil.path(APP_HOME, INSTANCES_FILENAME));
 			} else {
 				instanceList = new CloudgeneInstanceList();
 			}
@@ -176,16 +175,16 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public void saveInstanceList() throws IOException, CloudgeneAppException {
-		getInstanceList().save(INSTANCES_FILENAME);
+		getInstanceList().save(FileUtil.path(APP_HOME, INSTANCES_FILENAME));
 	}
 
 	public ProjectList getProjectList() throws IOException {
 
 		if (projectList == null) {
-			File file = new File(PROJECTS_FILENAME);
+			File file = new File(FileUtil.path(APP_HOME, PROJECTS_FILENAME));
 
 			if (file.exists()) {
-				projectList = ProjectList.load(PROJECTS_FILENAME);
+				projectList = ProjectList.load(FileUtil.path(APP_HOME, PROJECTS_FILENAME));
 			} else {
 				projectList = new ProjectList();
 			}
@@ -194,7 +193,7 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public void saveProjects() throws IOException {
-		getProjectList().save(PROJECTS_FILENAME);
+		getProjectList().save(FileUtil.path(APP_HOME, PROJECTS_FILENAME));
 	}
 
 	@Override
