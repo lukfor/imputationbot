@@ -41,18 +41,9 @@
 
 	<repositories>
 		<repository>
-			<id>genepi</id>
-			<name>Genepi Innsbruck repository</name>
-			<url>https://raw.github.com/genepi/maven-repository/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>maven-restlet</id>
-			<name>Restlet Framework repository</name>
-			<url>http://maven.restlet.org</url>
+			<id>bintray-genepi-maven</id>
+			<name>bintray</name>
+			<url>https://dl.bintray.com/genepi/maven</url>
 		</repository>
 	</repositories>
 
@@ -62,7 +53,7 @@
 		<dependency>
 			<groupId>genepi</groupId>
 			<artifactId>genepi-io</artifactId>
-			<version>1.0.11</version>
+			<version>1.0.12</version>
 		</dependency>
 
 		<dependency>
