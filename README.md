@@ -3,6 +3,7 @@
 # Imputation Bot
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
+![build](https://github.com/lukfor/imputationbot/workflows/build/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/imputationbot/badge/?version=latest)](https://imputationbot.readthedocs.io/en/latest/?badge=latest)
 
 
