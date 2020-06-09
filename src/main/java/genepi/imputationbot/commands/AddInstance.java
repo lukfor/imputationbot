@@ -13,8 +13,11 @@ public class AddInstance extends BaseCommand {
 
 	public static final String DEFAULT_HOSTNAME = "https://imputationserver.sph.umich.edu";
 
+	private String[] args;
+
 	public AddInstance(String[] args) {
 		super(args);
+		this.args = args;
 	}
 
 	@Override
@@ -30,8 +33,15 @@ public class AddInstance extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		String hostname = read("Imputationserver Url", DEFAULT_HOSTNAME);
-		String token = read("API Token");
+		String hostname = "";
+		String token = "";
+		if (this.args.length == 2) {
+			hostname = args[0];
+			token = args[1];
+		} else {
+			hostname = read("Imputationserver Url", DEFAULT_HOSTNAME);
+			token = read("API Token");
+		}
 
 		// remove trailing slashes
 		hostname = hostname.replaceFirst("/*$", "");
@@ -72,13 +82,17 @@ public class AddInstance extends BaseCommand {
 		println();
 
 		JSONObject defaultApp = client.getDefaultApp(instance);
-		instances.add(instance);	
+		CloudgeneInstance oldInstance = instances.getByHostname(hostname);
+		if (oldInstance != null) {
+			instances.remove(oldInstance);
+		}
+		instances.add(instance);
 		saveInstanceList();
 
 		println();
 		println();
-		printlnInGreen("Imputation Bot is ready to submit jobs to "+instance.getHostname() + " (" + defaultApp.getString("name") + ") "
-				+ defaultApp.getString("version") + ") 👍");
+		printlnInGreen("Imputation Bot is ready to submit jobs to " + instance.getHostname() + " ("
+				+ defaultApp.getString("name") + ") " + defaultApp.getString("version") + ") 👍");
 		println();
 		return 0;
 
