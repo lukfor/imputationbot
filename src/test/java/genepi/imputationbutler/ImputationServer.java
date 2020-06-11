@@ -25,13 +25,23 @@ import genepi.io.FileUtil;
 
 public class ImputationServer {
 
-	public static final String DOCKER_IMAGE = "genepi/imputationserver:v1.2.7";
+	public static final String IMAGE = "genepi/imputationserver";
 
-	public static File IMPUTATIONSERVER_WORKSPACE = new File("imputationserver");
+	public static final String VERSION = "v1.2.7";
 
-	public static File IMPUTATIONSERVER_DATABASE = new File("imputationserver/database");
+	public static final String LOCAL_DIRECTORY = "imputationserver_" + VERSION;
 
-	public static File IMPUTATIONSERVER_JOBS = new File("imputationserver/jobs");
+	public static boolean DEBUG = true;
+
+	public static File IMPUTATIONSERVER_WORKSPACE = new File(LOCAL_DIRECTORY);
+
+	public static File IMPUTATIONSERVER_DATABASE = new File(LOCAL_DIRECTORY + "/database");
+
+	public static File IMPUTATIONSERVER_JOBS = new File(LOCAL_DIRECTORY + "/jobs");
+
+	public static File IMPUTATIONSERVER_APP = new File(LOCAL_DIRECTORY + "/apps/imputationserver");
+
+	public static File IMPUTATIONSERVER_PANEL = new File(LOCAL_DIRECTORY + "/apps/hapmap-2");
 
 	private static ImputationServer instance;
 
@@ -46,32 +56,41 @@ public class ImputationServer {
 			FileUtil.deleteDirectory(IMPUTATIONSERVER_DATABASE);
 		}
 
+		// Delete old resutls
 		if (IMPUTATIONSERVER_JOBS.exists()) {
 			FileUtil.deleteDirectory(IMPUTATIONSERVER_JOBS);
 		}
 
-		GenericContainer imputationserver = new GenericContainer(DOCKER_IMAGE);
+		GenericContainer imputationserver = new GenericContainer(IMAGE + ":" + VERSION);
 		imputationserver.withExposedPorts(80);
 		imputationserver.withPrivilegedMode(true);
-		// avoid clone in test setup only (wehen apps already installed!)
-		//imputationserver.addEnv("CLOUDGENE_REPOSITORY", "");
 		imputationserver.withStartupTimeout(Duration.ofMinutes(5));
-		//imputationserver.withFileSystemBind(IMPUTATIONSERVER_WORKSPACE.getAbsolutePath(), "/data/",
-		//		BindMode.READ_WRITE);
-		Consumer l = new Consumer() {
-			@Override
-			public void accept(Object arg0) {
-				System.out.println(((OutputFrame) arg0).getUtf8String());
+		imputationserver.withFileSystemBind(IMPUTATIONSERVER_WORKSPACE.getAbsolutePath(), "/data/",
+				BindMode.READ_WRITE);
 
-			}
-		};
-		imputationserver.withLogConsumer(l);
+		// Avoid reinstall when applications are already installed
+		if (IMPUTATIONSERVER_APP.exists() && IMPUTATIONSERVER_PANEL.exists()) {
+			System.out.println("Applications are already installed.");
+			imputationserver.addEnv("CLOUDGENE_REPOSITORY", "");
+		} else {
+			System.out.println("Applications are not installed. Start installation.");
+		}
 
-		System.out.println("Starting imputationserver...");
+		if (DEBUG) {
+			Consumer l = new Consumer() {
+				@Override
+				public void accept(Object arg0) {
+					System.out.println(((OutputFrame) arg0).getUtf8String());
+				}
+			};
+			imputationserver.withLogConsumer(l);
+		}
+
+		System.out.println("Starting " + IMAGE + " " + VERSION + "...");
 		imputationserver.start();
 		url = "http://" + imputationserver.getContainerIpAddress() + ":" + imputationserver.getMappedPort(80);
 		try {
-			//wait until cloudgene is started.
+			// wait until cloudgene is started.
 			Thread.sleep(10000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
@@ -120,7 +139,6 @@ public class ImputationServer {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
