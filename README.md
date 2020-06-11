@@ -1,5 +1,3 @@
-![Image1](assets/logo.png)
-
 # Imputation Bot
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
@@ -7,7 +5,9 @@
 [![Documentation Status](https://readthedocs.org/projects/imputationbot/badge/?version=latest)](https://imputationbot.readthedocs.io/en/latest/?badge=latest)
 
 
-Your personal bot for Imputationserver
+> Automate interactions with the imputation servers
+
+![Image1](assets/logo.png)
 
 ## Requirements
 
@@ -30,6 +30,8 @@ Test the installation with the following command:
 ```sh
 imputationbot version
 ```
+
+The documentation is available at [http://imputationbot.readthedocs.io](http://imputationbot.readthedocs.io).
 
 
 ## Get your API Token
