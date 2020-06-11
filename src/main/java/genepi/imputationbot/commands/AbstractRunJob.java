@@ -33,6 +33,8 @@ public class AbstractRunJob extends BaseCommand {
 
 	private String mode;
 
+	private CloudgeneJob job;
+
 	public AbstractRunJob(String[] args, String mode) {
 		super(args);
 		this.mode = mode;
@@ -124,6 +126,14 @@ public class AbstractRunJob extends BaseCommand {
 				println();
 			}
 
+			if (hasFlag(argsJob, "--wait")) {
+				CloudgeneClient client = getClient();
+				println("Waiting until job " + job.getId() + " is finished.");
+				client.waitForJob(job.getId());
+				job = client.getJobDetails(job.getId());
+				println("Job completed. State: " + job.getJobStateAsText());
+			}
+
 			return 0;
 
 		} catch (Exception e) {
@@ -213,7 +223,7 @@ public class AbstractRunJob extends BaseCommand {
 		println();
 
 		HttpEntity entity = form.build();
-		CloudgeneJob job = client.submitJob(instance, app.getString("id"), entity);
+		job = client.submitJob(instance, app.getString("id"), entity);
 		// reload job to get job name etc..
 		job = client.getJobDetails(job.getId());
 
@@ -232,6 +242,10 @@ public class AbstractRunJob extends BaseCommand {
 
 	}
 
+	public CloudgeneJob getJob() {
+		return job;
+	}
+
 	private String parseArgs(String[] args, String option) {
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equalsIgnoreCase(option)) {
@@ -241,5 +255,14 @@ public class AbstractRunJob extends BaseCommand {
 			}
 		}
 		return null;
+	}
+
+	private boolean hasFlag(String[] args, String option) {
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equalsIgnoreCase(option)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
