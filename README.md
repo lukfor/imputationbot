@@ -1,3 +1,5 @@
+![Image1](assets/logo.png)
+
 # Imputation Bot
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
@@ -7,7 +9,6 @@
 
 > Automate interactions with the imputation servers
 
-![Image1](assets/logo.png)
 
 ## Requirements
 
