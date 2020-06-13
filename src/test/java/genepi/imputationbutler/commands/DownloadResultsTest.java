@@ -21,6 +21,8 @@ public class DownloadResultsTest {
 
 	public static final String VCF = "test-data/chr20.R50.merged.1.330k.recode.small.vcf.gz";
 
+	public static final String VCF_SMALL = "test-data/small.vcf.gz";
+	
 	public static final String OUTPUT = "test-data-output";
 
 	@Test
@@ -97,6 +99,36 @@ public class DownloadResultsTest {
 		assertTrue(new File(OUTPUT + "/" + job.getId() + "/local/chr20.info.gz").exists());
 
 		// TODO check file content (number of lines 63481)
+	}
+	
+	@Test
+	public void testDownloadFailedJob() throws Exception {
+
+		deleteInstances();
+
+		String hostname = ImputationServer.getInstance().getUrl();
+		String token = ImputationServer.getInstance().getAdminToken();
+
+		AddInstance addInstance = new AddInstance(hostname, token);
+		assertEquals(0, addInstance.start());
+
+		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
+				"--files", VCF_SMALL);
+		int result = runImputationJob.start();
+		assertEquals(0, result);
+
+		CloudgeneJob job = runImputationJob.getJob();
+		assertNotNull(job);
+		assertTrue(job.isSuccessful());
+
+		FileUtil.deleteDirectory(OUTPUT);
+		
+		DownloadResults downloadResults = new DownloadResults(job.getId(), "--output", OUTPUT);
+		result = downloadResults.start();
+		assertEquals(0, result);
+
+		assertTrue(new File(OUTPUT + "/" + job.getId()).exists());
+
 	}
 
 	// TODO: download project

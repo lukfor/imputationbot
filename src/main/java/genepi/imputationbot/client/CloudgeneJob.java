@@ -37,10 +37,6 @@ public class CloudgeneJob {
 			throw new CloudgeneException(400, "File could not be downloaded. Job is retired."); 
 		}
 		
-		if (!isSuccessful()) {
-			throw new CloudgeneException(400, "File could not be downloaded. Job execution was not successfull."); 
-		}
-		
 		JSONArray outputs = job.getJSONArray("outputParams");
 
 		Downloader downloader = new Downloader();
