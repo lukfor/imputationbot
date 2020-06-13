@@ -208,17 +208,12 @@ public class AbstractRunJob extends BaseCommand {
 		String projectName = line.getOptionValue("project");
 		String studyName = line.getOptionValue("name");
 
-		String jobName = "";
-		if (projectName != null) {
-			jobName = projectName;
-		}
+		String jobName = null;
 		if (projectName != null && studyName != null) {
-			jobName += "-";
+			jobName = projectName + "-" + studyName;
+		} else if (studyName != null) {
+			jobName = studyName;
 		}
-		if (studyName != null) {
-			jobName += studyName;
-		}
-
 		if (jobName != null) {
 			form.addTextBody("job-name", jobName);
 		}
