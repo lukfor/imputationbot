@@ -149,10 +149,4 @@ public class CloudgeneInstance {
 
 	}
 
-	public Map<String, String> getHttpHeader() {
-		Map<String, String> httpHeader = new HashMap<String, String>();
-		httpHeader.put("X-Auth-Token", token);
-		return httpHeader;
-	}
-
 }

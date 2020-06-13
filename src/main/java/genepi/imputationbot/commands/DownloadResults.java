@@ -7,10 +7,11 @@ import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectList;
+import genepi.io.FileUtil;
 
 public class DownloadResults extends BaseCommand {
 
-	public DownloadResults(String[] args) {
+	public DownloadResults(String... args) {
 		super(args);
 	}
 
@@ -45,15 +46,15 @@ public class DownloadResults extends BaseCommand {
 
 			println("Project: " + project.getName());
 			println();
-			
-			//use all ids from project
+
+			// use all ids from project
 			jobIds = new String[project.getJobs().size()];
-			for (int i = 0; i< project.getJobs().size(); i++) {
+			for (int i = 0; i < project.getJobs().size(); i++) {
 				jobIds[i] = project.getJobs().get(i).getJob();
 			}
-			
+
 		}
-		
+
 		for (int i = 0; i < jobIds.length; i++) {
 			String id = jobIds[i];
 
@@ -69,19 +70,20 @@ public class DownloadResults extends BaseCommand {
 				println();
 			}
 
-			println("Downloading job " + job.getName() + "... " + "[" + (i+1) + "/" + jobIds.length + "]");
+			println("Downloading job " + job.getName() + "... " + "[" + (i + 1) + "/" + jobIds.length + "]");
 			Object password = getValue("password");
 			Object output = getValue("output");
-			String outputFolder = null;
-			if (output != null) {
-				outputFolder = output.toString();
+			String outputFolder = "";
+
+			if (job.getId().equals(job.getName())) {
+				outputFolder = job.getId();
 			} else {
-				if (job.getId().equals(job.getName())) {
-					outputFolder = job.getId();
-				} else {
-					outputFolder = job.getId() + "-" + job.getName();
-				}
+				outputFolder = job.getId() + "-" + job.getName();
 			}
+			if (output != null) {
+				outputFolder = FileUtil.path(output.toString(), outputFolder);
+			}
+
 			if (password != null) {
 				job.downloadAll(client, outputFolder, password.toString());
 			} else {

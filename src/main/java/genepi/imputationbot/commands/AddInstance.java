@@ -15,7 +15,7 @@ public class AddInstance extends BaseCommand {
 
 	private String[] args;
 
-	public AddInstance(String[] args) {
+	public AddInstance(String... args) {
 		super(args);
 		this.args = args;
 	}

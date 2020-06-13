@@ -13,7 +13,7 @@ import genepi.imputationbot.util.FlipTable;
 
 public class ListInstances extends BaseCommand {
 
-	public ListInstances(String[] args) {
+	public ListInstances(String... args) {
 		super(args);
 	}
 

@@ -17,6 +17,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import genepi.imputationbot.client.CloudgeneException;
 
@@ -40,7 +41,6 @@ public class Download {
 		this.target = target;
 	}
 
-
 	public URL getSource() {
 		return source;
 	}
@@ -57,11 +57,17 @@ public class Download {
 			HttpGet httpget = new HttpGet(source.toString());
 			HttpResponse response = httpclient.execute(httpget);
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) {
+			System.out.println(statusCode);
+			if (statusCode == 204) {
+				sourceSize = 0;
+			} else if (statusCode == 200) {
+				HttpEntity responseEntity = response.getEntity();
+				sourceSize = responseEntity.getContentLength();
+			} else {
+				System.out.println("HTTP-Code: " + statusCode);
+				System.out.println("HTTP-Content: " + EntityUtils.toString(response.getEntity()));
 				throw new CloudgeneException(400, "File could not be downloaded. Max download limit exceeded.");
 			}
-			HttpEntity responseEntity = response.getEntity();
-			sourceSize = responseEntity.getContentLength();
 
 		}
 		return sourceSize;
@@ -78,7 +84,8 @@ public class Download {
 		return target.exists();
 	}
 
-	public boolean isDownloadComplete() throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
+	public boolean isDownloadComplete()
+			throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
 		if (getSourceSize() == -1 || getTargetSize() == -1) {
 			return false;
 		} else {
@@ -113,7 +120,14 @@ public class Download {
 		HttpResponse response = httpclient.execute(httpget);
 		int statusCode = response.getStatusLine().getStatusCode();
 
-		if (statusCode != 200) {
+		if (statusCode == 204) {
+			// write empty file.
+			OutputStream output = new FileOutputStream(target);
+			output.close();
+			return;
+		} else if (statusCode != 200) {
+			System.out.println("HTTP-Code: " + statusCode);
+			System.out.println("HTTP-Content: " + EntityUtils.toString(response.getEntity()));			
 			throw new CloudgeneException(400, "File could not be downloaded. Max download limit exceeded.");
 		}
 
