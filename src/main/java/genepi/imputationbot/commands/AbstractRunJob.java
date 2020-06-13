@@ -34,6 +34,8 @@ public class AbstractRunJob extends BaseCommand {
 	private String mode;
 
 	private CloudgeneJob job;
+	
+	private Project project = null;
 
 	public AbstractRunJob(String[] args, String mode) {
 		super(args);
@@ -72,8 +74,6 @@ public class AbstractRunJob extends BaseCommand {
 		}
 
 		String projectName = parseArgs(args, "--project");
-		Project project = null;
-
 		try {
 			if (projectName != null) {
 				project = getProjectList().getByName(projectName);
@@ -244,6 +244,10 @@ public class AbstractRunJob extends BaseCommand {
 
 	public CloudgeneJob getJob() {
 		return job;
+	}
+	
+	public Project getProject() {
+		return project;
 	}
 
 	private String parseArgs(String[] args, String option) {

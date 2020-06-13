@@ -136,6 +136,10 @@ public class CloudgeneClient {
 
 	}
 
+	public void waitForJob(CloudgeneJob job) throws CloudgeneException, InterruptedException {
+		waitForJob(job.getId());
+	}
+	
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
 		waitForJob(id, 10000);
 	}
