@@ -34,7 +34,7 @@ public class AbstractRunJob extends BaseCommand {
 	private String mode;
 
 	private CloudgeneJob job;
-	
+
 	private Project project = null;
 
 	public AbstractRunJob(String[] args, String mode) {
@@ -208,16 +208,19 @@ public class AbstractRunJob extends BaseCommand {
 		String projectName = line.getOptionValue("project");
 		String studyName = line.getOptionValue("name");
 
-		String jobName = null;
+		String jobName = "";
 		if (projectName != null) {
-			jobName = projectName + "_";
+			jobName = projectName;
+		}
+		if (projectName != null && studyName != null) {
+			jobName += "-";
 		}
 		if (studyName != null) {
-			jobName += studyName + "_";
+			jobName += studyName;
 		}
 
 		if (jobName != null) {
-			form.addTextBody("job-name", jobName + referencePanel.replaceAll("apps@", ""));
+			form.addTextBody("job-name", jobName);
 		}
 
 		println();
@@ -245,7 +248,7 @@ public class AbstractRunJob extends BaseCommand {
 	public CloudgeneJob getJob() {
 		return job;
 	}
-	
+
 	public Project getProject() {
 		return project;
 	}

@@ -39,6 +39,8 @@ public class ImputationServer {
 
 	public static File IMPUTATIONSERVER_JOBS = new File(LOCAL_DIRECTORY + "/jobs");
 
+	public static File IMPUTATIONSERVER_HADOOP = new File(LOCAL_DIRECTORY + "/hadoop");
+
 	public static File IMPUTATIONSERVER_APP = new File(LOCAL_DIRECTORY + "/apps/imputationserver");
 
 	public static File IMPUTATIONSERVER_PANEL = new File(LOCAL_DIRECTORY + "/apps/hapmap-2");
@@ -61,6 +63,11 @@ public class ImputationServer {
 			FileUtil.deleteDirectory(IMPUTATIONSERVER_JOBS);
 		}
 
+		// Delete hdfs to prevent it from safe mode
+		if (IMPUTATIONSERVER_HADOOP.exists()) {
+			FileUtil.deleteDirectory(IMPUTATIONSERVER_HADOOP);
+		}
+		
 		GenericContainer imputationserver = new GenericContainer(IMAGE + ":" + VERSION);
 		imputationserver.withExposedPorts(80);
 		imputationserver.withPrivilegedMode(true);
@@ -91,7 +98,7 @@ public class ImputationServer {
 		url = "http://" + imputationserver.getContainerIpAddress() + ":" + imputationserver.getMappedPort(80);
 		try {
 			// wait until cloudgene is started.
-			Thread.sleep(10000);
+			Thread.sleep(20000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
