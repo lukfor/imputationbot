@@ -22,7 +22,7 @@ public class DownloadResultsTest {
 	public static final String VCF = "test-data/chr20.R50.merged.1.330k.recode.small.vcf.gz";
 
 	public static final String VCF_SMALL = "test-data/small.vcf.gz";
-	
+
 	public static final String OUTPUT = "test-data-output";
 
 	@Test
@@ -100,7 +100,7 @@ public class DownloadResultsTest {
 
 		// TODO check file content (number of lines 63481)
 	}
-	
+
 	@Test
 	public void testDownloadFailedJob() throws Exception {
 
@@ -113,16 +113,16 @@ public class DownloadResultsTest {
 		assertEquals(0, addInstance.start());
 
 		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
-				"--files", VCF_SMALL);
+				"--files", VCF_SMALL, "--wait");
 		int result = runImputationJob.start();
 		assertEquals(0, result);
 
 		CloudgeneJob job = runImputationJob.getJob();
 		assertNotNull(job);
-		assertTrue(job.isSuccessful());
+		assertFalse(job.isSuccessful());
 
 		FileUtil.deleteDirectory(OUTPUT);
-		
+
 		DownloadResults downloadResults = new DownloadResults(job.getId(), "--output", OUTPUT);
 		result = downloadResults.start();
 		assertEquals(0, result);

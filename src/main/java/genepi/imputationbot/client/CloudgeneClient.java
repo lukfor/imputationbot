@@ -155,7 +155,10 @@ public class CloudgeneClient {
 		if (job.isRunning()) {
 			Thread.sleep(pollingTime);
 			waitForJob(id, pollingTime);
+		} else {
+			Thread.sleep(5000);
 		}
+		
 	}
 
 	public CloudgeneJob getJobDetails(String id) throws CloudgeneException {
