@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,7 +99,7 @@ public class CommandlineOptionsUtil {
 
 		System.out.println("  Parameters:");
 
-        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+		MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
 
 		for (int i = 0; i < params.length(); i++) {
 
@@ -175,14 +174,14 @@ public class CommandlineOptionsUtil {
 
 										for (File subfile : files) {
 											if (subfile.getAbsolutePath().endsWith(".vcf.gz")) {
-   											    multipartEntityBuilder.addBinaryBody(id, subfile);
+												multipartEntityBuilder.addBinaryBody(id, subfile);
 												System.out.println("    - " + subfile.getAbsolutePath());
 											}
 										}
 
 									} else {
 
-										 multipartEntityBuilder.addBinaryBody(id, file);
+										multipartEntityBuilder.addBinaryBody(id, file);
 										System.out.println("      - " + tile);
 
 									}
@@ -192,13 +191,17 @@ public class CommandlineOptionsUtil {
 								}
 							}
 						}
+					} else if (type.equals("checkbox")) {
+						String trueValue = getValueByKey(param, "true");
+						if (value.equals(trueValue)) {
+							multipartEntityBuilder.addTextBody(id, trueValue);
+						}
+						System.out.println("    " + id + ": " + trueValue);
 					} else {
-						multipartEntityBuilder.addTextBody(id, value);
-						System.out.println("    " + id + ": " + value);
+						System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 					}
 				} else {
 					if (type.equals("checkbox")) {
-						multipartEntityBuilder.addTextBody(id,  getValueByKey(param, "false"));
 						System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 					}
 				}
