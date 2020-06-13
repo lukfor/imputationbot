@@ -80,6 +80,7 @@ public class RunImputationJobTest {
 		CloudgeneClient client = new CloudgeneClient(getInstances());
 		client.waitForJob(job);
 
+		job = client.getJobDetails(job.getId());		
 		assertTrue(job.isSuccessful());
 		assertFalse(job.isRetired());
 		assertFalse(job.isRunning());
@@ -255,8 +256,6 @@ public class RunImputationJobTest {
 	}
 
 	// TODO: test optional parameters: build, r2 filter, password, aesEncryption?
-
-	// TODO: test project
 
 	private void deleteInstances() {
 		// delete instances files
