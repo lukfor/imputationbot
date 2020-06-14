@@ -12,6 +12,7 @@ import genepi.imputationbot.commands.RemoveProject;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowVersion;
+import genepi.imputationbot.commands.SpeedTest;
 
 public class App extends Toolbox {
 
@@ -37,6 +38,7 @@ public class App extends Toolbox {
 		toolbox.addTool("projects", ListProjects.class);
 		toolbox.addTool("remove-project", RemoveProject.class);
 		toolbox.addTool("version", ShowVersion.class);
+		toolbox.addTool("speed", SpeedTest.class);
 		toolbox.start();
 
 	}

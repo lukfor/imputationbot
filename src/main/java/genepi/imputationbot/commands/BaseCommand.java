@@ -204,6 +204,7 @@ public abstract class BaseCommand extends Tool {
 
 		} catch (Exception e) {
 			error(e);
+			e.printStackTrace();
 			return 1;
 		}
 	}
