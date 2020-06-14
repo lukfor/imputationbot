@@ -12,7 +12,7 @@ public class ListJobs extends BaseCommand {
 
 	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public ListJobs(String[] args) {
+	public ListJobs(String... args) {
 		super(args);
 	}
 

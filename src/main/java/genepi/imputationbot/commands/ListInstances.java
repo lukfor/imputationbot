@@ -13,6 +13,8 @@ import genepi.imputationbot.util.FlipTable;
 
 public class ListInstances extends BaseCommand {
 
+	private String[][] data;
+	
 	public ListInstances(String... args) {
 		super(args);
 	}
@@ -42,7 +44,7 @@ public class ListInstances extends BaseCommand {
 		header[4] = "Version";
 		header[5] = "Token expires on";
 		
-		String[][] data = new String[instances.size()][header.length];
+		data = new String[instances.size()][header.length];
 		
 		for (int i = 0; i < instances.size(); i++) {
 			
@@ -66,6 +68,10 @@ public class ListInstances extends BaseCommand {
 		
 		return 0;
 
+	}
+	
+	public String[][] getData() {
+		return data;
 	}
 
 }

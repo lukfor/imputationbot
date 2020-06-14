@@ -201,6 +201,8 @@ public class CloudgeneClient {
 			result.add(jobDetails);
 		}
 
+		result.sortById();
+		
 		return result;
 
 	}

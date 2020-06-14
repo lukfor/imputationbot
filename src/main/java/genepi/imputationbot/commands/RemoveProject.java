@@ -1,22 +1,12 @@
 package genepi.imputationbot.commands;
 
-import java.util.List;
-import java.util.Vector;
-
-import org.json.JSONObject;
-
-import genepi.imputationbot.client.CloudgeneApiToken;
-import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.client.CloudgeneUser;
 import genepi.imputationbot.model.Project;
-import genepi.imputationbot.util.FlipTable;
 
 public class RemoveProject extends BaseCommand {
 
 	public static final String HELP = "A list of all projects can be obtained with 'imputationbot projects'.";
 
-	public RemoveProject(String[] args) {
+	public RemoveProject(String... args) {
 		super(args);
 	}
 

@@ -3,19 +3,13 @@ package genepi.imputationbot.commands;
 import java.util.List;
 import java.util.Vector;
 
-import org.json.JSONObject;
-
-import genepi.imputationbot.client.CloudgeneApiToken;
-import genepi.imputationbot.client.CloudgeneClient;
 import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.client.CloudgeneUser;
-import genepi.imputationbot.util.FlipTable;
 
 public class RemoveInstance extends BaseCommand {
 
 	public static final String HELP = "A list of all instances including the ID can be obtained with 'imputationbot instances'.";
 
-	public RemoveInstance(String[] args) {
+	public RemoveInstance(String... args) {
 		super(args);
 	}
 

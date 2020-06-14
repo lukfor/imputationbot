@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
-import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectJob;
 import genepi.imputationbot.model.ProjectList;
@@ -14,7 +13,9 @@ public class ListProjects extends BaseCommand {
 
 	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public ListProjects(String[] args) {
+	private String[][] data;
+
+	public ListProjects(String... args) {
 		super(args);
 	}
 
@@ -38,7 +39,7 @@ public class ListProjects extends BaseCommand {
 		ProjectList projectList = getProjectList();
 		List<Project> projects = new Vector<Project>(projectList.getProjects());
 
-		String[][] data = new String[projects.size()][header.length];
+		data = new String[projects.size()][header.length];
 
 		for (int i = 0; i < projects.size(); i++) {
 			Project project = projects.get(i);
@@ -56,6 +57,10 @@ public class ListProjects extends BaseCommand {
 
 		return 0;
 
+	}
+
+	public String[][] getData() {
+		return data;
 	}
 
 }

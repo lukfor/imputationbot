@@ -22,6 +22,8 @@ import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.client.CloudgeneJobList;
 import genepi.imputationbot.commands.AddInstance;
 import genepi.imputationbot.commands.BaseCommand;
+import genepi.imputationbot.commands.ListJobs;
+import genepi.imputationbot.commands.ListProjects;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbutler.ImputationServer;
@@ -30,6 +32,8 @@ import genepi.io.FileUtil;
 public class RunImputationJobTest {
 
 	public static final String VCF = "test-data/chr20.R50.merged.1.330k.recode.small.vcf.gz";
+
+	public static final String VCF_SMALL = "test-data/small.vcf.gz";
 
 	@Test
 	public void testRunImputationAndWait() throws IOException {
@@ -80,7 +84,7 @@ public class RunImputationJobTest {
 		CloudgeneClient client = new CloudgeneClient(getInstances());
 		client.waitForJob(job);
 
-		job = client.getJobDetails(job.getId());		
+		job = client.getJobDetails(job.getId());
 		assertTrue(job.isSuccessful());
 		assertFalse(job.isRetired());
 		assertFalse(job.isRunning());
@@ -117,7 +121,10 @@ public class RunImputationJobTest {
 		assertEquals("test-project", project1.getName());
 		assertEquals(1, project1.getJobs().size());
 
-		RunImputationJob runImputationJob2 = new RunImputationJob(args);
+		String[] args2 = new String[] { "--refpanel", "hapmap-2", "--population", "eur", "--files", VCF_SMALL,
+				"--project", "test-project" };
+
+		RunImputationJob runImputationJob2 = new RunImputationJob(args2);
 		int result2 = runImputationJob2.start();
 		assertEquals(0, result2);
 
@@ -135,12 +142,31 @@ public class RunImputationJobTest {
 		client.waitForProject(project2);
 
 		CloudgeneJobList jobs = client.getJobs(project2);
-		for (CloudgeneJob job : jobs) {
-			assertTrue(job.isSuccessful());
-			assertFalse(job.isRetired());
-			assertFalse(job.isRunning());
-			assertEquals(hostname, job.getInstance().getHostname());
-		}
+		jobs.sortById();
+
+		assertFalse(jobs.get(0).isSuccessful());
+		assertFalse(jobs.get(0).isRetired());
+		assertFalse(jobs.get(0).isRunning());
+		assertEquals(hostname, jobs.get(0).getInstance().getHostname());
+
+		assertTrue(jobs.get(1).isSuccessful());
+		assertFalse(jobs.get(1).isRetired());
+		assertFalse(jobs.get(1).isRunning());
+		assertEquals(hostname, jobs.get(1).getInstance().getHostname());
+
+		ListJobs listJobs = new ListJobs("test-project");
+		int result3 = listJobs.start();
+		assertEquals(0, result3);
+
+		ListProjects listProjects = new ListProjects();
+		int result4 = listProjects.start();
+		assertEquals(0, result4);
+
+		assertEquals(1, listProjects.getData().length);
+		assertEquals(3, listProjects.getData()[0].length);
+		assertEquals("test-project", listProjects.getData()[0][0]);
+		assertTrue(listProjects.getData()[0][2].contains(job1.getId()));
+		assertTrue(listProjects.getData()[0][2].contains(job2.getId()));
 	}
 
 	@Test
