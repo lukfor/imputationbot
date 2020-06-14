@@ -57,7 +57,6 @@ public class Download {
 			HttpGet httpget = new HttpGet(source.toString());
 			HttpResponse response = httpclient.execute(httpget);
 			int statusCode = response.getStatusLine().getStatusCode();
-			System.out.println(statusCode);
 			if (statusCode == 204) {
 				sourceSize = 0;
 			} else if (statusCode == 200) {
