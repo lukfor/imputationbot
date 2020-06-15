@@ -115,12 +115,12 @@ public class CloudgeneClient {
 	public CloudgeneJob submitJob(CloudgeneInstance instance, String app, HttpEntity form) throws CloudgeneException {
 
 		ProgressEntityWrapper wrapper = new ProgressEntityWrapper(form, new UploadProgressPrinter());
-		
+
 		String content = post(instance, "/api/v2/jobs/submit/" + app, wrapper);
 		JSONObject object = new JSONObject(content);
-	
+
 		System.out.println("  Uploading files" + " [100%]\n");
-		
+
 		return new CloudgeneJob(object, instance);
 	}
 
@@ -139,7 +139,7 @@ public class CloudgeneClient {
 	public void waitForJob(CloudgeneJob job) throws CloudgeneException, InterruptedException {
 		waitForJob(job.getId());
 	}
-	
+
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
 		waitForJob(id, 10000);
 	}
@@ -158,7 +158,7 @@ public class CloudgeneClient {
 		} else {
 			Thread.sleep(5000);
 		}
-		
+
 	}
 
 	public CloudgeneJob getJobDetails(String id) throws CloudgeneException {
@@ -202,7 +202,7 @@ public class CloudgeneClient {
 		}
 
 		result.sortById();
-		
+
 		return result;
 
 	}
@@ -241,8 +241,12 @@ public class CloudgeneClient {
 						"The provided Token is invalid. Please check if your token is correct and not expired");
 			default:
 				String content = EntityUtils.toString(responseEntity);
-				JSONObject object = new JSONObject(content);
-				throw new CloudgeneException(statusCode, object.getString("message"));
+				try {
+					JSONObject object = new JSONObject(content);
+					throw new CloudgeneException(statusCode, object.getString("message"));
+				} catch (Exception e) {
+					throw new CloudgeneException(statusCode, content);
+				}
 
 			}
 		} catch (IOException e2) {
@@ -273,8 +277,12 @@ public class CloudgeneClient {
 						"The provided Token is invalid. Please check if your token is correct and not expired");
 			default:
 				String content = EntityUtils.toString(responseEntity);
-				JSONObject object = new JSONObject(content);
-				throw new CloudgeneException(statusCode, object.getString("message"));
+				try {
+					JSONObject object = new JSONObject(content);
+					throw new CloudgeneException(statusCode, object.getString("message"));
+				} catch (Exception e) {
+					throw new CloudgeneException(statusCode, content);
+				}
 
 			}
 		} catch (IOException e2) {
