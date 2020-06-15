@@ -195,10 +195,10 @@ public class CommandlineOptionsUtil {
 						String trueValue = getValueByKey(param, "true");
 						if (value.equals(trueValue)) {
 							multipartEntityBuilder.addTextBody(id, trueValue);
+							System.out.println("    " + id + ": " + trueValue);
+						} else {
+							System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 						}
-						System.out.println("    " + id + ": " + trueValue);
-					} else {
-						System.out.println("    " + id + ": " + getValueByKey(param, "false"));
 					}
 				} else {
 					if (type.equals("checkbox")) {
