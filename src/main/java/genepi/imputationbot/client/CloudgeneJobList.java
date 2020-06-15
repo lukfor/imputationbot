@@ -27,7 +27,7 @@ public class CloudgeneJobList extends Vector<CloudgeneJob> {
 			}
 		});
 	}
-	
+
 	@Override
 	public synchronized String toString() {
 
@@ -60,7 +60,11 @@ public class CloudgeneJobList extends Vector<CloudgeneJob> {
 			data[i][2] = job.getName();
 			data[i][3] = job.getId();
 			data[i][4] = DATE_FORMAT.format(job.getSubmittedOn());
-			data[i][5] = job.getExecutionTime() + " sec";
+			if (job.isWaiting()) {
+				data[i][5] = "-";
+			} else {
+				data[i][5] = job.getExecutionTime() + " sec";
+			}
 			try {
 				data[i][6] = job.getInstance().getName();
 			} catch (CloudgeneException e) {
