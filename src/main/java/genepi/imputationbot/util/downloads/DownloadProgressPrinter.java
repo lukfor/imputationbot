@@ -33,6 +33,15 @@ public class DownloadProgressPrinter implements IDownloadProgressListener {
 	}
 
 	public void downloadProgress(Download download, byte[] buffer, int length) {
+
+		try {
+			if (download.getSourceSize() == -1) {
+				return;
+			}
+		} catch (Exception e) {
+			return;
+		}
+
 		transferedBytes += length;
 		long progress = -1;
 		try {
@@ -65,7 +74,7 @@ public class DownloadProgressPrinter implements IDownloadProgressListener {
 
 	public void downloadError(Download download, Exception exception) {
 		System.out.println("  Downloading from " + download.getSource() + " failed.");
-		//exception.printStackTrace();
+		// exception.printStackTrace();
 	}
 
 	public void downloadCompleted(Download download) {

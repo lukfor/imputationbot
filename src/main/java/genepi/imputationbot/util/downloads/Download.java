@@ -27,9 +27,9 @@ public class Download {
 
 	private File target;
 
-	private long sourceSize = -1;
+	private long sourceSize = Long.MIN_VALUE;
 
-	private long targetSize = -1;
+	private long targetSize = Long.MIN_VALUE;
 
 	protected static final int DEFAULT_BUFFER_SIZE = 4 * 1024;
 	protected static final int MAXIMUM_BUFFER_SIZE = 512 * 1024;
@@ -51,7 +51,7 @@ public class Download {
 
 	protected long getSourceSize() throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
 
-		if (sourceSize == -1) {
+		if (sourceSize == Long.MIN_VALUE) {
 
 			HttpClient httpclient = HttpClients.createDefault();
 			HttpGet httpget = new HttpGet(source.toString());
@@ -73,7 +73,7 @@ public class Download {
 	}
 
 	protected long getTargetSize() {
-		if (targetSize == -1 && target.exists()) {
+		if (targetSize == Long.MIN_VALUE && target.exists()) {
 			targetSize = target.length();
 		}
 		return targetSize;
@@ -85,7 +85,7 @@ public class Download {
 
 	public boolean isDownloadComplete()
 			throws URISyntaxException, ClientProtocolException, IOException, CloudgeneException {
-		if (getSourceSize() == -1 || getTargetSize() == -1) {
+		if (getSourceSize() == Long.MIN_VALUE || getTargetSize() == Long.MIN_VALUE) {
 			return false;
 		} else {
 			return (getSourceSize() == getTargetSize());
