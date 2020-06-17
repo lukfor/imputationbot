@@ -24,7 +24,7 @@ public abstract class BaseCommand extends Tool {
 	public static String USER_HOME = System.getProperty("user.home");
 
 	public static String APP_HOME = FileUtil.path(USER_HOME, ".imputationbot");
-	
+
 	public static String INSTANCES_FILENAME = "imputationbot.instances";
 
 	public static String PROJECTS_FILENAME = "imputationbot.projects";
@@ -117,31 +117,38 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public CloudgeneClient getClient() throws Exception {
+		return getClient(true);
+	}
+
+	public CloudgeneClient getClient(boolean verify) throws Exception {
 
 		CloudgeneClient client = new CloudgeneClient(getInstanceList().getAll());
 
 		for (CloudgeneInstance instance : getInstanceList().getAll()) {
 
-			try {
-				CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
+			if (verify) {
 
-				if (!token.isValid()) {
-					throw new CloudgeneException(100, token.toString());
-				}
+				try {
+					CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
 
-				if (token.getExpiresInDays() < 7) {
-					println();
-					println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
-					println();
-				}
+					if (!token.isValid()) {
+						throw new CloudgeneException(100, token.toString());
+					}
 
-			} catch (CloudgeneException e) {
-				if (e.getCode() == 404) {
-					throw new CloudgeneException(e.getCode(),
-							"Token could not be verified. Are you sure Imputationserver is running on '"
-									+ instance.getHostname() + "'?");
-				} else {
-					throw e;
+					if (token.getExpiresInDays() < 7) {
+						println();
+						println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
+						println();
+					}
+
+				} catch (CloudgeneException e) {
+					if (e.getCode() == 404) {
+						throw new CloudgeneException(e.getCode(),
+								"Token could not be verified. Are you sure Imputationserver is running on '"
+										+ instance.getHostname() + "'?");
+					} else {
+						throw e;
+					}
 				}
 			}
 		}

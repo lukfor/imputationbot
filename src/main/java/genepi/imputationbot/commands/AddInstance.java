@@ -56,7 +56,7 @@ public class AddInstance extends BaseCommand {
 		instance.setToken(token);
 
 		CloudgeneInstanceList instances = getInstanceList(false);
-		CloudgeneClient client = getClient();
+		CloudgeneClient client = getClient(false);
 
 		// verify token
 		try {
