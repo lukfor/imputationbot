@@ -36,10 +36,10 @@ It will output something similar to the text shown below:
 
 
 ```sh
-Imputation Bot 0.2.0 🤖
+Imputation Bot 0.8.3 🤖
 https://imputationserver.sph.umich.edu
-(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
-Built by lukas on 2019-12-02
+(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
+Built by lukas on 2020-09-01T11:31:10Z
 ```
 
 Now you are ready to configure Imputation-Bot and impute your GWAS data. Read the [Getting started](getting-started) section to learn more about how to submit your first job.

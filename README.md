@@ -62,10 +62,10 @@ imputationbot add-instance
 ```
 
 ```
-Imputation Bot 0.1.0 🤖
+Imputation Bot 0.8.3 🤖
 https://imputationserver.sph.umich.edu
-(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
-Built by lukas on 2019-10-09T15:54:07Z
+(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
+Built by lukas on 2020-09-01T11:31:10Z
 
 Imputationserver Url [https://imputationserver.sph.umich.edu]:
 API Token [None]: eyJjdHkiOiJ0ZXh0XC9wbGFpbiIsImFsZyI6IkhTMjU2In0.eyJtYWlsIjoibHVrYXMuZm9yZXJAaS1tZWQuYWMuYXQiLCJleHBpcmUiOjE1NzMyMjkwNTY3NTEsIm5hbWUiOiJMdWthcyBGb3JlciIsImFwaSI6dHJ1ZSwidXNlcm5hbWUiOiJsdWtmb3IifQ.qY7iEM6ul-gJ0EuHmEUHRnoS5hZs7kD1HC95NFaxE9w

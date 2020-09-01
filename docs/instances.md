@@ -42,6 +42,8 @@ Imputationserver Url [https://imputationserver.sph.umich.edu]:
 API Token [None]: eyJjdHkiOiJ0ZXh0XC9wbGFpbiIsImFsZyI6IkhTMjU2In0.eyJtYWlsIjoibHVrYXMuZm9yZXJAaS1tZWQuYWMuYXQiLCJleHBpcmUiOjE1NzMyMjkwNTY3NTEsIm5hbWUiOiJMdWthcyBGb3JlciIsImFwaSI6dHJ1ZSwidXNlcm5hbWUiOiJsdWtmb3IifQ.qY7iEM6ul-gJ0EuHmEUHRnoS5hZs7kD1HC95NFaxE9w
 ```
 
+All instances and tokens are stored locally in ` ~/.imputationbot/imputationbot.instances`.
+
 ## List instances
 
 ```sh
@@ -70,3 +72,5 @@ Built by lukas on 2019-10-09T15:54:07Z
 ```sh
 imputationbot remove-instance <ID>
 ```
+
+
