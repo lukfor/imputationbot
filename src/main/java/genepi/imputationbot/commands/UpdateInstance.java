@@ -8,14 +8,17 @@ import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.client.CloudgeneUser;
+import genepi.imputationbot.util.Console;
 
-public class AddInstance extends BaseCommand {
+public class UpdateInstance extends BaseCommand {
 
 	public static final String DEFAULT_HOSTNAME = "https://imputationserver.sph.umich.edu";
 
+	public static final String HELP = "A list of all instances including the ID can be obtained with 'imputationbot instances'.";
+
 	private String[] args;
 
-	public AddInstance(String... args) {
+	public UpdateInstance(String... args) {
 		super(args);
 		this.args = args;
 	}
@@ -33,30 +36,48 @@ public class AddInstance extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		String hostname = "";
-		String token = "";
-		if (this.args.length == 2) {
-			hostname = args[0];
-			token = args[1];
-		} else {
-			hostname = read("Imputationserver Url", DEFAULT_HOSTNAME);
-			token = read("API Token");
-		}
+		CloudgeneInstanceList instances = getInstanceList();
 
-		// remove trailing slashes
-		hostname = hostname.replaceFirst("/*$", "");
-
-		if (token.isEmpty()) {
-			error("Please enter a API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
+		if (instances.isEmpty()) {
+			error("No instances found. Please run 'imputationbot add-instance' and enter your API Token");
 			return 1;
 		}
 
-		CloudgeneInstance instance = new CloudgeneInstance();
-		instance.setHostname(hostname);
-		instance.setToken(token);
+		int id = -1;
+		if (args.length < 1) {
+			// list instances
+			id = Console.select("Select Instance: ", instances.getAll().toArray());
 
-		CloudgeneInstanceList instances = getInstanceList();
+		} else {
+			try {
+				id = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				error("Unknown instance '" + args[0] + "'. " + HELP);
+				return 1;
+			}
+
+		}
+
+		if (id < 1 || id > instances.getAll().size()) {
+			error("Unknown instance '" + id + "'. " + HELP);
+			return 1;
+		}
+
+		String token = "";
+		if (args.length > 1) {
+			token = args[1];
+		} else {
+			token = read("API Token");
+		}
+
 		CloudgeneClient client = getClient(false);
+
+		CloudgeneInstance oldInstance = instances.getById(id);
+		instances.remove(oldInstance);
+
+		CloudgeneInstance instance = new CloudgeneInstance();
+		instance.setHostname(oldInstance.getHostname());
+		instance.setToken(token);
 
 		// verify token
 		try {
@@ -82,10 +103,6 @@ public class AddInstance extends BaseCommand {
 		println();
 
 		JSONObject defaultApp = client.getDefaultApp(instance);
-		CloudgeneInstance oldInstance = instances.getByHostname(hostname);
-		if (oldInstance != null) {
-			instances.remove(oldInstance);
-		}
 		instances.add(instance);
 		saveInstanceList();
 

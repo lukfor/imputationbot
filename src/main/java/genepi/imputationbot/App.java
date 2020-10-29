@@ -12,6 +12,7 @@ import genepi.imputationbot.commands.RemoveProject;
 import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowVersion;
+import genepi.imputationbot.commands.UpdateInstance;
 
 public class App extends Toolbox {
 
@@ -25,6 +26,7 @@ public class App extends Toolbox {
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("add-instance", AddInstance.class);
+		toolbox.addTool("update-instance", UpdateInstance.class);
 		toolbox.addTool("remove-instance", RemoveInstance.class);
 		toolbox.addTool("instances", ListInstances.class);
 		toolbox.addTool("download", DownloadResults.class);

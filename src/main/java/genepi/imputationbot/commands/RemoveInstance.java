@@ -1,9 +1,8 @@
 package genepi.imputationbot.commands;
 
-import java.util.List;
-import java.util.Vector;
-
 import genepi.imputationbot.client.CloudgeneInstance;
+import genepi.imputationbot.client.CloudgeneInstanceList;
+import genepi.imputationbot.util.Console;
 
 public class RemoveInstance extends BaseCommand {
 
@@ -26,25 +25,34 @@ public class RemoveInstance extends BaseCommand {
 	@Override
 	public int runAndHandleErrors() throws Exception {
 
-		List<CloudgeneInstance> instances = new Vector<CloudgeneInstance>(getInstanceList().getAll());
+		CloudgeneInstanceList instances = getInstanceList();
+
+		if (instances.isEmpty()) {
+			error("No instances found. Please run 'imputationbot add-instance' and enter your API Token");
+			return 1;
+		}
+
+		int id = -1;
 
 		String[] ids = getRemainingArgs();
 
 		if (ids.length < 1) {
-			error("Please specify a instance ID. " + HELP);
-			return -1;
+
+			// list instances
+			id = Console.select("Select Instance: ", instances.getAll().toArray());
+
+		} else {
+			try {
+				id = Integer.parseInt(ids[0]);
+			} catch (NumberFormatException e) {
+				error("Unknown instance '" + ids[0] + "'. " + HELP);
+				return 1;
+			}
+
 		}
 
-		int id = -1;
-		try {
-			id = Integer.parseInt(ids[0]);
-		} catch (NumberFormatException e) {
-			error("Unknown instance '" + ids[0] + "'. " + HELP);
-			return -1;
-		}
-
-		if (id >= 1 && id <= instances.size()) {
-			CloudgeneInstance instance = instances.get(id - 1);
+		if (id >= 1 && id <= instances.getAll().size()) {
+			CloudgeneInstance instance = instances.getById(id);
 			getInstanceList().remove(instance);
 			saveInstanceList();
 			printlnInGreen(instance.getName() + " (" + instance.getHostname() + ") removed.");
@@ -53,7 +61,7 @@ public class RemoveInstance extends BaseCommand {
 
 		} else {
 			error("Unknown instance '" + id + "'. " + HELP);
-			return -1;
+			return 1;
 		}
 
 	}

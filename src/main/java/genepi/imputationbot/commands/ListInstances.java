@@ -34,7 +34,11 @@ public class ListInstances extends BaseCommand {
 	public int runAndHandleErrors() throws Exception {
 
 		List<CloudgeneInstance> instances = new Vector<CloudgeneInstance>(getInstanceList().getAll());
-
+		if (instances.isEmpty()) {
+			error("No instances found. Please run 'imputationbot add-instance' and enter your API Token");
+			return 1;
+		}
+		
 		CloudgeneClient client = getClient(false);
 
 		String[] header = new String[6];
@@ -62,13 +66,13 @@ public class ListInstances extends BaseCommand {
 				data[i][2] = instance.getHostname();
 				data[i][3] = user.getUsername();
 				data[i][4] = app.getString("version");
-				data[i][5] = AnsiColors.makeGreen(token.getExpire().toString());
+				data[i][5] = AnsiColors.green(token.getExpire().toString());
 			} else {
 				data[i][1] = "-";
 				data[i][2] = instance.getHostname();
 				data[i][3] = token.getUsername();
 				data[i][4] = "-";
-				data[i][5] = AnsiColors.makeRed(token.getExpire().toString());
+				data[i][5] = AnsiColors.red(token.getExpire().toString());
 			}
 		}
 

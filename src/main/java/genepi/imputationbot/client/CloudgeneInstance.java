@@ -148,5 +148,10 @@ public class CloudgeneInstance {
 		return new String[0][4]; 
 
 	}
+	
+	@Override
+	public String toString() {
+		return hostname;
+	}
 
 }

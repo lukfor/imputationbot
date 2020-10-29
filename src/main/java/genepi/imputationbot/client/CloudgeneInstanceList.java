@@ -37,6 +37,14 @@ public class CloudgeneInstanceList {
 		return null;
 	}
 
+	public CloudgeneInstance getById(int id) {
+		return instances.get(id - 1);
+	}
+
+	public boolean isEmpty() {
+		return instances.isEmpty();
+	}
+
 	public CloudgeneInstance getByReferencePanel(String referencePanel)
 			throws CloudgeneException, CloudgeneAppException {
 		for (CloudgeneInstance instance : instances) {

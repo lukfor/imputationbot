@@ -2,20 +2,85 @@ package genepi.imputationbot.util;
 
 public class AnsiColors {
 
-	public static String makeRed(String text) {
-		return ((char) 27 + "[31m" + text + (char) 27 + "[0m");
+	public static boolean active = true;
+
+	public static final String ANSI_RESET = "\u001B[0m";
+
+	public static final String ANSI_BLACK = "\u001B[30m";
+
+	public static final String ANSI_RED = "\u001B[31m";
+
+	public static final String ANSI_GREEN = "\u001B[32m";
+
+	public static final String ANSI_YELLOW = "\u001B[33m";
+
+	public static final String ANSI_BLUE = "\u001B[34m";
+
+	public static final String ANSI_PURPLE = "\u001B[35m";
+
+	public static final String ANSI_CYAN = "\u001B[36m";
+
+	public static final String ANSI_WHITE = "\u001B[37m";
+
+	public static final String ANSI_GRAY = "\u001B[90m";
+
+	public static void enable() {
+		active = true;
 	}
 
-	public static String makeGreen(String text) {
-		return ((char) 27 + "[32m" + text + (char) 27 + "[0m");
+	public static void disable() {
+		active = false;
 	}
 
-	public static String makeBlue(String text) {
-		return ((char) 27 + "[34m" + text + (char) 27 + "[0m");
+	public static boolean isEnabled() {
+		return active;
 	}
 
-	public static String makeGray(String text) {
-		return ((char) 27 + "[90m" + text + (char) 27 + "[0m");
+	public static boolean isDisabled() {
+		return !active;
 	}
 
+	public static String color(String string, String color) {
+		if (active) {
+			return color + string + ANSI_RESET;
+		} else {
+			return string;
+		}
+	}
+
+	public static String black(String string) {
+		return color(string, ANSI_BLACK);
+	}
+
+	public static String red(String string) {
+		return color(string, ANSI_RED);
+	}
+
+	public static String green(String string) {
+		return color(string, ANSI_GREEN);
+	}
+
+	public static String yellow(String string) {
+		return color(string, ANSI_YELLOW);
+	}
+
+	public static String blue(String string) {
+		return color(string, ANSI_BLUE);
+	}
+
+	public static String purple(String string) {
+		return color(string, ANSI_PURPLE);
+	}
+
+	public static String cyan(String string) {
+		return color(string, ANSI_CYAN);
+	}
+
+	public static String white(String string) {
+		return color(string, ANSI_WHITE);
+	}
+
+	public static String gray(String string) {
+		return color(string, ANSI_GRAY);
+	}
 }

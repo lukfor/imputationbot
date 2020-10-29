@@ -131,29 +131,29 @@ public class CloudgeneJob {
 		int state = job.getInt("state");
 		switch (state) {
 		case 1:
-			return AnsiColors.makeBlue("Waiting");
+			return AnsiColors.blue("Waiting");
 		case 2:
-			return AnsiColors.makeBlue("Running");
+			return AnsiColors.blue("Running");
 		case 3:
-			return AnsiColors.makeBlue("Exporting");
+			return AnsiColors.blue("Exporting");
 		case 4:
-			return AnsiColors.makeGreen("Success");
+			return AnsiColors.green("Success");
 		case 5:
-			return AnsiColors.makeRed("Failed");
+			return AnsiColors.red("Failed");
 		case 6:
-			return AnsiColors.makeRed("Canceled");
+			return AnsiColors.red("Canceled");
 		case 7:
-			return AnsiColors.makeGray("Retired");
+			return AnsiColors.gray("Retired");
 		case 8:
-			return AnsiColors.makeGreen("Success");
+			return AnsiColors.green("Success");
 		case 9:
-			return AnsiColors.makeRed("Failed");
+			return AnsiColors.red("Failed");
 		case 10:
-			return AnsiColors.makeGray("Deleted");
+			return AnsiColors.gray("Deleted");
 		case -1:
-			return AnsiColors.makeGray("Dead");
+			return AnsiColors.gray("Dead");
 		}
-		return AnsiColors.makeGray("?");
+		return AnsiColors.gray("?");
 	}
 
 	@Override
