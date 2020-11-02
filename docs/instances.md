@@ -24,7 +24,7 @@ The complete data exchange between Imputation-Bot and MIS is encrypted using Sec
 
 Api Tokens are valid for 30 days. You can check the status in the web interface or with `imputationbot instances`
 
-## Configure instance
+## Add instance
 
 ```sh
 imputationbot add-instance
@@ -46,6 +46,8 @@ All instances and tokens are stored locally in ` ~/.imputationbot/imputationbot.
 
 ## List instances
 
+A list of all instances including the ID can be obtained with `instances`:
+
 ```sh
 imputationbot instances
 ```
@@ -65,12 +67,24 @@ Built by lukas on 2019-10-09T15:54:07Z
 ╚════╧════════════════════════════╧════════════════════════════════════════╧══════════╧═════════╧══════════════════════════════╝
 ```
 
+In addition to general information about the instance itself, the status and expiration date of the API token is shown.
 
+## Update instance
+
+If a API Token is expired, the `update-instance` command can be used to update the token;
+
+```sh
+imputationbot update-instance [<ID> <TOKEN>]
+```
+
+A list of all instances including the ID can be obtained with `instances`. If no ID and token are set via the command-line, a list of all instances appears and an instance can be selected as well as the new token can be entered.
 
 ## Remove instance
 
+To remove an existing instance, the `delete-instance` command can be used:
+
 ```sh
-imputationbot remove-instance <ID>
+imputationbot remove-instance [<ID>]
 ```
 
-
+A list of all instances including the ID can be obtained with `instances`. If no ID is set via the command-line, a list of all instances appears where an instance can be selected.
