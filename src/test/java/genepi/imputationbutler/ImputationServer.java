@@ -12,6 +12,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.fluent.Form;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -128,8 +129,19 @@ public class ImputationServer {
 		return adminToken;
 	}
 
-	public String revokeTokenForUser(String user) {
-		return "";
+	public void revokeTokenForUser(String user, String password) throws Exception {
+		LoginToken loginToken = login(user, password);
+
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+
+		HttpDelete httpDelete = new HttpDelete(url + "/api/v2/users/" + user + "/api-token");
+		httpDelete.addHeader("Cookie", loginToken.getCookie());
+		httpDelete.addHeader("X-CSRF-Token", loginToken.getCsrfToken());
+
+		HttpResponse response = httpclient.execute(httpDelete);
+		if (user.equals("admin")) {
+			adminToken = "";
+		}
 	}
 
 	public String createTokenForUser(String user, String password) throws Exception {
@@ -154,7 +166,12 @@ public class ImputationServer {
 		String content = EntityUtils.toString(responseEntity);
 		JSONObject object = new JSONObject(content);
 
-		return object.getString("token");
+		String token = object.getString("token");
+		if (user.equals("admin")) {
+			adminToken = token;
+		}
+		
+		return token;
 
 	}
 

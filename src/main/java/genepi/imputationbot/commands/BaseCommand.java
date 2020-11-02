@@ -109,11 +109,11 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public void printlnInRed(String text) {
-		System.out.println(AnsiColors.makeRed(text));
+		System.out.println(AnsiColors.red(text));
 	}
 
 	public void printlnInGreen(String text) {
-		System.out.println(AnsiColors.makeGreen(text));
+		System.out.println(AnsiColors.green(text));
 	}
 
 	public CloudgeneClient getClient() throws Exception {
@@ -158,19 +158,9 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public CloudgeneInstanceList getInstanceList() throws IOException, CloudgeneAppException {
-		return getInstanceList(true);
-	}
-
-	public CloudgeneInstanceList getInstanceList(boolean check) throws IOException, CloudgeneAppException {
 
 		if (instanceList == null) {
 			File file = new File(FileUtil.path(APP_HOME, INSTANCES_FILENAME));
-
-			if (!file.exists() && check) {
-				throw new CloudgeneAppException(
-						"No instance found. Please run 'imputationbot add-instance' and enter your API Token");
-			}
-
 			if (file.exists()) {
 				instanceList = CloudgeneInstanceList.load(FileUtil.path(APP_HOME, INSTANCES_FILENAME));
 			} else {

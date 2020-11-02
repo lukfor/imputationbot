@@ -40,7 +40,7 @@ public class RemoveInstanceTest {
 
 		listInstancesAfter = new ListInstances();
 		// expect error, since no instances set
-		assertEquals(0, listInstancesAfter.start());
+		assertEquals(1, listInstancesAfter.start());
 		assertEquals(0, listInstancesAfter.getInstanceList().getAll().size());
 
 	}
