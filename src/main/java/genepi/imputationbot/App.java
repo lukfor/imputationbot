@@ -16,7 +16,7 @@ import genepi.imputationbot.commands.UpdateInstance;
 
 public class App extends Toolbox {
 
-	public static final String VERSION = "0.8.3";
+	public static final String VERSION = "0.9.0";
 
 	public App(String command, String[] args) {
 		super(command, args);
