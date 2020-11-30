@@ -9,7 +9,9 @@ public class Console {
 	public static PrintStream out = System.out;
 
 	public static InputStream in = System.in;
-
+	
+	public static Scanner scanner = new Scanner(in);
+		
 	public static String prompt(String label, String defaultValue) {
 		print(label + " [" + defaultValue + "]: ");
 		String value = readln();
@@ -96,14 +98,13 @@ public class Console {
 	}
 
 	public static String readln() {
-		Scanner scanner = new Scanner(in);
 		String value = scanner.nextLine();
-		scanner.close();
 		return value;
 	}
 
 	public static void setIn(InputStream in) {
 		Console.in = in;
+		scanner = new Scanner(in);
 	}
 
 	public static void setOut(PrintStream out) {

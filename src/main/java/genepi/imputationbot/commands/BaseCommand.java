@@ -3,7 +3,6 @@ package genepi.imputationbot.commands;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Scanner;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -17,6 +16,7 @@ import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.AnsiColors;
+import genepi.imputationbot.util.Console;
 import genepi.io.FileUtil;
 
 public abstract class BaseCommand extends Tool {
@@ -28,8 +28,6 @@ public abstract class BaseCommand extends Tool {
 	public static String INSTANCES_FILENAME = "imputationbot.instances";
 
 	public static String PROJECTS_FILENAME = "imputationbot.projects";
-
-	private static Scanner scanner = new Scanner(System.in);
 
 	private CloudgeneInstanceList instanceList;
 
@@ -87,19 +85,11 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public String read(String label, String defaultValue) {
-		System.out.print(label + " [" + defaultValue + "]: ");
-		String value = scanner.nextLine();
-		if (value.isEmpty()) {
-			return defaultValue;
-		} else {
-			return value;
-		}
+		return Console.prompt(label, defaultValue);
 	}
 
 	public String read(String label) {
-		System.out.print(label + " [None]: ");
-		String value = scanner.nextLine();
-		return value;
+		return Console.prompt(label);
 	}
 
 	public void error(String message) {
@@ -201,6 +191,7 @@ public abstract class BaseCommand extends Tool {
 
 		} catch (Exception e) {
 			error(e);
+			e.printStackTrace();
 			return 1;
 		}
 	}
