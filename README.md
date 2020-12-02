@@ -85,6 +85,8 @@ The complete command looks like this:
 imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
 ```
 
+A test file is available [here](https://github.com/lukfor/imputationserver-ashg20/raw/main/files/chr20.R50.merged.1.330k.recode.small.vcf.gz).
+
 After submission we get the URL where we can monitor the progress of our job.
 
 ## Monitor Jobs
