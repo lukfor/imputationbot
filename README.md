@@ -1,6 +1,6 @@
 ![Image1](assets/logo.png)
 
-# Imputation Bot
+# imputation-bot
 
 [![GitHub release](https://img.shields.io/github/release/lukfor/imputationbot.svg)](https://GitHub.com/lukfor/imputationbot/releases/)
 ![build](https://github.com/lukfor/imputationbot/workflows/build/badge.svg)
@@ -19,6 +19,8 @@ You will need the following things properly installed on your computer.
 
 ## Download and Install
 
+### Linux or macOS
+
 Download and install the latest version from our download page using the following commands:
 
 ```
@@ -31,6 +33,26 @@ Test the installation with the following command:
 ```sh
 imputationbot version
 ```
+
+The documentation is available at [http://imputationbot.readthedocs.io](http://imputationbot.readthedocs.io).
+
+You can also download the [latest version](https://github.com/lukfor/imputationbot/releases/latest) of `imputationbot-X.X.X-macos.zip` or `imputationbot-X.X.X-linux.zip` from our download page.
+
+
+### Windows
+
+Download the [latest version](https://github.com/lukfor/imputationbot/releases/latest) of `imputationbot-X.X.X-windows.zip` from our download page.
+
+- Open the zip file and extract it content to a folder of choice.
+
+- Open the command-line, navigate to your folder where you extracted the exe file.
+
+- Test the installation with following command:
+
+```sh
+imputationbot version
+```
+
 
 The documentation is available at [http://imputationbot.readthedocs.io](http://imputationbot.readthedocs.io).
 
@@ -62,7 +84,7 @@ imputationbot add-instance
 ```
 
 ```
-Imputation Bot 0.8.3 🤖
+imputation-bot 1.0.0 🤖
 https://imputationserver.sph.umich.edu
 (c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
 Built by lukas on 2020-09-01T11:31:10Z
@@ -91,7 +113,7 @@ After submission we get the URL where we can monitor the progress of our job.
 
 ## Monitor Jobs
 
-However, we can also use Imputation Bot to get a list all our jobs and their status:
+However, we can also use imputation-bot to get a list all our jobs and their status:
 
 ```
 imputationbot jobs
@@ -111,9 +133,9 @@ We can use the `download` command to download all imputed genotypes and the QC r
 imputationbot download job-XXXXXXXX-XXXXXX-XXX
 ```
 
-If the job is still running, Imputation Bot waits until the job is finished and starts automatically with the download.
+If the job is still running, imputation-bot waits until the job is finished and starts automatically with the download.
 
-You can provide Imputation Bot the password we sent you via email and it decrypts all files for you:
+You can provide imputation-bot the password we sent you via email and it decrypts all files for you:
 
 ```
 imputationbot download job-XXXXXXXX-XXXXXX-XXX --password MYPASSWORD
