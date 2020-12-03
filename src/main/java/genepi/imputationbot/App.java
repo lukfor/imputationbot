@@ -13,6 +13,8 @@ import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.commands.RunQualityControlJob;
 import genepi.imputationbot.commands.ShowVersion;
 import genepi.imputationbot.commands.UpdateInstance;
+import genepi.imputationbot.util.AnsiColors;
+import genepi.imputationbot.util.OperatingSystem;
 
 public class App extends Toolbox {
 
@@ -23,6 +25,11 @@ public class App extends Toolbox {
 	}
 
 	public static void main(String[] args) throws Exception {
+
+		// disable ansi colors on windows
+		if (OperatingSystem.isWindows()) {
+			AnsiColors.disable();
+		}
 
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("add-instance", AddInstance.class);
