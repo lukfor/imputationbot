@@ -4,7 +4,7 @@ The following Imputation-Servers are supported by imputation-bot:
 
 ## Michigan Imputation Server
 
-Url: http://imputationsever.sph.umich
+Url: [http://imputationsever.sph.umich](http://imputationsever.sph.umich)
 
 ### Reference Panels
 
@@ -19,7 +19,7 @@ Url: http://imputationsever.sph.umich
 
 ## TOPMed Imputation Server
 
-Url: https://topmed.dev.imputationserver.org/#!
+Url: [https://topmed.dev.imputationserver.org](https://topmed.dev.imputationserver.org)
 
 ### Reference Panels
 
