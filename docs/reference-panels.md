@@ -12,7 +12,7 @@ Output:
 
 
 ```sh
-Imputation Bot 0.1.3 🤖
+imputation-bot 1.0.0 🤖
 https://imputationserver.sph.umich.edu
 (c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
 Built by null on null

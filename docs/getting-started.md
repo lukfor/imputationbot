@@ -2,7 +2,7 @@
 
 ## Configuration
 
-To use Imputation-Bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website.
+To use imputation-bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website.
 
 **Step 1:** Login and click on your **username** and then **profile**:
 
@@ -27,7 +27,7 @@ imputationbot add-instance
 ```
 
 ```
-Imputation Bot 0.1.0 🤖
+imputation-bot 1.0.0 🤖
 https://imputationserver.sph.umich.edu
 (c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
 Built by lukas on 2019-10-09T15:54:07Z
@@ -70,9 +70,9 @@ We can use the `download` command to download all imputed genotypes and the QC r
 imputationbot download job-XXXXXXXX-XXXXXX-XXX
 ```
 
-If the job is still running, Imputation Bot waits until the job is finished and starts automatically with the download.
+If the job is still running, imputation-bot waits until the job is finished and starts automatically with the download.
 
-You can provide Imputation Bot the password we sent you via email and it decrypts all files for you:
+You can provide imputation-bot the password we sent you via email and it decrypts all files for you:
 
 ```sh
 imputationbot download job-XXXXXXXX-XXXXXX-XXX --password MYPASSWORD

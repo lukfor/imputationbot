@@ -1,6 +1,6 @@
 # Contact
 
-The complete Imputation-Bot source code is available on [GitHub](https://github.com/lukfor/imputationbot). Feel free to create issues and pull requests. Before contacting us, please have a look at the [FAQ page](/faq) first.
+The complete imputation-bot source code is available on [GitHub](https://github.com/lukfor/imputationbot). Feel free to create issues and pull requests. Before contacting us, please have a look at the [FAQ page](/faq) first.
 
 Please contact [Lukas Forer](mailto:lukas.forer@i-med.ac.at) in case of other problems.
 

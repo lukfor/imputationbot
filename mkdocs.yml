@@ -1,4 +1,4 @@
-site_name: Imputation-Bot 0.9.0
+site_name: Imputation-Bot 0.9.1
 theme: readthedocs
 
 pages:
@@ -10,6 +10,7 @@ pages:
 - List Jobs: list-jobs.md
 - Download Results: download-results.md
 - Manage Projects: projects.md
+- Public Instances: public-instances.md
 - FAQ: faq.md
 - Contact: contact.md
 
