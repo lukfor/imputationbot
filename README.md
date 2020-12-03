@@ -43,11 +43,11 @@ You can also download the [latest version](https://github.com/lukfor/imputationb
 
 Download the [latest version](https://github.com/lukfor/imputationbot/releases/latest) of `imputationbot-X.X.X-windows.zip` from our download page.
 
-- Open the zip file and extract it content to a folder of choice.
+- Open the zip file and extract the exe file to a folder of choice
 
-- Open the command-line, navigate to your folder where you extracted the exe file.
+- Open the command-line and navigate to your folder
 
-- Test the installation with following command:
+- Test the installation by running the following command:
 
 ```sh
 imputationbot version
