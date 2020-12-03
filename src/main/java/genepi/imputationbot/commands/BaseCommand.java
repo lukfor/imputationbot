@@ -50,7 +50,7 @@ public abstract class BaseCommand extends Tool {
 
 	private void printHeader() {
 		System.out.println();
-		System.out.println("Imputation Bot " + App.VERSION + " " + Emoji.ROBOT);
+		System.out.println("imputation-bot " + App.VERSION + " " + Emoji.ROBOT);
 		System.out.println("https://imputationserver.sph.umich.edu");
 		System.out.println("(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
 
