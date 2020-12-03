@@ -8,6 +8,7 @@ import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.client.CloudgeneUser;
+import genepi.imputationbot.util.Emoji;
 
 public class AddInstance extends BaseCommand {
 
@@ -78,7 +79,7 @@ public class AddInstance extends BaseCommand {
 		// test api token by getting user profile
 		CloudgeneUser user = client.getAuthUser(instance);
 		println();
-		println("Hi " + user.getFullName() + " 👋");
+		println("Hi " + user.getFullName() + " " + Emoji.WAVING_HAND);
 		println();
 
 		JSONObject defaultApp = client.getDefaultApp(instance);
@@ -92,7 +93,7 @@ public class AddInstance extends BaseCommand {
 		println();
 		println();
 		printlnInGreen("Imputation Bot is ready to submit jobs to " + instance.getHostname() + " ("
-				+ defaultApp.getString("name") + ") " + defaultApp.getString("version") + ") 👍");
+				+ defaultApp.getString("name") + ") " + defaultApp.getString("version") + ") " + Emoji.THUMBS_UP);
 		println();
 		return 0;
 

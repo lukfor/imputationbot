@@ -17,6 +17,7 @@ import genepi.imputationbot.client.CloudgeneInstanceList;
 import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.AnsiColors;
 import genepi.imputationbot.util.Console;
+import genepi.imputationbot.util.Emoji;
 import genepi.io.FileUtil;
 
 public abstract class BaseCommand extends Tool {
@@ -49,7 +50,7 @@ public abstract class BaseCommand extends Tool {
 
 	private void printHeader() {
 		System.out.println();
-		System.out.println("Imputation Bot " + App.VERSION + " 🤖");
+		System.out.println("Imputation Bot " + App.VERSION + " " + Emoji.ROBOT);
 		System.out.println("https://imputationserver.sph.umich.edu");
 		System.out.println("(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
 
@@ -127,7 +128,7 @@ public abstract class BaseCommand extends Tool {
 
 					if (token.getExpiresInDays() < 7) {
 						println();
-						println("💡 Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
+						println(Emoji.LIGHT_BULB + " Warning! Your API Token expires in " + token.getExpiresInDays() + " days");
 						println();
 					}
 

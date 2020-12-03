@@ -1,10 +1,5 @@
 package genepi.imputationbot.commands;
 
-import org.json.JSONObject;
-
-import genepi.imputationbot.client.CloudgeneApiToken;
-import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.util.OperatingSystem;
 
 public class ShowVersion extends BaseCommand {

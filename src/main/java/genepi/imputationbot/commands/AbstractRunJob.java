@@ -22,6 +22,7 @@ import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectJob;
 import genepi.imputationbot.model.ProjectList;
 import genepi.imputationbot.util.CommandlineOptionsUtil;
+import genepi.imputationbot.util.Emoji;
 
 public class AbstractRunJob extends BaseCommand {
 
@@ -202,7 +203,8 @@ public class AbstractRunJob extends BaseCommand {
 			// TODO: add password check! smae as for username?
 			form.addTextBody("password", line.getOptionValue("password"));
 			println();
-			println("  💡 User defined password set. Don't forget your password, you need it to decrypt your results!");
+			println("  " + Emoji.LIGHT_BULB
+					+ " User defined password set. Don't forget your password, you need it to decrypt your results!");
 		}
 
 		String projectName = line.getOptionValue("project");
@@ -231,7 +233,8 @@ public class AbstractRunJob extends BaseCommand {
 			printlnInGreen("  Imputation job '" + job.getName() + "' submitted successfully");
 		}
 
-		println("  👉 Check the job progress on " + instance.getHostname() + "/index.html#!jobs/" + job.getId());
+		println("  " + Emoji.BACKHAND_INDEX_POINTING_RIGHT + " Check the job progress on " + instance.getHostname()
+				+ "/index.html#!jobs/" + job.getId());
 		println();
 		println();
 		ProjectJob projectJob = new ProjectJob();
