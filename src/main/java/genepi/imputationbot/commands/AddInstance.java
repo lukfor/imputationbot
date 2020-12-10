@@ -48,7 +48,7 @@ public class AddInstance extends BaseCommand {
 		hostname = hostname.replaceFirst("/*$", "");
 
 		if (token.isEmpty()) {
-			error("Please enter a API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
+			error("Please enter API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
 			return 1;
 		}
 

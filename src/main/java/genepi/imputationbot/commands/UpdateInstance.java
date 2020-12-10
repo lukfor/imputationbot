@@ -70,6 +70,11 @@ public class UpdateInstance extends BaseCommand {
 		} else {
 			token = read("API Token");
 		}
+		
+		if (token == null || token.trim().isEmpty()) {
+			error("Please enter API Token.");
+			return 1;
+		}
 
 		CloudgeneClient client = getClient(false);
 
