@@ -72,7 +72,7 @@ public class UpdateInstance extends BaseCommand {
 		}
 		
 		if (token == null || token.trim().isEmpty()) {
-			error("Please enter API Token.");
+			error("Please enter API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
 			return 1;
 		}
 
