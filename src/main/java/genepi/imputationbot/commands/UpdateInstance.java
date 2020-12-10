@@ -47,7 +47,12 @@ public class UpdateInstance extends BaseCommand {
 		int id = -1;
 		if (args.length < 1) {
 			// list instances
-			id = Console.select("Select Instance: ", instances.getAll().toArray());
+			if (instances.getAll().size() == 1) {
+				println("Instance: " + instances.getAll().toArray()[0]);
+				id = 1;
+			} else {
+				id = Console.select("Select Instance: ", instances.getAll().toArray());
+			}
 
 		} else {
 			try {
@@ -70,7 +75,7 @@ public class UpdateInstance extends BaseCommand {
 		} else {
 			token = read("API Token");
 		}
-		
+
 		if (token == null || token.trim().isEmpty()) {
 			error("Please enter API token. Learn more about the token on https://imputationserver.readthedocs.io/en/latest/api/");
 			return 1;
