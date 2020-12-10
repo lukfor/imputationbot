@@ -137,12 +137,15 @@
 					<!-- get all project dependencies -->
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>	
+					</descriptorRefs>
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
 							<mainClass>genepi.imputationbot.App</mainClass>
 						</manifest>
+						<manifestEntries>
+							<Build-Time>${maven.build.timestamp}</Build-Time>
+						</manifestEntries>
 					</archive>
 
 				</configuration>
@@ -156,7 +159,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>	
+			</plugin>
 
 
 			<!-- Create windows binaries -->
@@ -219,7 +222,7 @@
 				<executions>
 					<execution>
 						<id>makeself</id>
-						<phase>package</phase>					
+						<phase>package</phase>
 						<goals>
 							<goal>makeself</goal>
 						</goals>
@@ -247,7 +250,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>	
+			</plugin>
 
 			<!-- Code Coverage -->
 
