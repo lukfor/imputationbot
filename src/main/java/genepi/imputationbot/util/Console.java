@@ -9,9 +9,9 @@ public class Console {
 	public static PrintStream out = System.out;
 
 	public static InputStream in = System.in;
-	
+
 	public static Scanner scanner = new Scanner(in);
-		
+
 	public static String prompt(String label, String defaultValue) {
 		print(label + " [" + defaultValue + "]: ");
 		String value = readln();
@@ -28,7 +28,7 @@ public class Console {
 		return value;
 	}
 
-	public static int promptInt(String label) {
+	public static Integer promptInt(String label) {
 		String value = prompt(label);
 		try {
 			return Integer.parseInt(value);
@@ -38,7 +38,7 @@ public class Console {
 		}
 	}
 
-	public static int promptInt(String label, Integer defaultValue) {
+	public static Integer promptInt(String label, Integer defaultValue) {
 		print(label);
 		if (defaultValue != null) {
 			print(" [" + defaultValue + "]: ");
@@ -51,7 +51,7 @@ public class Console {
 				return Integer.parseInt(value);
 			} catch (Exception e) {
 				error("Value '" + value + "' is not a valid input.");
-				return promptInt(label);
+				return promptInt(label, defaultValue);
 			}
 		}
 	}
@@ -61,12 +61,16 @@ public class Console {
 		for (int i = 0; i < items.length; i++) {
 			println("  [" + (i + 1) + "] " + items[i]);
 		}
-		int selection = promptInt(AnsiColors.green("> "), null);
-		if (selection >= 1 && selection <= items.length) {
+		Integer selection = promptInt(AnsiColors.green("> "), null);
+		if (selection != null && selection >= 1 && selection <= items.length) {
 			println();
 			return selection;
 		} else {
-			println(AnsiColors.red("Selection '" + selection + "' is not a valid."));
+			if (selection != null) {
+				error("Selection '" + selection + "' is not valid.");
+			} else {
+				error("Please enter a selection.");
+			}
 			return select(label, items);
 		}
 	}
