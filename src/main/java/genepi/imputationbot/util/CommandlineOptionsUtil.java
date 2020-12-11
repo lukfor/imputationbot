@@ -2,6 +2,7 @@ package genepi.imputationbot.util;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
@@ -86,7 +87,8 @@ public class CommandlineOptionsUtil {
 
 	}
 
-	public static MultipartEntityBuilder createForm(JSONArray params, CommandLine line) throws Exception {
+	public static MultipartEntityBuilder createForm(JSONArray params, CommandLine line, String idFiles)
+			throws Exception {
 		Map<String, String> props = new HashMap<String, String>();
 
 		for (int i = 0; i < params.length(); i++) {
@@ -190,6 +192,38 @@ public class CommandlineOptionsUtil {
 									throw new CloudgeneAppException("File '" + file + "' not found.");
 								}
 							}
+
+							if (id.equals(idFiles)) {
+								List<String> tiles2 = line.getArgList();
+								for (String tile : tiles2) {
+									File file = new File(tile);
+
+									if (file.exists()) {
+
+										if (file.isDirectory()) {
+
+											File[] files = file.listFiles();
+
+											for (File subfile : files) {
+												if (subfile.getAbsolutePath().endsWith(".vcf.gz")) {
+													multipartEntityBuilder.addBinaryBody(id, subfile);
+													System.out.println("    - " + subfile.getAbsolutePath());
+												}
+											}
+
+										} else {
+
+											multipartEntityBuilder.addBinaryBody(id, file);
+											System.out.println("      - " + tile);
+
+										}
+
+									} else {
+										throw new CloudgeneAppException("File '" + file + "' not found.");
+									}
+								}
+							}
+
 						}
 					} else if (type.equals("checkbox")) {
 						String trueValue = getValueByKey(param, "true");

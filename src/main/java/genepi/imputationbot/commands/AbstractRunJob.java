@@ -193,7 +193,7 @@ public class AbstractRunJob extends BaseCommand {
 			return null;
 		}
 
-		MultipartEntityBuilder form = CommandlineOptionsUtil.createForm(params, line);
+		MultipartEntityBuilder form = CommandlineOptionsUtil.createForm(params, line, "files");
 
 		// add mode
 		form.addTextBody("mode", mode);
