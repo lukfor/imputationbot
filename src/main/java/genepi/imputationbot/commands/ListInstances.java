@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.client.CloudgeneInstance;
 import genepi.imputationbot.client.CloudgeneUser;
 import genepi.imputationbot.util.AnsiColors;
@@ -57,6 +58,7 @@ public class ListInstances extends BaseCommand {
 
 			data[i][0] = (i + 1) + "";
 
+			try {
 			CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
 			if (token.isValid() && !token.isExpired()) {
 				JSONObject server = client.getServerDetails(instance);
@@ -73,6 +75,13 @@ public class ListInstances extends BaseCommand {
 				data[i][3] = token.getUsername();
 				data[i][4] = "-";
 				data[i][5] = AnsiColors.red(token.getExpire().toString());
+			}
+			}catch (CloudgeneException e) {
+				data[i][1] = "-";
+				data[i][2] = instance.getHostname();
+				data[i][3] = "-";
+				data[i][4] = "-";
+				data[i][5] = AnsiColors.red(e.getMessage());
 			}
 		}
 

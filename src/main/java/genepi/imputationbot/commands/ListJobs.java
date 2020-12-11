@@ -3,6 +3,7 @@ package genepi.imputationbot.commands;
 import java.text.SimpleDateFormat;
 
 import genepi.imputationbot.client.CloudgeneClient;
+import genepi.imputationbot.client.CloudgeneException;
 import genepi.imputationbot.client.CloudgeneJob;
 import genepi.imputationbot.client.CloudgeneJobList;
 import genepi.imputationbot.model.Project;
@@ -52,9 +53,26 @@ public class ListJobs extends BaseCommand {
 
 			} else {
 
-				CloudgeneJob cloudgeneJob = client.getJobDetails(id);
-				println(cloudgeneJob.toString());
-
+				CloudgeneJob job = client.getJobDetails(id);
+				println("Job-ID: " + job.getId());
+				println("Job-Name: " + job.getName());
+				println("Submitted On: " + DATE_FORMAT.format(job.getSubmittedOn()));
+				if (job.getQueuePosition() > -1) {
+					println("Queue: " + job.getQueuePosition());
+				}
+				if (job.isWaiting()) {
+					println("Execution-Time: -");
+				} else {
+					println("Execution-Time: " + job.getExecutionTime() + " sec");
+				}
+				println("Status: " + job.getJobStateAsText());
+				try {
+					println("Instance: " + job.getInstance().getName());
+					println("Url: " + job.getInstance().getHostname() + "/index.html#!jobs/" + job.getId());
+				} catch (CloudgeneException e) {
+					println("Instance: " + "Unknown");
+				}
+				println();
 				return 0;
 			}
 

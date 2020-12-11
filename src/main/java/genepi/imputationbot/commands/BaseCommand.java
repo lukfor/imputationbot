@@ -1,13 +1,10 @@
 package genepi.imputationbot.commands;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import genepi.base.Tool;
-import genepi.imputationbot.App;
 import genepi.imputationbot.client.CloudgeneApiToken;
 import genepi.imputationbot.client.CloudgeneAppException;
 import genepi.imputationbot.client.CloudgeneClient;
@@ -48,7 +45,7 @@ public abstract class BaseCommand extends Tool {
 	}
 
 	public void error(Exception e) {
-		if (e instanceof CloudgeneException || e instanceof CloudgeneAppException) {
+		if (e instanceof CloudgeneException || e instanceof CloudgeneAppException || e instanceof FileNotFoundException) {
 			error(e.getMessage());
 		} else {
 			error(e.toString());
@@ -150,7 +147,7 @@ public abstract class BaseCommand extends Tool {
 		return projectList;
 	}
 
-	public void saveProjects() throws IOException {
+	public void saveProjects() throws IOException, CloudgeneException {
 		getProjectList().save(FileUtil.path(APP_HOME, PROJECTS_FILENAME));
 	}
 
@@ -162,7 +159,7 @@ public abstract class BaseCommand extends Tool {
 
 		} catch (Exception e) {
 			error(e);
-			e.printStackTrace();
+			//e.printStackTrace();
 			return 1;
 		}
 	}

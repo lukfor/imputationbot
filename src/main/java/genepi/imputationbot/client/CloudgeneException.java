@@ -1,5 +1,7 @@
 package genepi.imputationbot.client;
 
+import org.apache.http.conn.HttpHostConnectException;
+
 public class CloudgeneException extends Exception {
 
 	/**
@@ -16,6 +18,15 @@ public class CloudgeneException extends Exception {
 		this.message = message;
 	}
 
+	public CloudgeneException(int code, Exception exception) {
+		this.code = code;
+		if (exception instanceof HttpHostConnectException) {
+			this.message = "Server is not responding (unavailable).";
+		} else {
+			this.message = exception.toString();
+		}
+	}
+
 	@Override
 	public String getMessage() {
 		return code + " - " + message;
@@ -24,7 +35,7 @@ public class CloudgeneException extends Exception {
 	public int getCode() {
 		return code;
 	}
-	
+
 	@Override
 	public String toString() {
 		return code + " - " + message;

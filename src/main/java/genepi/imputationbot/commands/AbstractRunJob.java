@@ -218,11 +218,14 @@ public class AbstractRunJob extends BaseCommand {
 
 		// add password
 		if (line.hasOption("password")) {
-			// TODO: add password check! smae as for username?
 			form.addTextBody("password", line.getOptionValue("password"));
 			println();
 			println("  " + Emoji.LIGHT_BULB
 					+ " User defined password set. Don't forget your password, you need it to decrypt your results!");
+		} else {
+			println();
+			println("  " + Emoji.LIGHT_BULB
+					+ " We encrypt the results using an one-time password and send it to you via e-mail.");
 		}
 
 		String projectName = line.getOptionValue("project");

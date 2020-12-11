@@ -249,9 +249,9 @@ public class CloudgeneClient {
 				}
 
 			}
-		} catch (IOException e2) {
+		} catch (IOException e) {
 
-			throw new CloudgeneException(100, e2.toString());
+			throw new CloudgeneException(100, e);
 		}
 	}
 
@@ -285,9 +285,9 @@ public class CloudgeneClient {
 				}
 
 			}
-		} catch (IOException e2) {
+		} catch (IOException e) {
 
-			throw new CloudgeneException(100, e2.toString());
+			throw new CloudgeneException(100, e);
 		}
 	}
 
