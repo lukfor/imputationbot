@@ -37,36 +37,6 @@ public abstract class BaseCommand extends Tool {
 	public BaseCommand(String[] args) {
 		super(args);
 		FileUtil.createDirectory(APP_HOME);
-		printHeader();
-	}
-
-	public BaseCommand(String[] args, boolean header) {
-		super(args);
-		FileUtil.createDirectory(APP_HOME);
-		if (header) {
-			printHeader();
-		}
-	}
-
-	private void printHeader() {
-		System.out.println();
-		System.out.println("imputation-bot " + App.VERSION + " " + Emoji.ROBOT);
-		System.out.println("https://imputationserver.sph.umich.edu");
-		System.out.println("(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
-
-		try {
-			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
-			Manifest manifest = new Manifest(url.openStream());
-			Attributes attr = manifest.getMainAttributes();
-			String buildTime = attr.getValue("Build-Time");
-			String builtBy = attr.getValue("Built-By");
-			System.out.println("Built by " + builtBy + " on " + buildTime);
-
-		} catch (IOException E) {
-			// handle
-		}
-
-		System.out.println();
 	}
 
 	public void println() {

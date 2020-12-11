@@ -1,5 +1,10 @@
 package genepi.imputationbot;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
 import genepi.base.Toolbox;
 import genepi.imputationbot.commands.AddInstance;
 import genepi.imputationbot.commands.DownloadResults;
@@ -23,6 +28,7 @@ public class App extends Toolbox {
 
 	public App(String command, String[] args) {
 		super(command, args);
+		printHeader();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -32,7 +38,7 @@ public class App extends Toolbox {
 			AnsiColors.disable();
 			Emoji.disable();
 		}
-
+		
 		App toolbox = new App("imputationbot", args);
 		toolbox.addTool("add-instance", AddInstance.class);
 		toolbox.addTool("update-instance", UpdateInstance.class);
@@ -48,5 +54,27 @@ public class App extends Toolbox {
 		toolbox.addTool("version", ShowVersion.class);
 		toolbox.start();
 
+	}
+	
+	
+	private void printHeader() {
+		System.out.println();
+		System.out.println("imputation-bot " + App.VERSION + " " + Emoji.ROBOT);
+		System.out.println("https://imputationserver.sph.umich.edu");
+		System.out.println("(c) 2019-2020 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger");
+
+		try {
+			URL url = this.getClass().getClassLoader().getResource("META-INF/MANIFEST.MF");
+			Manifest manifest = new Manifest(url.openStream());
+			Attributes attr = manifest.getMainAttributes();
+			String buildTime = attr.getValue("Build-Time");
+			String builtBy = attr.getValue("Built-By");
+			System.out.println("Built by " + builtBy + " on " + buildTime);
+
+		} catch (IOException E) {
+			// handle
+		}
+
+		System.out.println();
 	}
 }
