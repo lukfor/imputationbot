@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import genepi.imputationbot.client.CloudgeneClient;
@@ -28,12 +30,21 @@ import genepi.imputationbot.commands.RunImputationJob;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbutler.ImputationServer;
 import genepi.io.FileUtil;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+import net.lingala.zip4j.util.Zip4jConstants;
 
 public class RunImputationJobTest {
 
 	public static final String VCF = "test-data/chr20.R50.merged.1.330k.recode.small.vcf.gz";
 
 	public static final String VCF_SMALL = "test-data/small.vcf.gz";
+
+	public static final String VCF_SMALL_CHR1 = "test-data/small.chr1.vcf.gz";
+
+	public static final String VCF_SMALL_CHR2 = "test-data/small.chr2.vcf.gz";
+
+	public static final String VCF_SMALL_CHR3 = "test-data/small.chr3.vcf.gz";
 
 	@Test
 	public void testRunImputationAndWait() throws IOException {
@@ -93,6 +104,90 @@ public class RunImputationJobTest {
 		assertNull(runImputationJob.getProject());
 	}
 
+	@Test
+	public void testAutoDownloadWithPassword() throws Exception {
+
+		String password = "test-password";
+
+		deleteInstances();
+
+		String hostname = ImputationServer.getInstance().getUrl();
+		String token = ImputationServer.getInstance().getAdminToken();
+
+		AddInstance addInstance = new AddInstance(hostname, token);
+		assertEquals(0, addInstance.start());
+
+		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
+				"--files", VCF, "--autoDownload", "--password", password, "--name", "test-job");
+		int result = runImputationJob.start();
+		assertEquals(0, result);
+
+		CloudgeneJob job = runImputationJob.getJob();
+		assertNotNull(job);
+		assertTrue(job.isSuccessful());
+
+		String output = job.getId() + "-test-job";
+
+		assertTrue(new File(output).exists());
+		assertTrue(new File(output + "/local/chr_20.zip").exists());
+		assertTrue(new File(output + "/local/chr20.dose.vcf.gz").exists());
+		assertTrue(new File(output + "/local/chr20.info.gz").exists());
+
+		FileUtil.deleteDirectory(job.getId());
+
+		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		assertTrue(file.isValidZipFile());
+		assertTrue(file.isEncrypted());
+
+		// check if zip file is not AES encrypted
+		for (Object o : file.getFileHeaders()) {
+			FileHeader h = (FileHeader) o;
+			assertEquals(true, h.isEncrypted());
+			assertNotEquals(Zip4jConstants.ENC_METHOD_AES, h.getEncryptionMethod());
+		}
+	}
+	
+	@Test
+	public void testAutoDownloadWithoutPassword() throws Exception {
+
+		deleteInstances();
+
+		String hostname = ImputationServer.getInstance().getUrl();
+		String token = ImputationServer.getInstance().getAdminToken();
+
+		AddInstance addInstance = new AddInstance(hostname, token);
+		assertEquals(0, addInstance.start());
+
+		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
+				"--files", VCF, "--autoDownload", "--name", "test-job");
+		int result = runImputationJob.start();
+		assertEquals(0, result);
+
+		CloudgeneJob job = runImputationJob.getJob();
+		assertNotNull(job);
+		assertTrue(job.isSuccessful());
+
+		String output = job.getId() + "-test-job";
+
+		assertTrue(new File(output).exists());
+		assertTrue(new File(output + "/local/chr_20.zip").exists());
+		assertFalse(new File(output + "/local/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(output + "/local/chr20.info.gz").exists());
+
+		FileUtil.deleteDirectory(job.getId());
+
+		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		assertTrue(file.isValidZipFile());
+		assertTrue(file.isEncrypted());
+
+		// check if zip file is not AES encrypted
+		for (Object o : file.getFileHeaders()) {
+			FileHeader h = (FileHeader) o;
+			assertEquals(true, h.isEncrypted());
+			assertNotEquals(Zip4jConstants.ENC_METHOD_AES, h.getEncryptionMethod());
+		}
+	}
+	
 	@Test
 	public void testRunImputationAndAddToProject() throws IOException, CloudgeneException, InterruptedException {
 
@@ -279,6 +374,44 @@ public class RunImputationJobTest {
 		CloudgeneJob job = runImputationJob.getJob();
 		assertNull(job);
 		assertNull(runImputationJob.getProject());
+	}
+
+	@Test
+	public void testRunImputationWithMultipleFiles() throws IOException, CloudgeneException, InterruptedException {
+
+		deleteInstances();
+
+		String hostname = ImputationServer.getInstance().getUrl();
+		String token = ImputationServer.getInstance().getAdminToken();
+
+		AddInstance addInstance = new AddInstance(hostname, token);
+		assertEquals(0, addInstance.start());
+
+		String[] args = new String[] { "--refpanel", "hapmap-2", "--population", "eur", "--files", VCF_SMALL_CHR1,
+				VCF_SMALL_CHR2, VCF_SMALL_CHR3 };
+
+		RunImputationJob runImputationJob = new RunImputationJob(args);
+		int result = runImputationJob.start();
+		assertEquals(0, result);
+
+		CloudgeneJob job = runImputationJob.getJob();
+		assertNotNull(job);
+
+		CloudgeneClient client = new CloudgeneClient(getInstances());
+		client.waitForJob(job);
+		job = client.getJobDetails(job.getId());
+		assertTrue(job.isSuccessful());
+		assertFalse(job.isRetired());
+		assertFalse(job.isRunning());
+		assertTrue(job.getExecutionTime() > 0);
+		assertEquals(hostname, job.getInstance().getHostname());
+		assertNull(runImputationJob.getProject());
+		
+		//check three result files
+		JSONArray outputs = job.getOutputs();
+		JSONObject files = outputs.getJSONObject(2);
+		assertEquals("Imputation Results", files.getString("description"));
+		assertEquals(3, files.getJSONArray("files").length());
 	}
 
 	// TODO: test optional parameters: build, r2 filter, password, aesEncryption?

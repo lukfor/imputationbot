@@ -62,7 +62,7 @@ public class DownloadResults extends BaseCommand {
 
 			if (job.isRunning()) {
 				println("Job " + job.getId() + " is running. Download starts automatically when job is finished...");
-				client.waitForJob(job.getId());
+				client.waitForJob(job.getId(), 30 * 1000);
 				job = client.getJobDetails(job.getId());
 
 				println("Job completed. State: " + job.getJobStateAsText());

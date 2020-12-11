@@ -126,6 +126,10 @@ public class CloudgeneJob {
 	public CloudgeneInstance getInstance() {
 		return instance;
 	}
+	
+	public JSONArray getOutputs() { 
+		return job.getJSONArray("outputParams");
+	}
 
 	public String getJobStateAsText() {
 		int state = job.getInt("state");

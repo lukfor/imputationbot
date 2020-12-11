@@ -135,6 +135,20 @@ public class AbstractRunJob extends BaseCommand {
 				println("Job completed. State: " + job.getJobStateAsText());
 			}
 
+			if (hasFlag(argsJob, "--autoDownload")) {
+				DownloadResults download = null;
+				String password = parseArgs(args, "--password");
+				if (password == null) {
+					download = new DownloadResults(job.getId());
+				} else {
+					download = new DownloadResults(job.getId(), "--password", password);
+				}
+				int result = download.start();
+				CloudgeneClient client = getClient();
+				job = client.getJobDetails(job.getId());
+				return result;
+			}
+
 			return 0;
 
 		} catch (Exception e) {
@@ -162,6 +176,10 @@ public class AbstractRunJob extends BaseCommand {
 		Option optionWait = new Option(null, "wait", false, "Wait until the job is executed");
 		optionWait.setRequired(false);
 		options.addOption(optionWait);
+
+		Option optionAutoDownload = new Option(null, "autoDownload", false, "Wait until the job is executed");
+		optionAutoDownload.setRequired(false);
+		options.addOption(optionAutoDownload);
 
 		Option optionPassword = new Option(null, "password", true, "Password used to encrypt results");
 		optionPassword.setRequired(false);
