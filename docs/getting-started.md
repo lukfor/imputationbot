@@ -1,58 +1,60 @@
 # Getting started
 
-## Configuration
+To use imputation-bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website. You can find configuration instructions  [here](instances).
 
-To use imputation-bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website.
-
-**Step 1:** Login and click on your **username** and then **profile**:
-
-![Image1](assets/token1.png)
-
-**Step 2:** Click on **Create API Token**
-
-![Image1](assets/token2.png)
-
-**Step 3:** Copy your API Token and paste it when `imputationbot add-instance` ask for it.
-
-![Image1](assets/token3.png)
-
-Api Tokens are valid for 30 days. You can check the status in the web interface or with `imputationbot instances`
-
-![Image1](assets/token4.png)
-
-**Step 4:** Next, configure imputationbot with the following command and enter the address and your API token:
-
-```
-imputationbot add-instance
-```
-
-```
-imputation-bot 1.0.0 🤖
-https://imputationserver.sph.umich.edu
-(c) 2019 Lukas Forer, Sebastian Schoenherr and Christian Fuchsberger
-Built by lukas on 2019-10-09T15:54:07Z
-
-Imputationserver Url [https://imputationserver.sph.umich.edu]:
-API Token [None]: eyJjdHkiOiJ0ZXh0XC9wbGFpbiIsImFsZyI6IkhTMjU2In0.eyJtYWlsIjoibHVrYXMuZm9yZXJAaS1tZWQuYWMuYXQiLCJleHBpcmUiOjE1NzMyMjkwNTY3NTEsIm5hbWUiOiJMdWthcyBGb3JlciIsImFwaSI6dHJ1ZSwidXNlcm5hbWUiOiJsdWtmb3IifQ.qY7iEM6ul-gJ0EuHmEUHRnoS5hZs7kD1HC95NFaxE9w
-```
 
 ## Run imputation
 
 You can use the `impute` command to submit a job:
 
-- The `--files` parameter defines the location of our VCF file. If we plan to impute more than one file we can enter the path to a folder or separate multiple filenames by `,`.
+- The `--files` parameter defines the location of our VCF file(s). If we plan to impute more than one file we can enter the path to a folder or multiple filenames separated by space.
 - We can use the `--refpanel` parameter to specify the reference panel. For the **1000 Geneoms Phase 3** panel we use `1000g-phase-3-v5`. If we are not sure what panels are provided by the server, we can use `imputationbot refpanels` to get a list of all reference panels and their supported populations.
 - For `--population` we use `eur` which stands for **European**
 
-The complete command looks like this:
+The complete command using this [example file](https://github.com/lukfor/imputationserver-ashg20/raw/main/files/chr20.R50.merged.1.330k.recode.small.vcf.gz) looks like this:
+
 
 ```sh
-imputationbot impute --files /path/to/your.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
+imputationbot impute --files chr20.small.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
 ```
 
-A test file is available [here](https://github.com/lukfor/imputationserver-ashg20/raw/main/files/chr20.R50.merged.1.330k.recode.small.vcf.gz).
+After submission we get the URL where we can monitor the progress of our job.
 
-After submission we get the URL where we can monitor the progress of our job. However, we can also use Imputation Bot to get a list all our jobs and their status:
+### Auto download
+
+If the `--autoDownload` flag is set then imputation-bot waits until the job is finished and starts the download for you:
+
+```sh
+imputationbot impute --files chr20.small.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --autoDownload
+```
+A new folder is created in the current directory and contains all the downloaded results.
+
+### Auto download and decryption
+
+You can can combine the `--autoDownload` flag with the `--password` parameter to set a user-defined password to encrypt the result files. In this case imputation-bot decrypts all files after download:
+
+```sh
+imputationbot impute --files chr20.small.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --autoDownload --password my_strong_password
+```
+The output directory contains now also all `*.vcf.gz` and `*.info.gz` files.
+
+### Submit all files from a folder
+
+```sh
+imputationbot impute --files folder/with/vcf-files --refpanel 1000g-phase-3-v5 --population eur
+```
+
+### Submit only vcf.gz files
+
+```sh
+imputationbot impute --files folder/*.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
+```
+
+Learn more about the `impute` command [here](submit-jobs).
+
+## Monitor jobs
+
+We can also use Imputation Bot to get a list of all our jobs and their status:
 
 ```sh
 imputationbot jobs
@@ -64,7 +66,11 @@ To get more details about our job, we can use the `jobs` command followed by the
 imputationbot jobs job-XXXXXXXX-XXXXXX-XXX
 ```
 
-We can use the `download` command to download all imputed genotypes and the QC report at once:
+Learn more about the `jobs` command [here](list-jobs).
+
+## Download results
+
+We can use the `download` command to download all imputed genotypes and the QC report at once for a given job ID:
 
 ```sh
 imputationbot download job-XXXXXXXX-XXXXXX-XXX
@@ -77,3 +83,5 @@ You can provide imputation-bot the password we sent you via email and it decrypt
 ```sh
 imputationbot download job-XXXXXXXX-XXXXXX-XXX --password MYPASSWORD
 ```
+
+Learn more about the `download` command [here](download-results).

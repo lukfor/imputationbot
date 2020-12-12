@@ -8,12 +8,48 @@ imputationbot impute --files my-study/my-study.chr1.vcf.gz --refpanel 1000g-phas
 
 After all files are uploaded and the job submission was successful, a URL is provided where you can monitor the progress of our job.
 
+#### Submit all files from a folder:
+
+```sh
+imputationbot impute --files folder/with/vcf-files --refpanel 1000g-phase-3-v5 --population eur
+```
+
+#### Submit only vcf.gz files:
+
+```sh
+imputationbot impute --files folder/*.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
+```
+
+#### Submit only files matching a certain pattern:
+
+```sh
+imputationbot impute --files folder/my_study.*.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
+```
+
+#### Auto download
+
+If the `--autoDownload` flag is set then imputation-bot waits until the job is finished and starts the download for you:
+
+```sh
+imputationbot impute --files chr20.small.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --autoDownload
+```
+A new folder is created in the current directory and contains all the downloaded results.
+
+#### Auto download and decryption
+
+You can can combine the `--autoDownload` flag with the `--password` parameter to set a user-defined password to encrypt the result files. In this case imputation-bot decrypts all files after download:
+
+```sh
+imputationbot impute --files chr20.small.vcf.gz --refpanel 1000g-phase-3-v5 --population eur --autoDownload --password my_strong_password
+```
+The output directory contains now also all `*.vcf.gz` and `*.info.gz` files.
+
 
 ## Required parameters
 
 ### `--files <file_path>`
 
-Defines the location of the VCF file. To impute more than one file you can either enter the path to a folder or separate multiple filenames by `,`.
+Defines the location of the VCF file. To impute more than one file you can either enter the path to a folder or multiple filenames.
 
 ### `--refpanel <ref>`
 
@@ -28,7 +64,7 @@ This information is used to compare the allele frequencies between your data and
 
 ### `--name <name>`
 
-An optional job name. Default name it the job id.
+An optional job name. Default name is the job id.
 
 ### `--password <password>`
 
@@ -45,3 +81,7 @@ To minimize the file size, Michigan Imputation Server includes an option to filt
 ### `--aesEncryption <yes>`
 
 All Imputation Server results are encrypted by default. Please tick this checkbox if you want to use AES 256 encryption instead of the default encryption method. Please note that AES encryption does not work with standard unzip programs. We recommend to use 7z instead. Possible values: `yes`or `no`. Default: `no`.
+
+### `--autoDownload`
+
+If this flag is set then imputation-bot waits until the job is finished and starts the download. You can can combine the `--autoDownload` flag with the `--password` parameter to set a user-defined password to encrypt the result files. In this case imputation-bot it decrypts all files for you after download.

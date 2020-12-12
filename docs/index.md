@@ -11,7 +11,7 @@ Your personal bot for [Michigian Imputation Server](https://imputationserver.sph
 
 You will need the following things properly installed on your computer.
 
-* [Java 8 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Java 8 or higher
 
 imputation-bot works on Linux, macOS and Windows.
 
@@ -60,4 +60,4 @@ https://imputationserver.sph.umich.edu
 Built by lukas on 2020-09-01T11:31:10Z
 ```
 
-Now you are ready to configure Imputation-Bot and impute your GWAS data. Read the [Getting started](getting-started) section to learn more about how to submit your first job.
+Now you are ready to [configure](instances) Imputation-Bot and impute your GWAS data. Read the [Getting started](getting-started) section to learn more about how to submit your first job.
