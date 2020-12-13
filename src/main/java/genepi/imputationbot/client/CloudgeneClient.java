@@ -18,13 +18,18 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import genepi.imputationbot.App;
 import genepi.imputationbot.model.Project;
 import genepi.imputationbot.model.ProjectJob;
+import genepi.imputationbot.util.OperatingSystem;
 import genepi.imputationbot.util.Version;
 import genepi.imputationbot.util.uploads.ProgressEntityWrapper;
 import genepi.imputationbot.util.uploads.UploadProgressPrinter;
 
 public class CloudgeneClient {
+
+	public static final String USER_AGENT = "imputation-bot " + App.VERSION + " (OS: " + OperatingSystem.NAME + ", Java: "
+			+ System.getProperty("java.version") + ")";
 
 	public static final String[] IMPUTATIONSERVER_ID = { "minimac4", "imputationserver" };
 
@@ -227,6 +232,7 @@ public class CloudgeneClient {
 			HttpClient httpclient = HttpClients.createDefault();
 			HttpGet httpget = new HttpGet(instance.getHostname() + url);
 			httpget.addHeader("X-Auth-Token", instance.getToken());
+			httpget.setHeader("User-Agent", USER_AGENT);
 
 			// Execute and get the response.
 			HttpResponse response = httpclient.execute(httpget);
@@ -262,6 +268,7 @@ public class CloudgeneClient {
 			HttpClient httpclient = HttpClients.createDefault();
 			HttpPost httppost = new HttpPost(instance.getHostname() + url);
 			httppost.addHeader("X-Auth-Token", instance.getToken());
+			httppost.setHeader("User-Agent", USER_AGENT);
 			httppost.setEntity(entity);
 
 			// Execute and get the response.
