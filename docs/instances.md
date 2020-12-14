@@ -1,6 +1,8 @@
 # Configure Instances
 
-Instead of storing usernames and passwords, imputation-bot is using API tokens to communicate with Michigan Imputation Server or any other clone. This approach has several advantages compared to user credentials:
+Instead of storing usernames and passwords, imputation-bot is using API tokens to communicate with Michigan Imputation Server or any other clone. A list of all supported instances can be found [here](public-instances.md).
+
+This approach has several advantages compared to user credentials:
 
 - tokens can be revoked by the user at any time (e.g. if token is compromised),
 - tokens have only access to a limited number of API endpoints (e.g. job handling) and it is therefore not possible to change user credentials via the API
@@ -9,6 +11,8 @@ Instead of storing usernames and passwords, imputation-bot is using API tokens t
 The complete data exchange between imputation-bot and MIS is encrypted using Secure Sockets Layer (SSL).
 
 ## Obtain API Token
+
+Please navigate to the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website or to an other supported instance:
 
 **Step 1:** Login and click on your **username** and then on **profile**:
 

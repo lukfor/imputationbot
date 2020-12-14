@@ -2,7 +2,7 @@
 
 ![Image1](assets/logo.png)
 
-Your personal bot for [Michigian Imputation Server](https://imputationserver.sph.umich.edu).
+Your personal bot for [Michigan Imputation Server](https://imputationserver.sph.umich.edu) and [TOPMed Imputation Server](https://imputation.biodatacatalyst.nhlbi.nih.gov/).
 
 
 
@@ -60,4 +60,4 @@ https://imputationserver.sph.umich.edu
 Built by lukas on 2020-09-01T11:31:10Z
 ```
 
-Now you are ready to [configure](instances) Imputation-Bot and impute your GWAS data. Read the [Getting started](getting-started) section to learn more about how to submit your first job.
+Now you are ready to [configure](instances.md) imputation-bot and impute your GWAS data. Read the [Getting started](getting-started.md) section to learn more about how to submit your first job.
