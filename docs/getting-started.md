@@ -1,6 +1,6 @@
 # Getting started
 
-To use imputation-bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) website. You can find configuration instructions [here](/instances).
+To use imputation-bot you have to enable API access from your Profile page. The required API token can be obtained from the [Michigan Imputation Server](https://imputationserver.sph.umich.edu) or [TOPMed Imputation Server](https://imputation.biodatacatalyst.nhlbi.nih.gov/) website. You can find configuration instructions [here](instances.md).
 
 
 ## Run imputation
@@ -50,7 +50,7 @@ imputationbot impute --files folder/with/vcf-files --refpanel 1000g-phase-3-v5 -
 imputationbot impute --files folder/*.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
 ```
 
-Learn more about the `impute` command [here](/submit-jobs).
+Learn more about the `impute` command [here](submit-jobs.md).
 
 ## Monitor jobs
 
@@ -66,7 +66,7 @@ To get more details about our job, we can use the `jobs` command followed by the
 imputationbot jobs job-XXXXXXXX-XXXXXX-XXX
 ```
 
-Learn more about the `jobs` command [here](/list-jobs).
+Learn more about the `jobs` command [here](list-jobs.md).
 
 ## Download results
 
@@ -84,4 +84,4 @@ You can provide imputation-bot the password we sent you via email and it decrypt
 imputationbot download job-XXXXXXXX-XXXXXX-XXX --password MYPASSWORD
 ```
 
-Learn more about the `download` command [here](/download-results).
+Learn more about the `download` command [here](download-results.md).
