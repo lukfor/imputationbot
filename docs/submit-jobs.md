@@ -1,6 +1,6 @@
 # Submit Jobs
 
-The `impute` command can be used to submit a job. The following command imputes the file `my-study/my-study.chr1.vcf.gz` against reference panel **1000 Geneoms Phase 3** and used the **European** population as a reference population during quality control:
+The `impute` command can be used to submit a job. The following command imputes the file `my-study/my-study.chr1.vcf.gz` against reference panel **1000 Genomes Phase 3** and used the **European** population as a reference population during quality control:
 
 ```sh
 imputationbot impute --files my-study/my-study.chr1.vcf.gz --refpanel 1000g-phase-3-v5 --population eur
@@ -53,7 +53,7 @@ Defines the location of the VCF file. To impute more than one file you can eithe
 
 ### `--refpanel <ref>`
 
-Specifies the ID of the reference panel. For example, the **1000 Geneoms Phase 3** panel on Michigan Imputation Server has the id `1000g-phase-3-v5`. If you are not sure what panels are provided by the server, you can use the command `imputationbot refpanels` to get a list of all reference panels and their ID.
+Specifies the ID of the reference panel. For example, the **1000 Genomes Phase 3** panel on Michigan Imputation Server has the id `1000g-phase-3-v5`. If you are not sure what panels are provided by the server, you can use the command `imputationbot refpanels` to get a list of all reference panels and their ID.
 
 ### `--population <pop>`
 
@@ -68,7 +68,7 @@ An optional job name. Default name is the job id.
 
 ### `--password <password>`
 
-An user defined password that is used to encrypt the imputed genotypes. If no password is provided, the service creates a random passwords and sends it to the email address of the owner of the token.
+An user defined password that is used to encrypt the imputed genotypes. If no password is provided, the service creates a random password and sends it to the email address of the owner of the token.
 
 ### `--build <build>`
 

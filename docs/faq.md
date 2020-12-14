@@ -1,6 +1,6 @@
 # FAQ
 
-### My token is expired. Why and what should I do?
+### My token is expired. What should I do?
 
 Due to security reasons, tokens are valid for 30 days only. Please reopen the profile page of the web-service, revoke your token and create a new one. Next, use the `update-instance`command and enter the new token.
 

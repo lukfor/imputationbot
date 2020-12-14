@@ -10,7 +10,7 @@ The complete data exchange between imputation-bot and MIS is encrypted using Sec
 
 ## Obtain API Token
 
-**Step 1:** Login and click on your **username** and then **profile**:
+**Step 1:** Login and click on your **username** and then on **profile**:
 
 ![Image1](assets/token1.png)
 
@@ -18,7 +18,7 @@ The complete data exchange between imputation-bot and MIS is encrypted using Sec
 
 ![Image1](assets/token2.png)
 
-**Step 3:** Copy your API Token and paste it when `imputationbot configure-instance` ask for it.
+**Step 3:** Copy your API Token and paste it when `imputationbot add-instance` asks for it.
 
 ![Image1](assets/token3.png)
 
@@ -71,7 +71,7 @@ In addition to general information about the instance itself, the status and exp
 
 ## Update instance
 
-If a API Token is expired, the `update-instance` command can be used to update the token;
+If a API Token is expired, the `update-instance` command can be used to update the token:
 
 ```sh
 imputationbot update-instance [<ID> <TOKEN>]
