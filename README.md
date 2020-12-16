@@ -14,7 +14,7 @@
 
 You will need the following things properly installed on your computer.
 
-* [Java 8 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Java 8 or higher
 
 
 ## Download and Install
