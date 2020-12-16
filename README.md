@@ -7,7 +7,7 @@
 [![Documentation Status](https://readthedocs.org/projects/imputationbot/badge/?version=latest)](https://imputationbot.readthedocs.io/en/latest/?badge=latest)
 
 
-> Automate interactions with the imputation servers
+> Automate interactions with Michigan Imputation Servers
 
 
 ## Requirements
