@@ -27,6 +27,7 @@ Download and install the latest version from our download page using the followi
 curl -sL imputationbot.now.sh | bash
 ```
 
+It will create the `imputationbot` executable file in the current directory. Optionally, move the `imputationbot` file to a directory accessible by your `$PATH` variable.
 
 Test the installation with the following command:
 
