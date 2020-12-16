@@ -14,7 +14,7 @@
 
 You will need the following things properly installed on your computer.
 
-* [Java 8 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Java 8 or higher
 
 
 ## Download and Install
@@ -27,6 +27,7 @@ Download and install the latest version from our download page using the followi
 curl -sL imputationbot.now.sh | bash
 ```
 
+It will create the `imputationbot` executable file in the current directory. Optionally, move the `imputationbot` file to a directory accessible by your `$PATH` variable.
 
 Test the installation with the following command:
 
