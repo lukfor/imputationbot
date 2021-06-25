@@ -52,7 +52,6 @@ public class DownloadResults extends BaseCommand {
 			for (int i = 0; i < project.getJobs().size(); i++) {
 				jobIds[i] = project.getJobs().get(i).getJob();
 			}
-
 		}
 
 		for (int i = 0; i < jobIds.length; i++) {
@@ -62,7 +61,9 @@ public class DownloadResults extends BaseCommand {
 
 			if (job.isRunning()) {
 				println("Job " + job.getId() + " is running. Download starts automatically when job is finished...");
-				client.waitForJob(job.getId(), 30 * 1000);
+				// noinspection StatementWithEmptyBody
+				while(!client.waitForJob(job.getId(), 30 * 1000)){}
+
 				job = client.getJobDetails(job.getId());
 
 				println("Job completed. State: " + job.getJobStateAsText());
