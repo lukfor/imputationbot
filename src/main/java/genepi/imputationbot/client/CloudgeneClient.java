@@ -136,9 +136,9 @@ public class CloudgeneClient {
 	public void waitForProject(Project project, int pollingTime) throws CloudgeneException, InterruptedException {
 
 		for (ProjectJob job : project.getJobs()) {
-			waitForJob(job.getJob(), pollingTime);
+			//noinspection StatementWithEmptyBody
+			while(!waitForJob(job.getJob(), pollingTime)){}
 		}
-
 	}
 
 	public void waitForJob(CloudgeneJob job) throws CloudgeneException, InterruptedException {
@@ -146,10 +146,14 @@ public class CloudgeneClient {
 	}
 
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
-		waitForJob(id, 10000);
+		//noinspection StatementWithEmptyBody
+		while(!waitForJob(id, 10000)){}
 	}
 
-	public void waitForJob(String id, int pollingTime) throws CloudgeneException, InterruptedException {
+	/**
+	 * return true if job is complete, false if time ran out
+	 * */
+	public boolean waitForJob(String id, int pollingTime) throws CloudgeneException, InterruptedException {
 
 		CloudgeneInstance instance = getInstanceByJobId(id);
 
@@ -159,9 +163,14 @@ public class CloudgeneClient {
 
 		if (job.isRunning()) {
 			Thread.sleep(pollingTime);
-			waitForJob(id, pollingTime);
 		} else {
 			Thread.sleep(5000);
+		}
+
+		if (job.isRunning()) {
+			return false;
+		} else {
+			return true;
 		}
 
 	}
