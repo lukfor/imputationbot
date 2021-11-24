@@ -24,7 +24,7 @@ import genepi.imputationbot.util.OperatingSystem;
 
 public class App extends Toolbox {
 
-	public static final String VERSION = "0.9.3";
+	public static final String VERSION = "0.9.4";
 
 	public App(String command, String[] args) {
 		super(command, args);
