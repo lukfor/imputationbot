@@ -28,8 +28,12 @@ import genepi.imputationbot.util.uploads.UploadProgressPrinter;
 
 public class CloudgeneClient {
 
-	public static final String USER_AGENT = "imputation-bot " + App.VERSION + " (OS: " + OperatingSystem.NAME + ", Java: "
-			+ System.getProperty("java.version") + ")";
+	public static int MAX_ATTEMPTS = 5;
+
+	public static int WAIT_BETWEEN_ATTEMPTS_SEC = 5;
+
+	public static final String USER_AGENT = "imputation-bot " + App.VERSION + " (OS: " + OperatingSystem.NAME
+			+ ", Java: " + System.getProperty("java.version") + ")";
 
 	public static final String[] IMPUTATIONSERVER_ID = { "minimac4", "imputationserver" };
 
@@ -136,8 +140,9 @@ public class CloudgeneClient {
 	public void waitForProject(Project project, int pollingTime) throws CloudgeneException, InterruptedException {
 
 		for (ProjectJob job : project.getJobs()) {
-			//noinspection StatementWithEmptyBody
-			while(!waitForJob(job.getJob(), pollingTime)){}
+			// noinspection StatementWithEmptyBody
+			while (!waitForJob(job.getJob(), pollingTime)) {
+			}
 		}
 	}
 
@@ -146,13 +151,14 @@ public class CloudgeneClient {
 	}
 
 	public void waitForJob(String id) throws CloudgeneException, InterruptedException {
-		//noinspection StatementWithEmptyBody
-		while(!waitForJob(id, 10000)){}
+		// noinspection StatementWithEmptyBody
+		while (!waitForJob(id, 10000)) {
+		}
 	}
 
 	/**
 	 * return true if job is complete, false if time ran out
-	 * */
+	 */
 	public boolean waitForJob(String id, int pollingTime) throws CloudgeneException, InterruptedException {
 
 		CloudgeneInstance instance = getInstanceByJobId(id);
@@ -236,38 +242,52 @@ public class CloudgeneClient {
 
 	public String get(CloudgeneInstance instance, String url) throws CloudgeneException {
 
-		try {
+		int attempts = 0;
 
-			HttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpget = new HttpGet(instance.getHostname() + url);
-			httpget.addHeader("X-Auth-Token", instance.getToken());
-			httpget.setHeader("User-Agent", USER_AGENT);
+		while (attempts < MAX_ATTEMPTS) {
 
-			// Execute and get the response.
-			HttpResponse response = httpclient.execute(httpget);
-			int statusCode = response.getStatusLine().getStatusCode();
-			HttpEntity responseEntity = response.getEntity();
-			switch (statusCode) {
-			case 200:
-			case 201:
-				return EntityUtils.toString(responseEntity);
-			case 401:
-				throw new CloudgeneException(401,
-						"The provided Token is invalid. Please check if your token is correct and not expired");
-			default:
-				String content = EntityUtils.toString(responseEntity);
-				try {
-					JSONObject object = new JSONObject(content);
-					throw new CloudgeneException(statusCode, object.getString("message"));
-				} catch (Exception e) {
-					throw new CloudgeneException(statusCode, content);
+			try {
+
+				HttpClient httpclient = HttpClients.createDefault();
+				HttpGet httpget = new HttpGet(instance.getHostname() + url);
+				httpget.addHeader("X-Auth-Token", instance.getToken());
+				httpget.setHeader("User-Agent", USER_AGENT);
+
+				// Execute and get the response.
+				HttpResponse response = httpclient.execute(httpget);
+				int statusCode = response.getStatusLine().getStatusCode();
+				HttpEntity responseEntity = response.getEntity();
+				switch (statusCode) {
+				case 200:
+				case 201:
+					return EntityUtils.toString(responseEntity);
+				case 401:
+					throw new CloudgeneException(401,
+							"The provided Token is invalid. Please check if your token is correct and not expired");
+				case 500:
+					// wait and try again
+					attempts++;
+					Thread.sleep(WAIT_BETWEEN_ATTEMPTS_SEC * 1000);
+					break;
+				default:
+					String content = EntityUtils.toString(responseEntity);
+					try {
+						JSONObject object = new JSONObject(content);
+						throw new CloudgeneException(statusCode, object.getString("message"));
+					} catch (Exception e) {
+						throw new CloudgeneException(statusCode, content);
+					}
+
 				}
+			} catch (Exception e) {
 
+				throw new CloudgeneException(100, e);
 			}
-		} catch (IOException e) {
 
-			throw new CloudgeneException(100, e);
 		}
+
+		throw new CloudgeneException(500, "Server error");
+
 	}
 
 	public String post(CloudgeneInstance instance, String url, HttpEntity entity) throws CloudgeneException {
