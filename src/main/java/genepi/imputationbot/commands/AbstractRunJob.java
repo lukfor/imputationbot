@@ -138,10 +138,15 @@ public class AbstractRunJob extends BaseCommand {
 			if (hasFlag(argsJob, "--autoDownload")) {
 				DownloadResults download = null;
 				String password = parseArgs(args, "--password");
-				if (password == null) {
+				String output = parseArgs(output, "--output");
+				if (password == null && output == null) {
 					download = new DownloadResults(job.getId());
-				} else {
+				} else if (password != null && output == null) {
 					download = new DownloadResults(job.getId(), "--password", password);
+				} else if (password == null && output != null) {
+					download = new DownloadResults(job.getId(), "--output", output);
+				} else {
+					download = new DownloadResults(job.getId(), "--password", password, "--output", output);
 				}
 				int result = download.start();
 				CloudgeneClient client = getClient();
