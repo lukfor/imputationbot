@@ -138,7 +138,7 @@ public class AbstractRunJob extends BaseCommand {
 			if (hasFlag(argsJob, "--autoDownload")) {
 				DownloadResults download = null;
 				String password = parseArgs(args, "--password");
-				String output = parseArgs(output, "--output");
+				String output = parseArgs(args, "--output");
 				if (password == null && output == null) {
 					download = new DownloadResults(job.getId());
 				} else if (password != null && output == null) {
