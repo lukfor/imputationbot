@@ -146,7 +146,51 @@ public class RunImputationJobTest {
 			assertNotEquals(Zip4jConstants.ENC_METHOD_AES, h.getEncryptionMethod());
 		}
 	}
-	
+
+	@Test
+	public void testAutoDownloadWithPasswordAndOutput() throws Exception {
+
+		String password = "test-password";
+
+		deleteInstances();
+
+		String hostname = ImputationServer.getInstance().getUrl();
+		String token = ImputationServer.getInstance().getAdminToken();
+
+		AddInstance addInstance = new AddInstance(hostname, token);
+		assertEquals(0, addInstance.start());
+
+		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
+				"--files", VCF, "--autoDownload", "--password", password, "--name", "test-job", "--output",
+				"my-output-folder");
+		int result = runImputationJob.start();
+		assertEquals(0, result);
+
+		CloudgeneJob job = runImputationJob.getJob();
+		assertNotNull(job);
+		assertTrue(job.isSuccessful());
+
+		String output = FileUtil.path("my-output-folder", job.getId() + "-test-job");
+
+		assertTrue(new File(output).exists());
+		assertTrue(new File(output + "/local/chr_20.zip").exists());
+		assertTrue(new File(output + "/local/chr20.dose.vcf.gz").exists());
+		assertTrue(new File(output + "/local/chr20.info.gz").exists());
+
+		FileUtil.deleteDirectory(job.getId());
+
+		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		assertTrue(file.isValidZipFile());
+		assertTrue(file.isEncrypted());
+
+		// check if zip file is not AES encrypted
+		for (Object o : file.getFileHeaders()) {
+			FileHeader h = (FileHeader) o;
+			assertEquals(true, h.isEncrypted());
+			assertNotEquals(Zip4jConstants.ENC_METHOD_AES, h.getEncryptionMethod());
+		}
+	}
+
 	@Test
 	public void testAutoDownloadWithoutPassword() throws Exception {
 
@@ -187,7 +231,7 @@ public class RunImputationJobTest {
 			assertNotEquals(Zip4jConstants.ENC_METHOD_AES, h.getEncryptionMethod());
 		}
 	}
-	
+
 	@Test
 	public void testRunImputationAndAddToProject() throws IOException, CloudgeneException, InterruptedException {
 
@@ -406,8 +450,8 @@ public class RunImputationJobTest {
 		assertTrue(job.getExecutionTime() > 0);
 		assertEquals(hostname, job.getInstance().getHostname());
 		assertNull(runImputationJob.getProject());
-		
-		//check three result files
+
+		// check three result files
 		JSONArray outputs = job.getOutputs();
 		JSONObject files = outputs.getJSONObject(2);
 		assertEquals("Imputation Results", files.getString("description"));

@@ -198,6 +198,10 @@ public class AbstractRunJob extends BaseCommand {
 		optionStudyName.setRequired(false);
 		options.addOption(optionStudyName);
 
+		Option optionOutputFolder = new Option(null, "output", true, "Optional output name");
+		optionOutputFolder.setRequired(false);
+		options.addOption(optionOutputFolder);
+		
 		// parse the command line arguments
 		CommandLine line = null;
 		try {
