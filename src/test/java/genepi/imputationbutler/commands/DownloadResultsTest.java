@@ -58,13 +58,13 @@ public class DownloadResultsTest {
 		String output = job.getId() + "-test-job";
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertFalse(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertFalse(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertFalse(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -103,13 +103,13 @@ public class DownloadResultsTest {
 		String output = job.getId() + "-test-job";
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertFalse(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertFalse(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertFalse(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -135,7 +135,7 @@ public class DownloadResultsTest {
 		assertEquals(0, addInstance.start());
 
 		RunImputationJob runImputationJob = new RunImputationJob("--refpanel", "hapmap-2", "--population", "eur",
-				"--files", VCF, "--wait", "--password", password, "--name", "test-job", "--aesEncryption", "yes");
+				"--files", VCF, "--wait", "--password", password, "--name", "test-job", "--aesEncryption", "true");
 		int result = runImputationJob.start();
 		assertEquals(0, result);
 
@@ -150,13 +150,13 @@ public class DownloadResultsTest {
 		String output = job.getId() + "-test-job";
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertFalse(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertFalse(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertFalse(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 		// check if zip file is AES encrypted
@@ -198,11 +198,11 @@ public class DownloadResultsTest {
 		assertEquals(0, result);
 
 		assertTrue(new File(OUTPUT + "/" + job.getId()).exists());
-		assertTrue(new File(OUTPUT + "/" + job.getId() + "/local/chr_20.zip").exists());
-		assertTrue(new File(OUTPUT + "/" + job.getId() + "/local/chr20.dose.vcf.gz").exists());
-		assertTrue(new File(OUTPUT + "/" + job.getId() + "/local/chr20.info.gz").exists());
+		assertTrue(new File(OUTPUT + "/" + job.getId() + "/output/chr_20.zip").exists());
+		assertTrue(new File(OUTPUT + "/" + job.getId() + "/output/chr20.dose.vcf.gz").exists());
+		assertTrue(new File(OUTPUT + "/" + job.getId() + "/output/chr20.info.gz").exists());
 
-		ZipFile file = new ZipFile(OUTPUT + "/" + job.getId() + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(OUTPUT + "/" + job.getId() + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -236,9 +236,9 @@ public class DownloadResultsTest {
 		assertEquals(0, result);
 
 		assertTrue(new File(OUTPUT + "/" + job.getId()).exists());
-		assertFalse(new File(OUTPUT + "/" + job.getId() + "/local/chr_20.zip").exists());
-		assertFalse(new File(OUTPUT + "/" + job.getId() + "/local/chr20.dose.vcf.gz").exists());
-		assertFalse(new File(OUTPUT + "/" + job.getId() + "/local/chr20.info.gz").exists());
+		assertFalse(new File(OUTPUT + "/" + job.getId() + "/output/chr_20.zip").exists());
+		assertFalse(new File(OUTPUT + "/" + job.getId() + "/output/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(OUTPUT + "/" + job.getId() + "/output/chr20.info.gz").exists());
 	}
 
 	// TODO: download project

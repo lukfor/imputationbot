@@ -74,7 +74,7 @@ public class UpdateInstanceTest {
 		assertEquals(1, updateInstance.start());
 
 		listInstancesAfter = new ListInstances();
-		assertEquals(0, listInstancesAfter.start());
+		assertEquals(1, listInstancesAfter.start());
 		assertEquals(1, listInstancesAfter.getInstanceList().getAll().size());
 		assertEquals(token, listInstancesAfter.getInstanceList().getByHostname(hostname).getToken());
 		

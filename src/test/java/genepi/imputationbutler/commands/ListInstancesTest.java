@@ -34,7 +34,7 @@ public class ListInstancesTest {
 		assertEquals(6, listInstances.getData()[0].length);
 
 		assertEquals("1", listInstances.getData()[0][0]);
-		assertEquals("Michigan Imputation Server", listInstances.getData()[0][1]);
+		assertEquals("Cloudgene", listInstances.getData()[0][1]);
 		assertEquals(ImputationServer.getInstance().getUrl(), listInstances.getData()[0][2]);
 		assertEquals("admin", listInstances.getData()[0][3]);
 		assertNotEquals("", listInstances.getData()[0][4]);
