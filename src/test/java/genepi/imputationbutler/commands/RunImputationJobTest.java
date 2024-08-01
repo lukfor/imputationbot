@@ -455,7 +455,7 @@ public class RunImputationJobTest {
 		JSONArray outputs = job.getOutputs();
 		JSONObject files = outputs.getJSONObject(0);
 		assertEquals("Output", files.getString("description"));
-		assertEquals(3, files.getJSONArray("files").length());
+		assertEquals(7, files.getJSONArray("files").length());
 	}
 
 	// TODO: test optional parameters: build, r2 filter, password, aesEncryption?
