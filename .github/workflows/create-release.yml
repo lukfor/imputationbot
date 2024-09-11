@@ -1,0 +1,30 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+    - '*'
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.9
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.9
+          
+      - name: Build
+        run: mvn install
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: "target/imputationbot-installer.sh"
+          token: ${{ secrets.GITHUB_TOKEN }}
