@@ -41,9 +41,9 @@
 
 	<repositories>
 		<repository>
-			<id>jfrog-genepi-maven</id>
-			<name>jfrog-genepi-maven</name>
-			<url>https://genepi.jfrog.io/artifactory/maven/</url>
+			<id>genepi-maven</id>
+			<name>genepi-maven</name>
+			<url>https://genepi.i-med.ac.at/maven</url>
 		</repository>
 	</repositories>
 
