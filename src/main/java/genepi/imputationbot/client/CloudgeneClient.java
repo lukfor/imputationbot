@@ -35,7 +35,7 @@ public class CloudgeneClient {
 	public static final String USER_AGENT = "imputation-bot " + App.VERSION + " (OS: " + OperatingSystem.NAME
 			+ ", Java: " + System.getProperty("java.version") + ")";
 
-	public static final String[] IMPUTATIONSERVER_ID = { "minimac4", "imputationserver" };
+	public static final String[] IMPUTATIONSERVER_ID = { "imputationserver2" };
 
 	public static final Version IMPUTATIONSERVER_MIN_VERSION = Version.parse("1.2.1");
 

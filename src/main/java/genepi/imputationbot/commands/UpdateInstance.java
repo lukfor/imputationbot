@@ -92,6 +92,7 @@ public class UpdateInstance extends BaseCommand {
 
 		// verify token
 		try {
+			System.out.println("Token ---> " + token);
 			CloudgeneApiToken apiToken = client.verifyToken(instance, token);
 			if (!apiToken.isValid()) {
 				throw new CloudgeneException(100, apiToken.toString());

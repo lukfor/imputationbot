@@ -129,13 +129,13 @@ public class RunImputationJobTest {
 		String output = job.getId() + "-test-job";
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertTrue(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertTrue(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertTrue(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertTrue(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -173,13 +173,13 @@ public class RunImputationJobTest {
 		String output = FileUtil.path("my-output-folder", job.getId() + "-test-job");
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertTrue(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertTrue(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertTrue(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertTrue(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -214,13 +214,13 @@ public class RunImputationJobTest {
 		String output = job.getId() + "-test-job";
 
 		assertTrue(new File(output).exists());
-		assertTrue(new File(output + "/local/chr_20.zip").exists());
-		assertFalse(new File(output + "/local/chr20.dose.vcf.gz").exists());
-		assertFalse(new File(output + "/local/chr20.info.gz").exists());
+		assertTrue(new File(output + "/output/chr_20.zip").exists());
+		assertFalse(new File(output + "/output/chr20.dose.vcf.gz").exists());
+		assertFalse(new File(output + "/output/chr20.info.gz").exists());
 
 		FileUtil.deleteDirectory(job.getId());
 
-		ZipFile file = new ZipFile(output + "/local/chr_20.zip");
+		ZipFile file = new ZipFile(output + "/output/chr_20.zip");
 		assertTrue(file.isValidZipFile());
 		assertTrue(file.isEncrypted());
 
@@ -453,9 +453,9 @@ public class RunImputationJobTest {
 
 		// check three result files
 		JSONArray outputs = job.getOutputs();
-		JSONObject files = outputs.getJSONObject(2);
-		assertEquals("Imputation Results", files.getString("description"));
-		assertEquals(3, files.getJSONArray("files").length());
+		JSONObject files = outputs.getJSONObject(0);
+		assertEquals("Output", files.getString("description"));
+		assertEquals(7, files.getJSONArray("files").length());
 	}
 
 	// TODO: test optional parameters: build, r2 filter, password, aesEncryption?

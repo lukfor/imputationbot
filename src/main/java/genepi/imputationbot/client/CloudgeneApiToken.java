@@ -1,5 +1,9 @@
 package genepi.imputationbot.client;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.json.JSONObject;
@@ -26,7 +30,7 @@ public class CloudgeneApiToken {
 
 	public boolean isExpired() {
 		if (token.has("expire")) {
-			return token.getLong("expire") < System.currentTimeMillis();
+			return parseExpire(token.getString("expire")).getTime() < System.currentTimeMillis();
 		} else {
 			return true;
 		}
@@ -34,7 +38,7 @@ public class CloudgeneApiToken {
 
 	public Date getExpire() {
 		if (token.has("expire")) {
-			return new Date(token.getLong("expire"));
+			return parseExpire(token.getString("expire"));
 		} else {
 			return null;
 		}
@@ -63,6 +67,13 @@ public class CloudgeneApiToken {
 		} else {
 			return "The provided API token is malformed.";
 		}
+	}
+
+	private Date parseExpire(String expire) {
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		ZonedDateTime zonedDateTime = ZonedDateTime.parse(expire, formatter);
+		Instant instant = zonedDateTime.toInstant();
+		return Date.from(instant);
 	}
 
 }
