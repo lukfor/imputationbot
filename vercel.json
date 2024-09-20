@@ -1,3 +1,6 @@
 {
-  "routes": [{ "src": "/", "dest": "/install/github-downloader.sh" }]
+  "routes": [
+    { "src": "/", "dest": "/install/github-downloader.sh" },
+    { "src": "/v2", "dest": "/install/github-downloader-v2.sh" }
+  ]
 }
