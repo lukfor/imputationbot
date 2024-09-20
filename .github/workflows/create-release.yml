@@ -26,5 +26,5 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: "target/imputationbot-installer.sh"
+          artifacts: "target/imputationbot-installer.sh,target/imputationbot-*-linux.zip,target/imputationbot-*-mac.zip,target/imputationbot-*-windows.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
