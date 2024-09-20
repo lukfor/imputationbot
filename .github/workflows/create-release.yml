@@ -18,9 +18,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+
+      - name: Setup Nextflow ${{ matrix.nextflow }}
+        uses: nf-core/setup-nextflow@v1
+        with:
+          version: "${{ matrix.nextflow }}"
           
       - name: Build
-        run: mvn install
+        run: mvn install -B
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
