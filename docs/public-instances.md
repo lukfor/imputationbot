@@ -18,8 +18,8 @@ Url: [http://imputationsever.sph.umich](http://imputationsever.sph.umich)
 
 ## TOPMed Imputation Server
 
-Url: [https://topmed.dev.imputationserver.org](https://topmed.dev.imputationserver.org)
+Url: [https://imputation.biodatacatalyst.nhlbi.nih.gov](https://imputation.biodatacatalyst.nhlbi.nih.gov)
 
 ### Reference Panels
 
-- `topmed-r2` TOPMed (Version R2 on GRC38)
+- `topmed-r3` TOPMed (Version R3 on GRC38)
