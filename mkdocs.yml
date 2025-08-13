@@ -1,7 +1,7 @@
 site_name: Imputation-Bot 1.0.0
 theme: readthedocs
 
-pages:
+nav:
 - Installation: index.md
 - Configure Instances: instances.md
 - Getting Started: getting-started.md
