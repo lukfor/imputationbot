@@ -39,8 +39,8 @@ public class CloudgeneInstance {
 	public String getName() throws CloudgeneException {
 		if (name == null) {
 			CloudgeneClient client = new CloudgeneClient(new Vector<CloudgeneInstance>());
-			JSONObject server = client.getServerDetails(this);
-			name = server.getString("name");
+			CloudgeneServerDetails server = client.getServerDetails(this);
+			name = server.getName();
 		}
 		return name;
 	}

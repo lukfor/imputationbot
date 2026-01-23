@@ -45,9 +45,9 @@ public class CloudgeneClient {
 		this.instances = instances;
 	}
 
-	public CloudgeneUser getAuthUser(CloudgeneInstance instance) throws CloudgeneException {
+	public CloudgeneUser getAuthUser(CloudgeneInstance instance, String username) throws CloudgeneException {
 
-		String content = get(instance, "/api/v2/users/me/profile");
+		String content = get(instance, "/api/v2/users/" + username + "/profile");
 		JSONObject object = new JSONObject(content);
 		return new CloudgeneUser(object);
 
@@ -67,24 +67,22 @@ public class CloudgeneClient {
 
 	}
 
-	public JSONObject getServerDetails(CloudgeneInstance instance) throws CloudgeneException {
+	public CloudgeneServerDetails getServerDetails(CloudgeneInstance instance) throws CloudgeneException {
 
 		String content = get(instance, "/api/v2/server");
 		JSONObject object = new JSONObject(content);
-		return object;
-
+		return new CloudgeneServerDetails(object);
 	}
 
 	public JSONObject getAppByIds(CloudgeneInstance instance, String[] ids, Version minVersion)
 			throws CloudgeneException, CloudgeneAppException {
 
-		JSONObject server = getServerDetails(instance);
-		JSONArray apps = server.getJSONArray("apps");
+		CloudgeneServerDetails server = getServerDetails(instance);
+		List<CloudgeneApplication> apps = server.getApps();
 
 		// search for application by id
-		for (int i = 0; i < apps.length(); i++) {
-			JSONObject app = apps.getJSONObject(i);
-			String id = app.get("id").toString();
+		for (CloudgeneApplication app : apps) {
+			String id = app.getId();
 			CloudgeneAppId appId = new CloudgeneAppId(id);
 
 			for (String _id : ids) {

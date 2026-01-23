@@ -3,13 +3,9 @@ package genepi.imputationbot.commands;
 import java.util.List;
 import java.util.Vector;
 
+import genepi.imputationbot.client.*;
 import org.json.JSONObject;
 
-import genepi.imputationbot.client.CloudgeneApiToken;
-import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneException;
-import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.client.CloudgeneUser;
 import genepi.imputationbot.util.AnsiColors;
 import genepi.imputationbot.util.FlipTable;
 
@@ -61,10 +57,11 @@ public class ListInstances extends BaseCommand {
 			try {
 			CloudgeneApiToken token = client.verifyToken(instance, instance.getToken());
 			if (token.isValid() && !token.isExpired()) {
-				JSONObject server = client.getServerDetails(instance);
+                CloudgeneServerDetails serverDetails = client.getServerDetails(instance);
+                CloudgeneUser user = serverDetails.getUser();
 				JSONObject app = client.getDefaultApp(instance);
-				CloudgeneUser user = client.getAuthUser(instance);
-				data[i][1] = server.getString("name");
+
+				data[i][1] = serverDetails.getName();
 				data[i][2] = instance.getHostname();
 				data[i][3] = user.getUsername();
 				data[i][4] = app.getString("version");

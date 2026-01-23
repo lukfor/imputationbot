@@ -1,13 +1,8 @@
 package genepi.imputationbot.commands;
 
+import genepi.imputationbot.client.*;
 import org.json.JSONObject;
 
-import genepi.imputationbot.client.CloudgeneApiToken;
-import genepi.imputationbot.client.CloudgeneClient;
-import genepi.imputationbot.client.CloudgeneException;
-import genepi.imputationbot.client.CloudgeneInstance;
-import genepi.imputationbot.client.CloudgeneInstanceList;
-import genepi.imputationbot.client.CloudgeneUser;
 import genepi.imputationbot.util.Console;
 import genepi.imputationbot.util.Emoji;
 
@@ -109,7 +104,9 @@ public class UpdateInstance extends BaseCommand {
 		}
 
 		// test api token by getting user profile
-		CloudgeneUser user = client.getAuthUser(instance);
+        CloudgeneServerDetails serverDetails = client.getServerDetails(instance);
+        CloudgeneUser user = serverDetails.getUser();
+
 		println();
 		println("Hi " + user.getFullName() + " " + Emoji.WAVING_HAND);
 		println();
