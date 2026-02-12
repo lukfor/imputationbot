@@ -21,11 +21,24 @@ You will need the following things properly installed on your computer.
 
 ### Linux or macOS
 
-Download and install the latest version from our download page using the following commands:
+Download and install the latest version from our download page using the commands below.
+
+#### Install v2 (recommended)
+
+The Michigan Imputation Server requires **version 2.x.x or higher** to function without errors.
+If you are currently using **version 1.0.0 or earlier**, please update and reinstall Imputation Bot.
+
+```
+curl -sL imputationbot.now.sh/v2 | bash
+```
+
+#### Install v1 (legacy)
 
 ```
 curl -sL imputationbot.now.sh | bash
 ```
+
+---
 
 It will create the `imputationbot` executable file in the current directory. Optionally, move the `imputationbot` file to a directory accessible by your `$PATH` variable.
 
